@@ -1,0 +1,157 @@
+/* ==============================================================================
+   CENTRALIZED DESIGN TOKENS & CSS CUSTOM PROPERTIES
+   Windows-Like Desktop Environment & Productivity Suite (v5.0)
+   ============================================================================== */
+
+:root {
+  /* Surface Hierarchies */
+  --bg-desktop: #0c1017;
+  --surface-base: rgba(18, 24, 38, 0.78);
+  --surface-card: rgba(26, 35, 54, 0.86);
+  --surface-elevated: rgba(33, 45, 70, 0.94);
+  --surface-translucent: rgba(20, 28, 45, 0.68);
+  --surface-acrylic: rgba(15, 22, 36, 0.75);
+  --surface-taskbar: rgba(13, 17, 23, 0.82);
+  --surface-dock: rgba(18, 24, 38, 0.72);
+  --surface-menu: rgba(22, 30, 48, 0.92);
+  --surface-tooltip: rgba(10, 14, 22, 0.95);
+  --surface-input: rgba(12, 16, 26, 0.7);
+
+  /* Borders & Hairlines */
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-medium: rgba(255, 255, 255, 0.14);
+  --border-strong: rgba(255, 255, 255, 0.22);
+  --border-focus: #0078d4;
+  --border-glass-highlight: rgba(255, 255, 255, 0.18);
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Ubuntu", "Helvetica Neue", sans-serif;
+  --font-mono: 'JetBrains Mono', "Cascadia Code", "Fira Code", Consolas, monospace;
+  
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --text-disabled: #475569;
+  --text-inverse: #0f172a;
+
+  /* Font Sizing */
+  --text-xs: 0.75rem;    /* 12px */
+  --text-sm: 0.8125rem;  /* 13px */
+  --text-base: 0.875rem; /* 14px */
+  --text-md: 0.9375rem;  /* 15px */
+  --text-lg: 1rem;       /* 16px */
+  --text-xl: 1.125rem;   /* 18px */
+  --text-2xl: 1.25rem;   /* 20px */
+  --text-3xl: 1.5rem;    /* 24px */
+
+  /* Font Weights */
+  --font-light: 300;
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+
+  /* Brand, Accents & Glows */
+  --accent-primary: #0078d4;
+  --accent-secondary: #3b82f6;
+  --accent-hover: #1d8cf8;
+  --accent-active: #0066b3;
+  --accent-glow: rgba(0, 120, 212, 0.35);
+  --accent-subtle: rgba(0, 120, 212, 0.15);
+
+  /* Status Tokens */
+  --status-success: #10b981;
+  --status-success-bg: rgba(16, 185, 129, 0.15);
+  --status-warning: #f59e0b;
+  --status-warning-bg: rgba(245, 158, 11, 0.15);
+  --status-error: #ef4444;
+  --status-error-bg: rgba(239, 68, 68, 0.15);
+  --status-info: #06b6d4;
+  --status-info-bg: rgba(6, 182, 212, 0.15);
+
+  /* Geometry & Radii */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* Shadows & Depth */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.45);
+  --shadow-window: 0 18px 50px rgba(0, 0, 0, 0.55), 0 0 0 1px var(--border-subtle);
+  --shadow-window-focused: 0 24px 64px rgba(0, 0, 0, 0.65), 0 0 0 1px var(--accent-primary), 0 0 20px var(--accent-glow);
+  --shadow-menu: 0 16px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--border-medium);
+
+  /* Backdrop Filters */
+  --backdrop-blur: blur(20px) saturate(180%);
+  --backdrop-blur-sm: blur(12px) saturate(150%);
+  --backdrop-blur-taskbar: blur(24px) saturate(200%);
+
+  /* Motion Tokens */
+  --motion-micro: 100ms cubic-bezier(0.2, 0.0, 0.0, 1.0);
+  --motion-normal: 180ms cubic-bezier(0.25, 0.1, 0.25, 1.0);
+  --motion-panel: 260ms cubic-bezier(0.16, 1.0, 0.3, 1.0);
+  --motion-window: 300ms cubic-bezier(0.1, 0.9, 0.2, 1.0);
+  --motion-minimize: 250ms cubic-bezier(0.4, 0.0, 0.2, 1.0);
+  --motion-workspace: 380ms cubic-bezier(0.2, 0.8, 0.2, 1.0);
+  --motion-spring: 350ms cubic-bezier(0.175, 0.885, 0.32, 1.15);
+
+  /* Z-Index Hierarchy */
+  --z-desktop: 1;
+  --z-desktop-icons: 10;
+  --z-widgets: 20;
+  --z-windows-base: 100;
+  --z-snap-preview: 500;
+  --z-taskbar: 1000;
+  --z-dock: 1000;
+  --z-flyout-menu: 1100;
+  --z-quick-settings: 1150;
+  --z-notification-center: 1200;
+  --z-command-palette: 1300;
+  --z-modal-overlay: 1400;
+  --z-context-menu: 1500;
+  --z-toast: 1600;
+}
+
+/* Base Body Styles */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--text-primary);
+  background-color: var(--bg-desktop);
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Reduced Motion Override */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-micro: 0ms !important;
+    --motion-normal: 50ms !important;
+    --motion-panel: 50ms !important;
+    --motion-window: 50ms !important;
+    --motion-minimize: 50ms !important;
+    --motion-workspace: 50ms !important;
+    --motion-spring: 50ms !important;
+  }
+  
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
