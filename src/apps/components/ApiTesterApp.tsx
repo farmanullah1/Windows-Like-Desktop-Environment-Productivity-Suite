@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Send, Clock, CheckCircle2, AlertCircle, Copy, Check } from 'lucide-react';
+import { Send, Clock, Copy, Check } from 'lucide-react';
 import { soundEngine } from '../../design-system/soundEngine';
 
 export const ApiTesterApp: React.FC<{ windowId: string }> = () => {
@@ -14,6 +14,7 @@ export const ApiTesterApp: React.FC<{ windowId: string }> = () => {
   const [responseTimeMs, setResponseTimeMs] = useState<number | null>(null);
   const [responseBody, setResponseBody] = useState<string | null>(null);
   const [responseHeaders, setResponseHeaders] = useState<string | null>(null);
+  const [responseTab, setResponseTab] = useState<'body' | 'headers'>('body');
   const [isCopied, setIsCopied] = useState(false);
 
   const handleSend = async () => {
@@ -178,22 +179,32 @@ export const ApiTesterApp: React.FC<{ windowId: string }> = () => {
               )}
             </div>
 
-            {responseBody && (
-              <button
-                onClick={copyResponse}
-                className="flex items-center gap-1 text-[11px] text-[var(--text-muted)] hover:text-white transition-colors"
-                title="Copy Response"
-              >
-                {isCopied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                <span>{isCopied ? 'Copied' : 'Copy'}</span>
-              </button>
-            )}
+            <div className="flex items-center gap-2">
+              {responseHeaders && (
+                <button
+                  onClick={() => setResponseTab(responseTab === 'body' ? 'headers' : 'body')}
+                  className="text-[10px] px-2 py-0.5 rounded bg-[var(--surface-input)] text-[var(--text-secondary)] hover:text-white"
+                >
+                  {responseTab === 'body' ? 'View Headers' : 'View Body'}
+                </button>
+              )}
+              {responseBody && (
+                <button
+                  onClick={copyResponse}
+                  className="flex items-center gap-1 text-[11px] text-[var(--text-muted)] hover:text-white transition-colors"
+                  title="Copy Response"
+                >
+                  {isCopied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                  <span>{isCopied ? 'Copied' : 'Copy'}</span>
+                </button>
+              )}
+            </div>
           </div>
 
           <div className="flex-1 p-3 overflow-auto">
             {responseBody ? (
               <pre className="font-mono text-xs text-[var(--text-primary)] leading-relaxed select-text">
-                {responseBody}
+                {responseTab === 'body' ? responseBody : responseHeaders}
               </pre>
             ) : (
               <div className="flex flex-col items-center justify-center h-full text-xs text-[var(--text-muted)] gap-1">

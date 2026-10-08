@@ -5,9 +5,7 @@ import {
   Pin,
   Search,
   FileText,
-  Clock,
   Download,
-  Tag,
 } from 'lucide-react';
 import { soundEngine } from '../../design-system/soundEngine';
 

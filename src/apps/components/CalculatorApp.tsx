@@ -6,7 +6,6 @@ export const CalculatorApp: React.FC<{ windowId: string }> = () => {
   const [display, setDisplay] = useState('0');
   const [equation, setEquation] = useState('');
   const [history, setHistory] = useState<string[]>([]);
-  const [showHistory, setShowHistory] = useState(false);
 
   const handleDigit = (digit: string) => {
     soundEngine.play('click');

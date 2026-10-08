@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Code, CheckCircle, AlertCircle, Copy, Check, Minimize2, Maximize2 } from 'lucide-react';
+import { AlertCircle, Copy, Check, Minimize2, Maximize2 } from 'lucide-react';
 import { soundEngine } from '../../design-system/soundEngine';
 
 const SAMPLE_JSON = `{
