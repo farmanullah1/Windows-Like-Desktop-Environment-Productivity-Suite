@@ -1,0 +1,360 @@
+import React, { useState, useEffect } from 'react';
+import {
+  Folder,
+  FileText,
+  ChevronRight,
+  ArrowLeft,
+  ArrowRight,
+  Plus,
+  Trash2,
+  Search,
+  Grid,
+  List as ListIcon,
+  HardDrive,
+  FileCode,
+  Image,
+} from 'lucide-react';
+import { soundEngine } from '../../design-system/soundEngine';
+
+interface FileItem {
+  id: string;
+  name: string;
+  type: 'folder' | 'file';
+  sizeKb?: number;
+  updatedAt: string;
+  extension?: string;
+  parentId: string | null;
+}
+
+const DEFAULT_FILES: FileItem[] = [
+  { id: 'f-docs', name: 'Documents', type: 'folder', parentId: null, updatedAt: '2026-10-08' },
+  { id: 'f-downloads', name: 'Downloads', type: 'folder', parentId: null, updatedAt: '2026-10-08' },
+  { id: 'f-pictures', name: 'Pictures', type: 'folder', parentId: null, updatedAt: '2026-10-08' },
+  { id: 'f-projects', name: 'Projects', type: 'folder', parentId: null, updatedAt: '2026-10-08' },
+  { id: 'f-welcome', name: 'Welcome_ADW5.txt', type: 'file', extension: 'txt', sizeKb: 4, parentId: null, updatedAt: '2026-10-08' },
+  { id: 'f-spec', name: 'System_Specification.md', type: 'file', extension: 'md', sizeKb: 54, parentId: 'f-docs', updatedAt: '2026-10-08' },
+  { id: 'f-todo', name: 'Sprint_Roadmap.txt', type: 'file', extension: 'txt', sizeKb: 12, parentId: 'f-docs', updatedAt: '2026-10-08' },
+  { id: 'f-wallpaper', name: 'Aurora_Wallpaper.png', type: 'file', extension: 'png', sizeKb: 1420, parentId: 'f-pictures', updatedAt: '2026-10-08' },
+  { id: 'f-code', name: 'desktopStore.ts', type: 'file', extension: 'ts', sizeKb: 18, parentId: 'f-projects', updatedAt: '2026-10-08' },
+];
+
+export const FileExplorerApp: React.FC<{ windowId: string }> = () => {
+  const [files, setFiles] = useState<FileItem[]>(() => {
+    try {
+      const saved = localStorage.getItem('adw_filesystem');
+      return saved ? JSON.parse(saved) : DEFAULT_FILES;
+    } catch {
+      return DEFAULT_FILES;
+    }
+  });
+
+  const [currentFolderId, setCurrentFolderId] = useState<string | null>(null);
+  const [history, setHistory] = useState<(string | null)[]>([null]);
+  const [historyIndex, setHistoryIndex] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+
+  // Persistence
+  useEffect(() => {
+    try {
+      localStorage.setItem('adw_filesystem', JSON.stringify(files));
+    } catch {
+      // storage error handled
+    }
+  }, [files]);
+
+  const navigateTo = (folderId: string | null) => {
+    soundEngine.play('click');
+    const newHistory = history.slice(0, historyIndex + 1);
+    newHistory.push(folderId);
+    setHistory(newHistory);
+    setHistoryIndex(newHistory.length - 1);
+    setCurrentFolderId(folderId);
+    setSelectedId(null);
+  };
+
+  const goBack = () => {
+    if (historyIndex > 0) {
+      soundEngine.play('click');
+      const newIndex = historyIndex - 1;
+      setHistoryIndex(newIndex);
+      setCurrentFolderId(history[newIndex]);
+      setSelectedId(null);
+    }
+  };
+
+  const goForward = () => {
+    if (historyIndex < history.length - 1) {
+      soundEngine.play('click');
+      const newIndex = historyIndex + 1;
+      setHistoryIndex(newIndex);
+      setCurrentFolderId(history[newIndex]);
+      setSelectedId(null);
+    }
+  };
+
+  const handleCreateFolder = () => {
+    soundEngine.play('click');
+    const folderName = prompt('Enter folder name:', 'New Folder');
+    if (!folderName || !folderName.trim()) return;
+
+    const newFolder: FileItem = {
+      id: `folder-${Date.now()}`,
+      name: folderName.trim(),
+      type: 'folder',
+      parentId: currentFolderId,
+      updatedAt: new Date().toISOString().split('T')[0],
+    };
+    setFiles((prev) => [...prev, newFolder]);
+  };
+
+  const handleCreateFile = () => {
+    soundEngine.play('click');
+    const fileName = prompt('Enter file name:', 'New Document.txt');
+    if (!fileName || !fileName.trim()) return;
+
+    const ext = fileName.includes('.') ? fileName.split('.').pop() : 'txt';
+    const newFile: FileItem = {
+      id: `file-${Date.now()}`,
+      name: fileName.trim(),
+      type: 'file',
+      extension: ext,
+      sizeKb: 1,
+      parentId: currentFolderId,
+      updatedAt: new Date().toISOString().split('T')[0],
+    };
+    setFiles((prev) => [...prev, newFile]);
+  };
+
+  const handleDeleteSelected = () => {
+    if (!selectedId) return;
+    soundEngine.play('click');
+    if (confirm('Delete selected item?')) {
+      setFiles((prev) => prev.filter((item) => item.id !== selectedId && item.parentId !== selectedId));
+      setSelectedId(null);
+    }
+  };
+
+  // Current folder files
+  const currentFiles = files
+    .filter((f) => {
+      if (searchQuery.trim()) {
+        return f.name.toLowerCase().includes(searchQuery.toLowerCase());
+      }
+      return f.parentId === currentFolderId;
+    })
+    .sort((a, b) => {
+      if (a.type === b.type) return a.name.localeCompare(b.name);
+      return a.type === 'folder' ? -1 : 1;
+    });
+
+  // Breadcrumbs
+  const getBreadcrumbs = () => {
+    const crumbs: { id: string | null; name: string }[] = [{ id: null, name: 'Home' }];
+    let curr = currentFolderId;
+    const path: { id: string; name: string }[] = [];
+    while (curr) {
+      const folder = files.find((f) => f.id === curr);
+      if (folder) {
+        path.unshift({ id: folder.id, name: folder.name });
+        curr = folder.parentId;
+      } else {
+        break;
+      }
+    }
+    return [...crumbs, ...path];
+  };
+
+  const getFileIcon = (item: FileItem) => {
+    if (item.type === 'folder') return <Folder className="w-8 h-8 text-amber-400 fill-amber-400/20" />;
+    if (item.extension === 'png' || item.extension === 'jpg') {
+      return <Image className="w-8 h-8 text-purple-400" />;
+    }
+    if (item.extension === 'ts' || item.extension === 'js' || item.extension === 'json') {
+      return <FileCode className="w-8 h-8 text-cyan-400" />;
+    }
+    return <FileText className="w-8 h-8 text-blue-400" />;
+  };
+
+  return (
+    <div className="flex flex-col h-full bg-[var(--surface-base)] text-[var(--text-primary)] select-none">
+      {/* Top Navigation & Toolbar */}
+      <div className="flex items-center gap-2 p-2 border-b border-[var(--border-subtle)] bg-[var(--surface-acrylic)] backdrop-blur-md">
+        <button
+          onClick={goBack}
+          disabled={historyIndex <= 0}
+          className="p-1.5 rounded-md hover:bg-[var(--border-medium)] disabled:opacity-40 transition-colors"
+          title="Back"
+        >
+          <ArrowLeft className="w-4 h-4" />
+        </button>
+        <button
+          onClick={goForward}
+          disabled={historyIndex >= history.length - 1}
+          className="p-1.5 rounded-md hover:bg-[var(--border-medium)] disabled:opacity-40 transition-colors"
+          title="Forward"
+        >
+          <ArrowRight className="w-4 h-4" />
+        </button>
+
+        {/* Breadcrumb address bar */}
+        <div className="flex-1 flex items-center gap-1 px-3 py-1 bg-[var(--surface-input)] border border-[var(--border-subtle)] rounded-lg text-xs overflow-x-auto">
+          <HardDrive className="w-3.5 h-3.5 text-blue-400 flex-shrink-0" />
+          {getBreadcrumbs().map((crumb, idx) => (
+            <React.Fragment key={crumb.name + idx}>
+              {idx > 0 && <ChevronRight className="w-3 h-3 text-[var(--text-muted)] flex-shrink-0" />}
+              <button
+                onClick={() => navigateTo(crumb.id)}
+                className="hover:text-[var(--accent-primary)] font-medium truncate"
+              >
+                {crumb.name}
+              </button>
+            </React.Fragment>
+          ))}
+        </div>
+
+        {/* Search */}
+        <div className="relative w-48">
+          <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
+          <input
+            type="text"
+            placeholder="Search files..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-8 pr-3 py-1 bg-[var(--surface-input)] border border-[var(--border-subtle)] rounded-lg text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--border-focus)]"
+          />
+        </div>
+
+        {/* Actions */}
+        <button
+          onClick={handleCreateFolder}
+          className="flex items-center gap-1 px-2.5 py-1 bg-[var(--surface-card)] hover:bg-[var(--border-medium)] border border-[var(--border-subtle)] rounded-lg text-xs font-medium transition-colors"
+          title="New Folder"
+        >
+          <Plus className="w-3.5 h-3.5 text-amber-400" />
+          <span>Folder</span>
+        </button>
+        <button
+          onClick={handleCreateFile}
+          className="flex items-center gap-1 px-2.5 py-1 bg-[var(--surface-card)] hover:bg-[var(--border-medium)] border border-[var(--border-subtle)] rounded-lg text-xs font-medium transition-colors"
+          title="New File"
+        >
+          <Plus className="w-3.5 h-3.5 text-blue-400" />
+          <span>File</span>
+        </button>
+        {selectedId && (
+          <button
+            onClick={handleDeleteSelected}
+            className="p-1.5 text-red-400 hover:bg-red-500/20 rounded-md transition-colors"
+            title="Delete Selected"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        )}
+
+        {/* View toggle */}
+        <div className="flex items-center border border-[var(--border-subtle)] rounded-lg overflow-hidden">
+          <button
+            onClick={() => setViewMode('grid')}
+            className={`p-1.5 ${viewMode === 'grid' ? 'bg-[var(--accent-subtle)] text-[var(--accent-primary)]' : 'hover:bg-[var(--border-medium)]'}`}
+            title="Grid View"
+          >
+            <Grid className="w-3.5 h-3.5" />
+          </button>
+          <button
+            onClick={() => setViewMode('list')}
+            className={`p-1.5 ${viewMode === 'list' ? 'bg-[var(--accent-subtle)] text-[var(--accent-primary)]' : 'hover:bg-[var(--border-medium)]'}`}
+            title="List View"
+          >
+            <ListIcon className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      </div>
+
+      {/* Main Content Area */}
+      <div className="flex-1 overflow-y-auto p-4">
+        {currentFiles.length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-full text-[var(--text-muted)] gap-2">
+            <Folder className="w-12 h-12 stroke-[1.2] opacity-40" />
+            <p className="text-sm">This folder is empty</p>
+            <p className="text-xs">Create a new folder or file to get started</p>
+          </div>
+        ) : viewMode === 'grid' ? (
+          <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-3">
+            {currentFiles.map((item) => (
+              <div
+                key={item.id}
+                onClick={() => setSelectedId(item.id)}
+                onDoubleClick={() => {
+                  if (item.type === 'folder') navigateTo(item.id);
+                  else soundEngine.play('click');
+                }}
+                className={`flex flex-col items-center p-3 rounded-xl cursor-pointer transition-all ${
+                  selectedId === item.id
+                    ? 'bg-[var(--accent-subtle)] border border-[var(--accent-primary)] shadow-sm'
+                    : 'hover:bg-[var(--surface-card)] border border-transparent'
+                }`}
+              >
+                <div className="mb-2">{getFileIcon(item)}</div>
+                <span className="text-xs text-center line-clamp-2 w-full break-all font-medium">
+                  {item.name}
+                </span>
+                {item.sizeKb !== undefined && (
+                  <span className="text-[10px] text-[var(--text-muted)] mt-1">{item.sizeKb} KB</span>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="flex flex-col divide-y divide-[var(--border-subtle)]">
+            <div className="grid grid-cols-12 text-[11px] font-semibold text-[var(--text-muted)] pb-2 px-2">
+              <span className="col-span-7">Name</span>
+              <span className="col-span-3">Date Modified</span>
+              <span className="col-span-2 text-right">Size</span>
+            </div>
+            {currentFiles.map((item) => (
+              <div
+                key={item.id}
+                onClick={() => setSelectedId(item.id)}
+                onDoubleClick={() => {
+                  if (item.type === 'folder') navigateTo(item.id);
+                  else soundEngine.play('click');
+                }}
+                className={`grid grid-cols-12 items-center py-2 px-2 rounded-lg cursor-pointer text-xs ${
+                  selectedId === item.id
+                    ? 'bg-[var(--accent-subtle)] text-[var(--accent-primary)] font-medium'
+                    : 'hover:bg-[var(--surface-card)]'
+                }`}
+              >
+                <div className="col-span-7 flex items-center gap-2 truncate">
+                  <div className="w-5 h-5 flex-shrink-0 flex items-center justify-center">
+                    {getFileIcon(item)}
+                  </div>
+                  <span className="truncate">{item.name}</span>
+                </div>
+                <span className="col-span-3 text-[var(--text-muted)]">{item.updatedAt}</span>
+                <span className="col-span-2 text-right text-[var(--text-muted)]">
+                  {item.sizeKb !== undefined ? `${item.sizeKb} KB` : '--'}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Status Bar */}
+      <div className="flex items-center justify-between px-3 py-1.5 border-t border-[var(--border-subtle)] bg-[var(--surface-acrylic)] text-[11px] text-[var(--text-muted)]">
+        <span>{currentFiles.length} items</span>
+        {selectedId && (
+          <span>
+            Selected:{' '}
+            <strong className="text-[var(--text-primary)]">
+              {files.find((f) => f.id === selectedId)?.name}
+            </strong>
+          </span>
+        )}
+      </div>
+    </div>
+  );
+};
