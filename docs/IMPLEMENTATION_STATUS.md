@@ -8,9 +8,9 @@
 | **Foundation** | Engineering Memory (`brain.md`) | IMPLEMENTED | REAL | Mandatory engineering memory established |
 | **Foundation** | Architecture Documentation (`docs/*`) | IMPLEMENTED | REAL | Architecture, Security, DB, API, Motion, Sound, Themes, A11y, Windows, Testing |
 | **Foundation** | Configuration Templates (`.gitignore`, `.env.example`) | IMPLEMENTED | REAL | Safe configuration files created |
-| **Design System** | CSS Custom Properties & Design Tokens | PLANNED | REAL | To be implemented in Phase 2 |
-| **Design System** | Web Audio API UI Sound Engine | PLANNED | REAL | To be implemented in Phase 2 |
-| **Design System** | Theme Provider (Light, Dark, High-Contrast, etc.) | PLANNED | REAL | To be implemented in Phase 2 |
+| **Design System** | CSS Custom Properties & Design Tokens | IMPLEMENTED | REAL | Centralized CSS tokens in `src/design-system/tokens.css` |
+| **Design System** | Web Audio API UI Sound Engine | IMPLEMENTED | REAL | Procedural synthesis sound engine in `src/design-system/soundEngine.ts` |
+| **Design System** | Theme Provider (Light, Dark, High-Contrast, etc.) | IMPLEMENTED | REAL | Multi-theme and performance modes in `src/design-system/ThemeProvider.tsx` |
 | **Desktop Shell** | Taskbar / Dock Component (Win / Mac / Hybrid) | PLANNED | REAL | Phase 3 |
 | **Desktop Shell** | Start Menu & App Launcher | PLANNED | REAL | Phase 3 |
 | **Desktop Shell** | Universal Search & Command Palette | PLANNED | REAL | Phase 3 |
