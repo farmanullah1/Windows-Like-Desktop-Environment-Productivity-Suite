@@ -16,10 +16,9 @@ import {
   Code,
   AppWindow,
 } from 'lucide-react';
-import { WindowState, SnapZone } from '../core/types';
+import { WindowState } from '../core/types';
 import { useDesktop } from '../core/desktopStore';
 import { APP_REGISTRY } from '../apps/registry';
-import { soundEngine } from '../design-system/soundEngine';
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   Folder,

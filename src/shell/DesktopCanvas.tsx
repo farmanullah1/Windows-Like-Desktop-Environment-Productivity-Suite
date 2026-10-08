@@ -5,13 +5,11 @@ import {
   FileText,
   Terminal,
   Monitor,
-  Trash2,
   Plus,
   RefreshCw,
   Palette,
 } from 'lucide-react';
 import { useDesktop } from '../core/desktopStore';
-import { useTheme } from '../design-system/ThemeProvider';
 import { soundEngine } from '../design-system/soundEngine';
 
 interface ContextMenuPos {
@@ -28,7 +26,6 @@ export const DesktopCanvas: React.FC = () => {
     addNotification,
   } = useDesktop();
 
-  const { theme } = useTheme();
   const [contextMenu, setContextMenu] = useState<ContextMenuPos | null>(null);
   const activeWorkspace = workspaces.find((w) => w.id === activeWorkspaceId);
 

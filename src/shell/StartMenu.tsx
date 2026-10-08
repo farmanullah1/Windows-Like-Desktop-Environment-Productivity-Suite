@@ -4,7 +4,6 @@ import {
   Power,
   Lock,
   RotateCcw,
-  User,
   Folder,
   Settings,
   FileText,
@@ -16,7 +15,6 @@ import {
   Send,
   Code,
   AppWindow,
-  ChevronRight,
 } from 'lucide-react';
 import { useDesktop } from '../core/desktopStore';
 import { getAllApps } from '../apps/registry';

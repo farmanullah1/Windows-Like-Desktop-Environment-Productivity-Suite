@@ -6,13 +6,11 @@ import {
   VolumeX,
   Sun,
   Moon,
-  Zap,
   Battery,
   Settings as SettingsIcon,
-  Check,
 } from 'lucide-react';
 import { useDesktop } from '../core/desktopStore';
-import { useTheme } from '../../src/design-system/ThemeProvider';
+import { useTheme } from '../design-system/ThemeProvider';
 import { soundEngine } from '../design-system/soundEngine';
 
 export const QuickSettings: React.FC = () => {
@@ -20,8 +18,6 @@ export const QuickSettings: React.FC = () => {
   const {
     theme,
     setTheme,
-    effectsMode,
-    setEffectsMode,
     soundEnabled,
     setSoundEnabled,
     soundVolume,

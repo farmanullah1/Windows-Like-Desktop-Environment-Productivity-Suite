@@ -1,4 +1,3 @@
-import React from 'react';
 import { AppDefinition } from '../core/types';
 import { FileExplorerApp } from './components/FileExplorerApp';
 import { SettingsApp } from './components/SettingsApp';

@@ -17,8 +17,6 @@ import {
   VolumeX,
   Battery,
   Bell,
-  Command,
-  Layout,
   Grid,
 } from 'lucide-react';
 import { useDesktop } from '../core/desktopStore';
@@ -113,6 +111,8 @@ export const Taskbar: React.FC = () => {
           ? 'pb-2 px-3'
           : isMac
           ? 'pb-3 px-4 justify-center'
+          : isDev
+          ? 'h-[40px] bg-[var(--surface-taskbar)] border-t border-[var(--border-subtle)] px-2 backdrop-blur-2xl'
           : 'h-[48px] bg-[var(--surface-taskbar)] border-t border-[var(--border-subtle)] px-3 backdrop-blur-2xl'
       }`}
     >
