@@ -38,7 +38,7 @@ if (fs.existsSync(rootEnvPath)) {
 }
 
 const app = express();
-const PORT = Number(process.env.PORT) || Number(process.env.API_PORT) || 3000;
+const PORT = Number(process.env.PORT) || Number(process.env.API_PORT) || 5000;
 const DB_SERVER = process.env.SERVER || process.env.DB_SERVER || 'localhost';
 const DB_NAME = process.env.DATABASE || process.env.DB_NAME || 'MyOS';
 const JWT_SECRET = process.env.JWT_SECRET || 'bac0a2b3e80af8c0fef9ca6a7f1466251047834cf15ee33f5af23b26e2012d09';
