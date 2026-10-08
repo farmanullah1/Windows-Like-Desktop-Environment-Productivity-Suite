@@ -186,7 +186,16 @@ export const NotesApp: React.FC<{ windowId: string }> = () => {
                   <span>{note.updatedAt}</span>
                   <div className="flex items-center gap-1">
                     {note.tags.slice(0, 2).map((t) => (
-                      <span key={t} className="px-1.5 py-0.2 rounded bg-[var(--surface-input)]">
+                      <span
+                        key={t}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedTag(selectedTag === t ? null : t);
+                        }}
+                        className={`px-1.5 py-0.5 rounded cursor-pointer transition-colors ${
+                          selectedTag === t ? 'bg-[var(--accent-primary)] text-white' : 'bg-[var(--surface-input)] hover:text-white'
+                        }`}
+                      >
                         {t}
                       </span>
                     ))}

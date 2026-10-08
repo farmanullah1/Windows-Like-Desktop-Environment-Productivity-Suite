@@ -4,10 +4,8 @@ import {
   Cpu,
   HardDrive,
   Battery,
-  Wifi,
   ShieldCheck,
   CheckCircle2,
-  Terminal,
 } from 'lucide-react';
 import { useDesktop } from '../../core/desktopStore';
 

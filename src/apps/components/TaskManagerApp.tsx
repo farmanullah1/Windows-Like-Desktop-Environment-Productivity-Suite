@@ -1,12 +1,8 @@
 import React, { useState } from 'react';
 import {
-  Activity,
   Cpu,
   HardDrive,
   XCircle,
-  RefreshCw,
-  Zap,
-  CheckCircle,
 } from 'lucide-react';
 import { useDesktop } from '../../core/desktopStore';
 import { soundEngine } from '../../design-system/soundEngine';

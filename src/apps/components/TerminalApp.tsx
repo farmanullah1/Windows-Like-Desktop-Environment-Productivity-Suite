@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Terminal as TerminalIcon, Sparkles, RefreshCw } from 'lucide-react';
 import { useDesktop } from '../../core/desktopStore';
 import { useTheme, ThemeType } from '../../design-system/ThemeProvider';
 import { soundEngine } from '../../design-system/soundEngine';

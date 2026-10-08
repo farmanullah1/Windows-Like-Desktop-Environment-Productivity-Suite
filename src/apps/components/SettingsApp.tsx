@@ -7,11 +7,9 @@ import {
   HardDrive,
   Eye,
   Info,
-  Sparkles,
   VolumeX,
   RotateCcw,
   Download,
-  Upload,
   Plus,
   Trash2,
 } from 'lucide-react';
