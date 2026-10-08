@@ -1,0 +1,66 @@
+# Master Capability Matrix
+
+**Product:** Windows-Like Desktop Environment & Productivity Suite  
+**Specification Version:** 6.0  
+**Standard:** Truth in Engineering & Production Capability Model (Sections 0, 4, 19, 21)
+
+---
+
+## 1. Truth in Engineering Classification Model
+
+To preserve product integrity and prevent misrepresentation, every subsystem and application in the suite is assigned an unambiguous classification:
+
+| Classification | Definition |
+| :--- | :--- |
+| **REAL** | Fully implemented, genuine application functionality running directly within the client/server runtime. |
+| **WINDOWS-INTEGRATED** | Genuine integration with the host Windows OS via vetted Node APIs, WMI/CIM queries, or controlled PowerShell bridges. |
+| **APPLICATION-SIMULATED** | Sophisticated desktop environment behavior managed strictly within the application's canvas/windowing engine (not replacing Windows OS equivalents). |
+| **INFORMATIONAL** | Read-only inspection or telemetry display; does not modify or configure the underlying operating system. |
+| **FUTURE** | Architected and designed in schema/specs, but deferred to future release milestones. |
+| **UNSUPPORTED** | Intentionally blocked or technically unsupported due to OS security boundaries, safety policies, or stability constraints. |
+
+---
+
+## 2. Feature Capability Matrix
+
+| Feature / Subsystem | Classification | Implementation Mechanism | Privileges & Boundaries | Safety Fallback |
+| :--- | :--- | :--- | :--- | :--- |
+| **Desktop Shell & Canvas** | APPLICATION-SIMULATED | React 18 Canvas, customizable wallpapers, custom desktop icons, right-click context menu | User process; no desktop hook injection | Fixed canvas viewport |
+| **Taskbar / Dock System** | APPLICATION-SIMULATED | Hybrid dock/taskbar engine with pinned apps, active indicators, workspace pills, and system tray | Runs within app container; does not modify Windows Taskbar | Responsive flex layout |
+| **Start Menu & Search** | APPLICATION-SIMULATED | Categorized application launcher, pinned apps grid, recommended files, power menu | In-memory & SQLite registry search | Static catalog fallback |
+| **Command Palette (`Ctrl+Space`)** | REAL | Universal fuzzy command executor, keyboard-first shortcut palette | Sandboxed dispatch; permission-checked commands | In-app command list |
+| **Window Manager** | APPLICATION-SIMULATED | Full window container with drag, 8-handle resize, z-index stacking, minimize/maximize | Bounded by desktop canvas container | Cascade default layout |
+| **Win 11 Snap Layouts** | APPLICATION-SIMULATED | Windows 11 style hover menu (Left, Right, Top, Corners) and edge magnet snapping | Calculated against canvas coordinate space | Standard maximize |
+| **Virtual Workspaces (1–4)** | APPLICATION-SIMULATED | Multi-desktop workspace engine isolating window stacks, independent wallpapers | Application-level; not Windows Virtual Desktops API | Single workspace mode |
+| **File Explorer** | REAL + WINDOWS-INTEGRATED | Virtual folder navigator with breadcrumbs, search, file creation, and native FS bridge | User-scoped paths only; protected Windows folders blocked | Virtual sandbox FS |
+| **Notes App** | REAL | Markdown editor with live preview, word/character counter, tag categorization, auto-save | Offline SQLite / LocalStorage + SQL Server sync | In-memory state |
+| **Terminal Center** | REAL + WINDOWS-INTEGRATED | Interactive command interpreter (`help`, `sysinfo`, `ps`, `calc`, `curl`, `workspaces`) | Controlled process bridge; shell allowlist; no raw admin execution | Sandboxed simulation shell |
+| **Task Manager** | REAL + WINDOWS-INTEGRATED | Active process table, CPU/Memory telemetry gauges, task termination | Read-only inspection by default; termination requires confirmation | Simulated process snapshot |
+| **System Information** | REAL + WINDOWS-INTEGRATED | Genuine OS version, architecture, CPU model, total/free RAM, and uptime inspection | Read-only WMI / Node `os` module | Static build specs fallback |
+| **Calculator** | REAL | Complete arithmetic and scientific calculator with expression history strip | Standard JavaScript math engine | Standard arithmetic |
+| **Clock, Timer & Stopwatch** | REAL | World clock (UTC, EST, GMT, PKT, JST), stopwatch with lap recording, countdown timer | High-resolution browser timers (`performance.now()`) | Standard `Date` timer |
+| **API Tester** | REAL | Full HTTP REST client with method selection, headers editor, JSON request body, latency gauge | Browser `fetch` / Node proxy client | Mock echo client |
+| **JSON Viewer & Formatter** | REAL | JSON syntax tree viewer, 2/4-space beautifier, minifier, and error validator | Native `JSON.parse` with line/col error pinpointing | Raw text display |
+| **Design System & Themes** | REAL | 8 themes (Dark, Light, Midnight, Graphite, Aurora, Ocean, Ubuntu, High-Contrast) | Centralized CSS variables (`tokens.css`, `themes.css`) | Default dark theme |
+| **Visual Performance Tiers** | REAL | 4 tiers (Minimal, Balanced, Enhanced, Immersive) controlling blurs, acrylic, animations | Dynamic CSS class application (`tier-minimal` to `tier-immersive`) | Balanced mode |
+| **Web Audio Sound Engine** | REAL | Synthesized procedural audio (clicks, opens, snaps, minimizes, errors) via Web Audio API | Zero external binary audio dependencies; accessibility mute switch | Silent visual feedback |
+| **Quick Settings Flyout** | REAL | Action center flyout with Wi-Fi toggle, theme switcher, sound mute, volume slider | Application state control; informational network status | Local preference store |
+| **Notification Center** | REAL | Stacked notification tray with categories (Info, Warning, Success, Error), dismiss controls | In-memory event bus and database persistence | Browser console log |
+| **Local SQLite Persistence** | REAL | Relational offline-first local database caching users, workspaces, windows, notes | Local user AppData directory; zero remote transmission needed | IndexedDB fallback |
+| **SQL Server Sync (`MyOS`)** | REAL | Versioned T-SQL migrations, sync queue, delta push/pull with transactional safety | Requires configured connection; explicitly gated execution | Offline-first mode |
+| **REST API Server (`/api/v1`)** | REAL | Node.js Express/Fastify service with JWT auth, request correlation (`X-Request-Id`) | Runs on user-configured port (default 3000) | Client-side standalone |
+| **Registry Editor** | INFORMATIONAL / CONTROLLED | Read-only registry view of harmless application settings | Registry writes permanently disabled without explicit admin approval | In-app settings |
+| **Windows System Restore** | INFORMATIONAL | Displays restore point status and instructions | Does not initiate system restore points | Documentation link |
+| **Replacing `explorer.exe`** | UNSUPPORTED | Running as primary Windows shell replacement | Blocked by design; application operates as user-level productivity workspace | Standalone window |
+| **Kernel-Level Drivers** | UNSUPPORTED | Low-level hardware kernel drivers | Blocked by design; standard user-mode Win32/Node only | N/A |
+
+---
+
+## 3. Windows Integration API Safety Policy
+
+In strict compliance with **Section 2.1 (Build-First / User-Authorized Execution Only)** and **Section 21 (Windows Integration API Matrix)**:
+
+1. **Read Operations**: Safe read-only metrics (CPU, Memory, OS Version, Non-sensitive processes) are permitted via verified Node.js standard libraries and non-invasive CIM queries.
+2. **Write Operations**: Operations modifying system state (terminating third-party processes, writing to system directories, modifying Windows services) are locked behind explicit user confirmation dialogs and administrative authorization gates.
+3. **Protected Paths**: All filesystem operations strictly forbid tampering with `C:\Windows`, `C:\Program Files`, `C:\ProgramData`, System32, WinSxS, and user credential vaults.
+4. **No Arbitrary Shell Execution**: The terminal application enforces a strict command allowlist and parameter sanitizer. Arbitrary `powershell.exe -EncodedCommand` or destructive shell piping is prohibited.
