@@ -17,6 +17,13 @@ import {
   Music,
   Image as ImageIcon,
   Sparkles,
+  Clipboard,
+  Wrench,
+  CheckSquare,
+  Calendar,
+  Flame,
+  ShieldCheck,
+  Bot,
 } from 'lucide-react';
 
 interface AppIconBadgeProps {
@@ -130,6 +137,54 @@ const APP_STYLE_MAP: Record<
     gradient: 'from-rose-400 via-pink-500 to-amber-500',
     glow: 'rgba(244, 63, 94, 0.45)',
     label: 'Photo Studio',
+  },
+  'clipboard': {
+    icon: Clipboard,
+    gradient: 'from-amber-400 via-orange-500 to-rose-500',
+    glow: 'rgba(245, 158, 11, 0.4)',
+    label: 'Clipboard Manager',
+  },
+  'snippets': {
+    icon: Sparkles,
+    gradient: 'from-violet-400 via-purple-500 to-indigo-600',
+    glow: 'rgba(139, 92, 246, 0.4)',
+    label: 'Snippet Expander',
+  },
+  'quick-utils': {
+    icon: Wrench,
+    gradient: 'from-teal-400 via-cyan-500 to-blue-600',
+    glow: 'rgba(6, 182, 212, 0.4)',
+    label: 'Quick Utilities',
+  },
+  'tasks': {
+    icon: CheckSquare,
+    gradient: 'from-blue-500 via-indigo-600 to-violet-700',
+    glow: 'rgba(59, 130, 246, 0.4)',
+    label: 'Tasks',
+  },
+  'calendar': {
+    icon: Calendar,
+    gradient: 'from-rose-500 via-red-600 to-amber-600',
+    glow: 'rgba(244, 63, 94, 0.4)',
+    label: 'Calendar',
+  },
+  'focus': {
+    icon: Flame,
+    gradient: 'from-amber-500 via-orange-600 to-rose-600',
+    glow: 'rgba(249, 115, 22, 0.4)',
+    label: 'Focus Mode',
+  },
+  'vault': {
+    icon: ShieldCheck,
+    gradient: 'from-emerald-500 via-teal-600 to-cyan-700',
+    glow: 'rgba(16, 185, 129, 0.4)',
+    label: 'Security Vault',
+  },
+  'ai-assistant': {
+    icon: Bot,
+    gradient: 'from-purple-500 via-indigo-600 to-pink-600',
+    glow: 'rgba(168, 85, 247, 0.4)',
+    label: 'Antigravity AI',
   },
 };
 
