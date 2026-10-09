@@ -44,6 +44,8 @@ export interface TranslationDictionary {
   textEditor: string;
   appCatalog: string;
   eventViewer: string;
+  mediaPlayer: string;
+  gallery: string;
 }
 
 export const translations: Record<LocaleCode, TranslationDictionary> = {
