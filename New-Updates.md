@@ -4619,3 +4619,1076 @@ The product name is MyOS. The logo is MyOS. The browser tab title is MyOS. Every
 Use brain.md for engineering memory. Use Git after every meaningful implementation unit. Do not launch the application, install dependencies, or modify the system during development — write the scripts, document them, and let the user run them.
 
 DO NOT MAKE MISTAKES, ANTIGRAVITY.
+
+
+# MyOS — Premium Startup Experience, Animated Login System & One-Command Launcher
+
+## Google Antigravity Master Implementation Prompt
+
+**Project Name:** MyOS
+**Project Type:** Windows-inspired, browser-based desktop operating system experience
+**Primary Objective:** Build a visually impressive, highly animated, polished MyOS startup experience with a custom logo, boot animation, login screen, account creation flow, and automated development launcher.
+
+---
+
+# 1. Your Role
+
+Act as a senior full-stack engineer, desktop-interface designer, motion-design specialist, security engineer, accessibility specialist, and QA architect.
+
+Build a complete, working, maintainable implementation of MyOS rather than a static mockup or demonstration prototype.
+
+The result must feel like a premium desktop operating environment inspired by the startup experience of modern operating systems. It should have its own visual identity, design language, animations, branding, and interactions.
+
+The application must be visually sophisticated without looking cluttered, excessively artificial, or like a generic AI-generated dashboard.
+
+Prioritize:
+
+* Exceptional visual design.
+* Smooth, intentional animations.
+* A convincing operating-system startup experience.
+* Reliable login and account creation interfaces.
+* Correct startup-versus-refresh behavior.
+* Secure authentication architecture.
+* Simple application startup through a single command.
+* Maintainable code and reliable error handling.
+* Responsive layouts and accessibility.
+* Transparent installation and execution behavior.
+
+## Critical execution restriction
+
+You are authorized to inspect the project, design the solution, create and edit source files, write configuration files, implement the application, and create the launcher script.
+
+**Do not execute or launch the completed application until I explicitly authorize you to do so.**
+
+Until I give that authorization, do not:
+
+* Run the application or its development server.
+* Execute `npm run`, `npm install`, `npm ci`, or other dependency-installation commands.
+* Open the application in a browser.
+* Run database migrations or modify databases.
+* Download dependencies or execute remote installation scripts.
+* Modify Windows settings, registry entries, services, firewall rules, or system configuration.
+* Perform destructive cleanup or overwrite existing user work.
+* Automatically elevate privileges.
+
+You may create the launcher script that will perform the required installation and startup steps when I choose to run it myself.
+
+If the project is incomplete or a required decision is unclear, inspect the available files, make conservative implementation decisions, document assumptions, and continue with the safest reasonable approach.
+
+---
+
+# 2. Product Vision
+
+MyOS must feel like a personal operating system that is coming to life.
+
+When the user launches MyOS through the intended `npm run` startup command, the experience should follow this sequence:
+
+1. The launcher checks whether the required runtime and dependencies are available.
+2. Missing project dependencies are installed using the project's approved package manager.
+3. The development server starts.
+4. The launcher opens a new browser tab pointing to the local MyOS application.
+5. MyOS displays a premium, Windows-inspired startup animation.
+6. The startup animation transitions smoothly into the login screen.
+7. The user can sign in or choose **Create Account** from the corner of the login interface.
+8. Successful authentication transitions into the MyOS desktop or the project's designated authenticated landing screen.
+
+A normal browser refresh must not replay the operating-system startup animation. The user should return directly to the appropriate login, session-restoration, or authenticated application state.
+
+The browser must not be repeatedly opened every time the application reloads or its development server performs a hot update.
+
+---
+
+# 3. MyOS Branding and Identity
+
+Create an original visual identity for MyOS.
+
+## 3.1 Name and logo
+
+The official product name is:
+
+**MyOS**
+
+Design a distinctive logo that remains recognizable at different sizes.
+
+The logo should work in:
+
+* The startup screen.
+* The login screen.
+* The account creation screen.
+* The browser favicon.
+* The application loading states.
+* The desktop shell and Start menu, where applicable.
+* The launcher documentation.
+* Small navigation and branding elements.
+
+Create the logo as a genuine project asset, preferably a clean SVG with a transparent background.
+
+The design may use an abstract window, a geometric four-part symbol, a connected constellation, or another original mark suggesting a personal digital environment.
+
+Do not copy the exact Windows logo, Windows startup artwork, or proprietary branding.
+
+## 3.2 Brand personality
+
+MyOS should feel:
+
+* Premium.
+* Modern.
+* Personal.
+* Technically sophisticated.
+* Calm and confident.
+* Colorful without being chaotic.
+* Animated without feeling slow.
+* Familiar to Windows users without being a Windows clone.
+
+Use consistent typography, spacing, iconography, shadows, borders, and motion.
+
+The logo and wordmark must remain legible over both light and dark backgrounds.
+
+---
+
+# 4. Complete Startup Experience
+
+## 4.1 Startup sequence
+
+Implement a deliberate, multi-stage startup sequence.
+
+### Stage A — Initial frame
+
+As soon as the MyOS application is opened in a fresh application-launch session, render a deliberate initial state rather than an unstyled page.
+
+Show a dark, cinematic background with subtle ambient lighting and the MyOS logo positioned near the center.
+
+Avoid flashes of white, layout shifts, unstyled content, or abrupt transitions.
+
+### Stage B — Logo reveal
+
+Animate the logo into view using a carefully composed combination of:
+
+* Smooth opacity transitions.
+* Scale and perspective effects.
+* Soft light sweeps.
+* Subtle glow.
+* Layered movement.
+* Gentle background gradients.
+* Carefully timed wordmark appearance.
+
+The animation should feel deliberate and polished, not like an exaggerated gaming intro.
+
+The MyOS wordmark should appear with the logo.
+
+### Stage C — Operating-system boot animation
+
+Create an original Windows-inspired startup animation.
+
+Potential visual elements include:
+
+* A dark blue, midnight, or deep-space background.
+* A softly illuminated central logo.
+* Slowly shifting ambient light.
+* A subtle rotating or orbiting visual element.
+* A smooth progress indicator or animated loading ring.
+* Minimal startup status text.
+* Small background particles or geometric details, used sparingly.
+* A transition from the boot screen toward the authentication environment.
+
+Use a cohesive motion sequence instead of animating every element independently.
+
+The animation must have a clear beginning, progression, and ending.
+
+Avoid a fake progress bar that appears broken or remains stuck. If progress is decorative rather than tied to real initialization, communicate that appropriately and complete the sequence within a bounded duration.
+
+Do not simulate security checks, disk operations, system scans, or other real operating-system activities that the browser application does not perform.
+
+### Stage D — Transition into authentication
+
+When startup completes, transition into the login screen.
+
+Use a smooth crossfade or carefully composed combination of opacity, scale, and background movement.
+
+Avoid a sudden replacement of the entire screen.
+
+The login interface should feel like the next stage of the same experience, not an unrelated webpage.
+
+### Suggested timing
+
+Use the following as initial design targets rather than rigid delays:
+
+* Initial logo reveal: approximately 0.5–1.2 seconds.
+* Main startup sequence: approximately 1.5–3 seconds.
+* Transition to login: approximately 0.4–0.8 seconds.
+
+Keep the total startup experience approximately 2.5–5 seconds under normal conditions.
+
+The application must not delay authentication unnecessarily just to make the animation longer.
+
+Use actual readiness checks where needed, but impose a sensible upper bound on decorative animation.
+
+---
+
+# 5. Critical Requirement: Startup Animation Must Not Replay on Refresh
+
+This is one of the most important requirements in the entire project.
+
+The startup animation must play when a new MyOS application-launch session begins through the intended `npm run` workflow. It must not replay whenever the user refreshes the browser.
+
+Do not solve this with a simple component-local boolean. Component state resets on a page reload.
+
+Do not use `sessionStorage` alone as the only startup detector. A tab-specific storage flag can produce confusing behavior with duplicate tabs, development reloads, or newly opened tabs.
+
+## 5.1 Implement an explicit launch-session mechanism
+
+Create a reliable startup-session architecture.
+
+The recommended approach is:
+
+1. The development launcher starts a new MyOS application session and generates a unique, non-secret launch-session identifier.
+2. The development server makes that identifier available to the frontend through a controlled development-only mechanism, or a local startup endpoint.
+3. The frontend reads the launch-session identifier when the application initializes.
+4. The application records that the startup animation has been completed for that launch session.
+5. A browser refresh retains the same launch-session identity.
+6. During refresh, the frontend recognizes that the animation has already completed and immediately displays the correct application state.
+7. Starting MyOS again through the launcher creates a new launch session, allowing the animation to play again.
+
+The session identifier is not an authentication token and must never grant access to a user account.
+
+Do not expose credentials, signing secrets, private environment variables, or database connection strings through this mechanism.
+
+Do not introduce an unnecessarily complex backend solely to implement this behavior.
+
+If a launch-session endpoint is used, it should be read-only, local-only, appropriately protected, and available only in the intended development configuration.
+
+## 5.2 Alternative implementation
+
+If a separate launch-session mechanism is impractical for the existing architecture, use an explicit session-state design that provides the same observable behavior.
+
+Document the chosen design and explain how it distinguishes a new application launch from a browser refresh.
+
+The following must be true:
+
+| Scenario                                                    | Expected behavior                                    |
+| ----------------------------------------------------------- | ---------------------------------------------------- |
+| First launch using the MyOS launcher                        | Play startup animation                               |
+| Refresh after startup completes                             | Skip startup animation                               |
+| React component rerenders                                   | Do not replay animation                              |
+| Development hot-module replacement                          | Do not replay animation                              |
+| Navigation between login and account creation               | Do not replay animation                              |
+| Successful login                                            | Transition to the authenticated experience           |
+| Logout                                                      | Return to login without replaying the boot animation |
+| New independent launch session                              | Play startup animation                               |
+| Duplicate tab using the same launch session                 | Do not replay startup unnecessarily                  |
+| Browser opened directly without a launch-session identifier | Show a sensible, documented fallback                 |
+| Startup fails before completion                             | Display an appropriate recoverable error state       |
+
+Ensure that authentication state and startup-animation state are separate concerns.
+
+A completed startup animation does not imply that a user is authenticated.
+
+---
+
+# 6. Premium Animated Login Screen
+
+After startup, show the MyOS login screen.
+
+This must be a real, usable interface, not just a visual illustration.
+
+## 6.1 Overall composition
+
+Create a full-viewport authentication experience.
+
+Use a carefully balanced composition with:
+
+* The MyOS logo and wordmark.
+* A welcoming heading.
+* A concise supporting sentence.
+* Email or username input.
+* Password input.
+* A primary **Sign In** button.
+* A visible **Create Account** option in a corner of the screen.
+* Optional password-recovery functionality.
+* An optional account avatar or user illustration.
+* Subtle ambient animation in the background.
+* Clear loading, validation, error, and success states.
+
+The layout should remain balanced on small screens, laptop screens, large monitors, and high-DPI displays.
+
+Do not sacrifice readability to decorative elements.
+
+## 6.2 Login screen placement
+
+Place the MyOS logo and wordmark near the upper-left or upper-center area of the login composition, depending on the final layout.
+
+Position the login panel as the primary focus.
+
+The **Create Account** option must be easy to discover without competing with the main sign-in action.
+
+For example, it can appear in the upper-right corner as a compact text link or understated outlined button:
+
+**New to MyOS? Create Account**
+
+The option must remain visible and usable at different viewport widths.
+
+On mobile layouts, move it into an appropriate position rather than allowing it to overlap the login panel.
+
+## 6.3 Visual treatment
+
+Use a sophisticated visual treatment combining:
+
+* Layered gradients.
+* Glass-like surfaces where appropriate.
+* Soft shadows.
+* Thin, subtle borders.
+* Controlled background blur.
+* Gentle ambient lighting.
+* Well-spaced typography.
+* A strong primary action.
+* Clear focus and error states.
+
+Do not put every element inside a glass card.
+
+Use visual hierarchy to make the authentication form easy to understand.
+
+The login panel should look premium in both dark and light themes if theme switching is supported.
+
+## 6.4 Login interactions
+
+Implement:
+
+* Email or username entry, according to the authentication design.
+* Password entry.
+* Password visibility toggle.
+* Keyboard navigation.
+* Enter-to-submit.
+* Appropriate required-field validation.
+* Clear invalid-input feedback.
+* Loading state during submission.
+* Duplicate-submission prevention.
+* Useful server-error messages.
+* A successful-authentication transition.
+* A recoverable error state when the backend is unavailable.
+
+Never display a fake successful login merely because the user entered any text.
+
+Do not hardcode a username or password as a production authentication mechanism.
+
+---
+
+# 7. Create Account Screen
+
+The Create Account option must be a fully implemented part of the authentication experience.
+
+Clicking **Create Account** should transition to the registration screen without replaying the startup animation.
+
+## 7.1 Registration interface
+
+Include the fields appropriate for the application's account model, such as:
+
+* Full name.
+* Email address.
+* Username, if required.
+* Password.
+* Confirm password.
+
+Use clear labels, useful placeholder text, and visible validation messages.
+
+Include:
+
+* A primary **Create Account** button.
+* A **Back to Sign In** link.
+* Password visibility controls.
+* Password-strength guidance where appropriate.
+* Duplicate-email or duplicate-username feedback.
+* A registration loading state.
+* A registration success state.
+* A recoverable failure state.
+
+Avoid collecting unnecessary personal information.
+
+## 7.2 Registration animation
+
+Animate the login and registration interfaces consistently.
+
+Possible transitions include:
+
+* A horizontal panel transition.
+* A controlled crossfade.
+* A slight change in panel position.
+* A smooth heading transition.
+* Staggered entry for form fields.
+
+Choose one coherent transition style.
+
+Do not stack multiple dramatic animations for a single navigation event.
+
+Respect reduced-motion settings.
+
+## 7.3 Authentication correctness
+
+Use the application's real authentication architecture if it already exists.
+
+If authentication has not been implemented, build it using the existing project architecture and a secure backend design.
+
+Passwords must never be stored in plaintext.
+
+Use an established password-hashing algorithm, server-side validation, appropriate session or token handling, and secure database queries.
+
+Do not store raw passwords, password hashes, authentication secrets, or sensitive session credentials in browser local storage.
+
+If a backend or database is unavailable, do not present the authentication system as production-ready. Clearly document what has been implemented and what remains necessary.
+
+---
+
+# 8. Advanced Animation and Motion Design
+
+MyOS should be heavily animated in the sense of being rich, polished, and responsive—not in the sense of making every object move continuously.
+
+Use a centralized animation system so the startup, login, registration, and later desktop experiences share a consistent visual language.
+
+## 8.1 Background animations
+
+Implement a carefully selected combination of:
+
+* Slowly moving gradient fields.
+* Soft aurora-like lighting.
+* Subtle parallax.
+* Gentle floating geometric shapes.
+* Sparse, low-contrast particles.
+* Ambient edge lighting.
+* A restrained light sweep behind the logo.
+
+These effects should create depth without distracting users from the login form.
+
+Avoid large numbers of particles, constant rapid movement, or expensive blur effects across the entire screen.
+
+## 8.2 Logo animations
+
+Create reusable logo animation variants:
+
+* Startup reveal.
+* Gentle idle glow.
+* Hover response.
+* Login-screen entrance.
+* Registration-screen transition.
+* Compact desktop logo transition.
+
+The idle animation must be subtle and optional.
+
+Avoid infinite spinning, aggressive pulsing, or excessive brightness changes.
+
+## 8.3 Interactive motion
+
+Provide polished feedback for:
+
+* Buttons.
+* Text fields.
+* Focus states.
+* Password visibility.
+* Navigation links.
+* Form validation.
+* Notifications.
+* Modal dialogs.
+* Dropdown menus.
+* Theme controls, if present.
+
+Examples include a slight button lift on hover, a subtle press response, a smooth focus ring, and a short validation transition.
+
+Every interaction must remain responsive. Animations must never delay the user's ability to click, type, submit, or navigate.
+
+## 8.4 Motion profiles
+
+Implement a centralized motion preference with these profiles:
+
+* **Off:** Disable nonessential motion.
+* **Reduced:** Follow the operating system's reduced-motion preference and minimize additional effects.
+* **Balanced:** The default, offering polished animations without excessive movement.
+* **Expressive:** Allow richer background and transition effects on capable devices.
+
+Do not automatically force the Expressive profile simply because the user requested a heavily animated design.
+
+Allow the user to reduce motion.
+
+Persist user-selected preferences only where appropriate.
+
+## 8.5 Technical animation standards
+
+Prefer performant CSS transforms and opacity transitions for simple motion.
+
+Use a maintained animation library only if it meaningfully improves the implementation and is compatible with the project's architecture.
+
+Avoid unnecessary dependencies.
+
+Requirements:
+
+* No flashing or strobing effects.
+* No forced long delays before controls become usable.
+* No repeated animations caused by React rerenders.
+* No layout shifts during transitions.
+* No excessive animation of expensive properties.
+* No unbounded timers or unmanaged event listeners.
+* Pause or reduce nonessential animation when the page is hidden.
+* Provide fallbacks for devices with limited processing power.
+* Avoid animation-related console errors.
+* Preserve usability when animations are disabled.
+
+Aim for smooth motion around 60 FPS on typical modern hardware, while prioritizing responsiveness and accessibility when that target cannot be maintained.
+
+---
+
+# 9. Color, Lighting, and Visual Customization
+
+Give MyOS a distinctive, attractive color system.
+
+Use design tokens instead of hardcoding colors throughout individual components.
+
+Suggested visual direction:
+
+* Midnight navy and electric blue for the startup.
+* Cyan and violet for subtle ambient lighting.
+* Soft white and cool gray for typography.
+* Carefully selected accent colors for interactive elements.
+* Dark, translucent surfaces where they improve depth.
+* Optional light-theme equivalents.
+
+Use gradients strategically.
+
+Do not use every color simultaneously.
+
+Maintain clear contrast between the background, login panel, input fields, text, icons, and primary actions.
+
+Where customization is supported, allow the user to choose an accent color without compromising text contrast.
+
+The logo, loading indicators, focus rings, buttons, and active states should use consistent semantic color tokens.
+
+---
+
+# 10. Browser and Application Startup Architecture
+
+The app must be easy to start on a Windows development machine.
+
+Create a reliable launcher that prepares the project, starts the development server, and opens MyOS in a new browser tab.
+
+The launcher should be designed for the existing repository rather than assuming a particular directory structure.
+
+Inspect the current project before choosing or changing scripts.
+
+## 10.1 Preferred developer experience
+
+The intended workflow should be as close as practical to:
+
+1. The user invokes the designated launcher command.
+2. The launcher checks prerequisites.
+3. The launcher installs missing dependencies when necessary.
+4. The launcher starts the development server.
+5. The launcher waits for the server to become responsive.
+6. The launcher opens one new browser tab.
+7. MyOS plays the startup animation.
+8. The login screen appears.
+9. The application remains available until the user stops the development server.
+
+The exact commands and implementation must match the project's actual package scripts.
+
+## 10.2 Package scripts
+
+Create or update `package.json` scripts as appropriate.
+
+The project must provide a clear `npm run` entry point, preferably:
+
+* `npm run start:myos` — starts the MyOS development workflow, including the required preparation and browser-opening behavior.
+* `npm run dev` — starts the development server without necessarily opening another browser tab on every invocation, unless this behavior is explicitly documented.
+
+You may choose a different name if the existing project already has an established convention.
+
+Avoid creating confusing duplicate scripts.
+
+Document the exact command the user should execute.
+
+## 10.3 Dependency installation
+
+The launcher must install the required project dependencies before starting the app when the project has not yet been prepared.
+
+Use the existing lockfile and package manager when possible.
+
+For an npm project:
+
+* If `package-lock.json` exists and is compatible, prefer `npm ci` for a clean, reproducible dependency installation.
+* If the project has no lockfile, use the appropriate installation workflow and document the result.
+* If dependencies are already installed and valid, avoid unnecessary reinstallations.
+* Detect installation failures and stop safely.
+* Do not start the app if required dependencies failed to install.
+* Never install unrelated global packages without explicit authorization.
+* Never run arbitrary remote scripts or use unverified installation shortcuts.
+* Do not delete the lockfile or rewrite dependency versions merely to resolve an unrelated issue.
+
+Do not blindly delete `node_modules` as a repair strategy.
+
+If Node.js or npm is missing, explain the prerequisite and stop safely rather than silently changing the system.
+
+## 10.4 New browser tab
+
+The launcher must open MyOS in a new browser tab once the server is ready.
+
+It must not open multiple tabs because of repeated readiness checks, server logs, or development hot reloads.
+
+Requirements:
+
+* Determine the actual local development URL from the server configuration.
+* Wait for a successful readiness response rather than using an arbitrary fixed sleep.
+* Use a bounded startup timeout.
+* Open the URL only after the server is ready.
+* Prevent duplicate browser-opening actions for the same launcher invocation.
+* Report the URL if automatic browser opening fails.
+* Do not require the user to manually copy a URL during normal startup.
+* Do not open a browser for every source-code change.
+* Do not use an external service to open the local app.
+* Do not silently switch to an unrelated browser or remote URL.
+
+On Windows, use an appropriate platform-supported browser-opening mechanism. Avoid shell injection and unsafe command construction.
+
+If the repository is configured to use a Vite development server, configure its browser-opening behavior so that the launcher and Vite do not both open tabs.
+
+## 10.5 Port handling
+
+Use the existing development-server port if possible.
+
+If the desired port is already occupied:
+
+* Detect the conflict.
+* Follow the project's existing port policy.
+* Either choose an available port if supported or stop with a clear message.
+* Use the actual URL reported by the server.
+* Do not terminate unrelated processes to free a port.
+* Do not silently change firewall rules or network settings.
+
+---
+
+# 11. Launcher Implementation
+
+Create a maintainable launcher appropriate for the existing environment.
+
+Prefer a cross-platform Node.js launcher when the project is already Node-based. A Windows `.cmd` wrapper may be included for convenience.
+
+Potential files include:
+
+* `scripts/start-myos.mjs`
+* `scripts/ensure-dependencies.mjs`
+* `start-myos.cmd`
+* `package.json` scripts
+* `README.md` startup instructions
+
+These are suggested names, not a requirement to create redundant files.
+
+## 11.1 Launcher responsibilities
+
+The launcher must:
+
+1. Locate the project root reliably.
+2. Verify that the required project files exist.
+3. Check that Node.js and npm are available.
+4. Select the correct package manager based on the repository.
+5. Check whether dependencies are installed.
+6. Install missing dependencies using the approved lockfile-based workflow.
+7. Stop if installation fails.
+8. Start the development server using the correct project script.
+9. Capture useful startup errors.
+10. Wait for the server's actual readiness.
+11. Open exactly one new browser tab.
+12. Keep the server process alive.
+13. Handle Ctrl+C and normal shutdown correctly.
+14. Avoid leaving orphaned child processes.
+15. Display a concise, useful status message.
+
+Use safe process-spawning APIs with argument arrays and `shell: false` wherever applicable.
+
+Do not build commands from untrusted input.
+
+Do not hide failures by ignoring exit codes.
+
+Do not suppress useful error output.
+
+## 11.2 Idempotence
+
+Repeated launcher use must not corrupt the project.
+
+The launcher should not:
+
+* Duplicate scripts on every run.
+* Reinstall everything unnecessarily.
+* Create multiple background servers unintentionally.
+* Open multiple tabs from a single invocation.
+* Change unrelated configuration.
+* Delete project data.
+* Modify Windows startup behavior.
+* Install a permanent service.
+* Add an unrequested scheduled task.
+
+The launcher must be an ordinary development tool, not an always-running background utility.
+
+## 11.3 Development versus production
+
+The automatic dependency installation and browser-opening workflow is primarily for development.
+
+Do not make the production application depend on running npm in the user's browser.
+
+Do not expose development-only startup endpoints in production builds.
+
+Document how the production build would be generated separately, but do not deploy it or run a production server without authorization.
+
+---
+
+# 12. Frontend Architecture and State Management
+
+Use the existing framework and architecture whenever practical.
+
+If the repository already uses React, retain React unless a compelling technical reason requires a change.
+
+Keep the implementation organized into reusable components, such as:
+
+* `MyOSLogo`
+* `StartupScreen`
+* `StartupAnimation`
+* `StartupSessionProvider`
+* `LoginScreen`
+* `LoginForm`
+* `CreateAccountScreen`
+* `RegistrationForm`
+* `AuthLayout`
+* `AnimatedBackground`
+* `MotionProvider`
+* `LoadingIndicator`
+* `ErrorMessage`
+* `Notification`
+* `PasswordInput`
+
+Use names that fit the repository's existing conventions.
+
+Avoid creating components for every trivial element.
+
+Separate:
+
+* Startup-session state.
+* Authentication state.
+* Form state.
+* Motion preferences.
+* Theme preferences.
+* Server readiness and launcher state.
+
+Use a clear state machine for the main experience, with states such as:
+
+`initializing → starting → authentication → registration → authenticated`
+
+The actual state model may be refined to represent failures, session restoration, and navigation accurately.
+
+Do not make authentication depend on the startup animation's completion flag.
+
+Prevent stale asynchronous requests from updating components after they are unmounted.
+
+Ensure that browser refresh and development hot-module replacement preserve the intended experience.
+
+---
+
+# 13. Accessibility and Responsive Design
+
+The application must remain usable by people who do not want extensive animations.
+
+Requirements:
+
+* Semantic HTML.
+* Proper form labels.
+* Keyboard accessibility.
+* Visible focus indicators.
+* Sufficient contrast.
+* Screen-reader-friendly error messages.
+* Logical tab order.
+* Appropriate accessible names for buttons and icons.
+* Reduced-motion support.
+* Responsive layout.
+* Touch-friendly controls.
+* No essential information conveyed by color alone.
+* No forced focus traps outside appropriate dialogs.
+* No inaccessible hover-only actions.
+
+If a screen reader is active or reduced motion is requested, do not make the user wait through decorative effects to access authentication.
+
+Do not hide the login form behind an unnecessarily long animation.
+
+The application must work at narrow widths, including approximately 320 CSS pixels, without horizontal scrolling.
+
+---
+
+# 14. Security and Privacy
+
+The development launcher and application must follow safe defaults.
+
+* Bind the development server to localhost unless network access is explicitly requested.
+* Do not expose the development server to the local network by default.
+* Do not disable browser security protections.
+* Do not store passwords in plaintext.
+* Do not hardcode production credentials.
+* Do not commit `.env` files or secrets.
+* Keep sensitive environment variables on the server.
+* Validate authentication input on the server.
+* Use parameterized database queries if a database is involved.
+* Apply suitable protections to authentication endpoints.
+* Avoid logging passwords, authentication tokens, and sensitive user data.
+* Do not introduce analytics, tracking, or external network dependencies without justification.
+* Do not claim that frontend-only authentication is secure production authentication.
+* Do not make startup-session identifiers function as authentication credentials.
+
+If the application already includes a backend and database, integrate with them rather than creating a competing authentication system.
+
+If a backend is required but not yet configured, implement the agreed architecture and document any configuration needed without running migrations or altering existing data.
+
+---
+
+# 15. Error Handling and Recovery
+
+Every important stage must have a clear failure state.
+
+Examples:
+
+### Dependency installation failure
+
+Display the relevant error and explain that the server was not started.
+
+### Server startup failure
+
+Report the useful error and do not open a browser tab that cannot load MyOS.
+
+### Server readiness timeout
+
+Stop waiting after a bounded period and show the expected URL and troubleshooting information.
+
+### Browser-opening failure
+
+Keep the server available when safe, display the local URL, and explain how to open it manually.
+
+### Missing launch-session information
+
+Use the documented fallback behavior without exposing secrets or repeatedly restarting the application.
+
+### Authentication failure
+
+Display a useful message without exposing internal server errors or sensitive implementation details.
+
+### Network or backend failure
+
+Provide a clear retry action when appropriate.
+
+### Animation failure
+
+Fall back to a usable, nonanimated login screen. Authentication must not become inaccessible because a visual effect failed.
+
+---
+
+# 16. Testing and Verification Plan
+
+Create a practical test plan and add automated tests where they fit the existing project.
+
+**Do not execute these tests until I authorize project execution.**
+
+## Startup behavior
+
+* A new launch session displays the startup animation.
+* The animation transitions to login.
+* Refresh after startup does not replay the animation.
+* React rerenders do not replay the animation.
+* Hot-module replacement does not replay the animation.
+* Navigation between login and registration does not replay startup.
+* A new launcher-created session can play startup again.
+* A missing startup-session identifier triggers the documented fallback.
+* A startup error does not permanently block login.
+
+## Login and registration
+
+* Login form fields work.
+* Password visibility toggle works.
+* Invalid inputs display useful errors.
+* Login requests show a loading state.
+* Duplicate submissions are prevented.
+* Create Account navigation works.
+* Registration validation works.
+* Back to Sign In works.
+* Authentication failures are recoverable.
+* Successful authentication opens the correct authenticated destination.
+
+## Launcher behavior
+
+* Dependencies are installed when needed.
+* Existing dependencies are not unnecessarily reinstalled.
+* Installation failure prevents server startup.
+* The server starts using the intended package script.
+* The launcher waits for readiness.
+* Exactly one new tab is opened per launcher invocation.
+* Hot reload does not trigger another browser-opening action.
+* Port conflicts are handled safely.
+* Ctrl+C shuts down the launcher-managed server appropriately.
+* Missing prerequisites produce clear instructions.
+* The launcher does not modify unrelated system configuration.
+
+## Visual and performance behavior
+
+* Startup looks polished at different viewport sizes.
+* Login and registration transitions are smooth.
+* Reduced-motion settings work.
+* Focus states are visible.
+* Background effects do not obstruct text.
+* No avoidable layout shifts occur.
+* There are no known animation-related memory leaks.
+* The interface remains usable on lower-powered devices.
+
+If browser automation is available, prepare tests for these behaviors. Do not install a new browser automation framework without authorization.
+
+---
+
+# 17. Required Project Deliverables
+
+Create or update the necessary project files.
+
+At minimum, deliver:
+
+1. A custom MyOS logo and favicon.
+2. The startup animation.
+3. The startup-session detection and persistence mechanism.
+4. The login screen.
+5. The Create Account screen.
+6. Consistent animation and design tokens.
+7. Authentication integration or a clearly documented authentication implementation.
+8. The one-command development launcher.
+9. The relevant npm scripts.
+10. Dependency and package-manager handling.
+11. Error handling for installation, startup, and authentication.
+12. Automated test files where appropriate.
+13. Updated README documentation.
+14. A clear startup and troubleshooting guide.
+15. A summary of implementation decisions and any remaining limitations.
+
+Use the existing repository's conventions and avoid creating duplicate implementations.
+
+Do not replace an existing authentication backend, database schema, or application architecture without first understanding it.
+
+---
+
+# 18. Implementation Workflow for Google Antigravity
+
+Follow this sequence.
+
+## Phase 1 — Inspect
+
+Inspect the existing project structure, package files, scripts, framework, authentication implementation, environment configuration, and relevant documentation.
+
+Identify the current development-server command and port policy.
+
+Do not run the project or install dependencies.
+
+## Phase 2 — Plan
+
+Document:
+
+* The startup-session architecture.
+* The authentication flow.
+* The component architecture.
+* The animation system.
+* The launcher lifecycle.
+* The dependency installation strategy.
+* The browser-opening strategy.
+* The security and privacy boundaries.
+* The test plan.
+
+Identify existing files that must be preserved.
+
+## Phase 3 — Implement
+
+Create the logo, design tokens, startup sequence, login interface, registration interface, state management, and launcher.
+
+Integrate with the existing backend when available.
+
+Implement the refresh-safe startup behavior before polishing decorative animation.
+
+## Phase 4 — Review
+
+Review the source statically for:
+
+* Incorrect npm scripts.
+* Missing dependencies.
+* Unsafe process spawning.
+* Duplicate browser-opening behavior.
+* Startup animation replay bugs.
+* Authentication-state bugs.
+* Unhandled errors.
+* Accessibility problems.
+* Performance issues.
+* Accidental system modifications.
+* Secrets accidentally included in frontend code.
+
+Perform static analysis and source inspection only when possible without executing project code.
+
+Do not claim that runtime tests have passed when they have not been run.
+
+## Phase 5 — Document and hand over
+
+Update the README with the exact command that the user should run.
+
+Explain what the launcher will do when the user runs it, including dependency installation, development-server startup, and browser-tab opening.
+
+List any required prerequisites and configuration.
+
+Identify what has been implemented, what has been reviewed statically, and what still requires runtime verification.
+
+Stop and wait for explicit authorization before launching or executing the application.
+
+---
+
+# 19. Final Acceptance Criteria
+
+The implementation is ready for review when all of the following are satisfied:
+
+* [ ] The product is named **MyOS**.
+* [ ] The product has a custom logo and favicon.
+* [ ] The initial experience contains a polished, Windows-inspired startup animation.
+* [ ] The startup animation transitions smoothly to login.
+* [ ] The startup animation runs once per intended launcher-created session.
+* [ ] Browser refresh does not replay the startup animation.
+* [ ] Component rerenders and hot reload do not replay the startup animation.
+* [ ] The login screen has a clearly visible Create Account option in a corner.
+* [ ] The registration screen is implemented and navigable.
+* [ ] Authentication behavior is genuine or its incomplete backend requirements are clearly documented.
+* [ ] The interface has rich but purposeful animations.
+* [ ] The color palette and branding are cohesive.
+* [ ] Reduced-motion and accessibility requirements are respected.
+* [ ] The launcher checks prerequisites and handles dependencies safely.
+* [ ] The launcher starts the correct development-server command.
+* [ ] The launcher waits for server readiness.
+* [ ] The launcher opens one new browser tab.
+* [ ] Refreshing or hot-reloading does not open additional tabs.
+* [ ] Installation and startup errors are handled clearly.
+* [ ] The launcher does not modify unrelated Windows settings.
+* [ ] Documentation contains the exact user-facing startup command.
+* [ ] No unapproved application execution, dependency installation, migration, or system modification has occurred.
+
+---
+
+# 20. Required Final Report
+
+When implementation is complete, provide a concise but detailed report containing:
+
+1. **Project status:** What was created or updated.
+2. **Visual design:** How the MyOS logo, startup animation, login, registration, colors, and motion were implemented.
+3. **Startup-session behavior:** How the application distinguishes a fresh launcher-created session from a browser refresh.
+4. **Launcher details:** The exact files and command involved in dependency preparation, server startup, readiness checks, and browser opening.
+5. **Authentication status:** Whether authentication is fully integrated, partially implemented, or awaiting configuration.
+6. **Testing status:** Which checks were completed statically and which still require authorized runtime testing.
+7. **Known limitations:** Any missing configuration, prerequisites, or outstanding issues.
+8. **Execution boundary:** Explicitly confirm whether the app was launched, dependencies installed, a browser opened, database migrations run, or Windows settings modified.
+
+Do not claim that anything was executed, installed, or tested unless it actually was.
+
+## Final instruction
+
+Build MyOS as a polished, original, premium operating-system-inspired web experience with a memorable startup animation, a beautiful login screen, a working Create Account flow, and a reliable one-command launcher.
+
+The most important technical distinction is this:
+
+**A new launcher-created session should show the startup animation. A normal browser refresh should not.**
+
+The most important operational distinction is this:
+
+**Create the application and launcher now, but do not execute them until I explicitly authorize you to do so.**

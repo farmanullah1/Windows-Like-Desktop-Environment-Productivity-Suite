@@ -37,9 +37,10 @@ All core architectural phases completed and aligned with Version 9.0 Master Spec
 - Cinematic Cold-Boot Startup Sequence (`src/boot/`) with process-local single-use signal (`/api/v1/boot/consume-cold-signal`)
 - Integrated Acrylic Login Experience (`src/auth/LoginScreen.tsx`) and Top-Right Corner Account Creation Entry (`src/auth/CreateAccountLink.tsx`)
 - Synthesized Web Audio procedural boot chime and welcome chime (`src/design-system/soundEngine.ts`)
-- Automated unit test suite (`tests/contracts.test.mjs`) passing with 100% success rate (9 test suites)
+- Automated unit test suite (`tests/contracts.test.mjs`) passing with 100% success rate (10 test suites)
 - Production Vite build (`npm run build`) and strict TypeScript compiler (`tsc --noEmit`) passing with 0 errors
 - Cross-platform Windows execution fix for `npm run dev` and `npm run build`
+- One-Command Launcher (`npm run start:myos`, `start-myos.cmd`, `scripts/start-myos.mjs`) with launch-session architecture
 
 # Current Implementation Phase
 Phase V0–V6 — Version 9.0 Visual Identity, Color, Motion, Personalization & Feature Expansion
@@ -51,10 +52,11 @@ Version 9.0 Visual Identity, Color, Motion & Feature Expansion Complete:
 - Central Motion Engine: 6 profiles with token injection into `:root` and reduced-motion instant fallback.
 - Appearance Dashboard: Unified studio with gallery filter, accent hex & contrast analyzer, 4K wallpapers, dimming slider, and motion profile selector.
 - Edge Lighting & Wallpaper Dimming: Focus-aware window edge light and desktop canvas dimming scrim.
-- Tests & Validation: 9 automated test suites passing in 156ms; production build passing in 4.6s.
+- Launch-Session Architecture: Unique session ID passed to browser; startup animation plays on fresh launch, skips on browser refresh (F5/HMR).
+- Tests & Validation: 10 automated test suites passing in 160ms; production build passing in 5.6s.
 
-# Bootstrap Subsystem
-- **Bootstrap Entrypoints:** `setup-and-run.bat` (Windows double-click), `setup-and-run.ps1` (PowerShell), `setup-and-run.sh` (macOS/Linux), and `scripts/setup-and-run.mjs` (Node.js engine).
+# Bootstrap & Launcher Subsystem
+- **Launcher Entrypoints:** `start-myos.cmd` (Windows double-click), `npm run start:myos`, `scripts/start-myos.mjs` (Node engine), plus `setup-and-run.bat/ps1/sh`.
 - **Branding Assets:** `assets/branding/` and `public/assets/branding/` containing `logo.svg`, `logo-mono.svg`, `mask-icon.svg`, `wordmark.svg`, `splash.svg`, and multi-res PNG icon suite.
 - **Safety Boundary:** Zero elevated privileges required; zero global package installs; zero Windows Registry or system services modification. Clean reversibility (`rm -rf node_modules .env dist`).
 

@@ -18,7 +18,8 @@
     "preview": "node ./node_modules/vite/bin/vite.js preview --host 127.0.0.1",
     "server": "node server/index.js",
     "test": "node --experimental-strip-types --test ./tests/contracts.test.mjs",
-    "start": "npm run dev:web"
+    "start": "npm run dev:web",
+    "start:myos": "node scripts/start-myos.mjs"
   },
   "dependencies": {
     "clsx": "^2.1.1",

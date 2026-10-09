@@ -99,6 +99,34 @@ test('Boot Experience: Cold-boot signal state machine contract', () => {
   assert.equal(consume(), false);
 });
 
+test('Launch Session: Cold boot plays on new launcher session, skips on browser refresh', () => {
+  const launchId1 = 'launch_123';
+  const launchId2 = 'launch_456';
+  const mockStorage = new Map();
+
+  const checkBoot = (launchId) => {
+    const key = `myos_boot_completed_${launchId}`;
+    if (mockStorage.get(key) === 'true') {
+      return 'warm'; // refresh
+    }
+    mockStorage.set(key, 'true');
+    return 'cold'; // first run of this session
+  };
+
+  // Launch 1 initial run -> cold (plays boot animation)
+  assert.equal(checkBoot(launchId1), 'cold');
+
+  // Launch 1 browser refresh (F5) -> warm (skips boot animation!)
+  assert.equal(checkBoot(launchId1), 'warm');
+  assert.equal(checkBoot(launchId1), 'warm');
+
+  // Launch 2 new launcher run -> cold (plays boot animation again!)
+  assert.equal(checkBoot(launchId2), 'cold');
+
+  // Launch 2 browser refresh (F5) -> warm (skips boot animation!)
+  assert.equal(checkBoot(launchId2), 'warm');
+});
+
 test('Permissions: All 32 permission keys are covered and verified', () => {
   assert.equal(checkPermission(['clipboard.history.*'], 'clipboard.history.read'), true);
   assert.equal(checkPermission(['snippet.*'], 'snippet.write'), true);

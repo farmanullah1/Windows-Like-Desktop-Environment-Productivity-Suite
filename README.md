@@ -21,20 +21,20 @@ Combining three dominant interface design philosophies into one cohesive, high-p
 
 ---
 
-## 🚀 One-Click Quick Start
+## 🚀 One-Click Quick Start & Launcher
 
 Get running in seconds with a single command:
 
-| Platform | Recommended Command |
+| Platform | Recommended Launcher Command |
 | :--- | :--- |
-| **Windows (Double-Click)** | Double-click `setup-and-run.bat` |
-| **Windows (PowerShell)** | `.\setup-and-run.ps1` or `npm run setup` |
-| **Windows (Terminal / CMD)** | `npm run setup` |
-| **macOS / Linux** | `./setup-and-run.sh` or `npm run setup` |
-| **Any Platform (Node.js)** | `node scripts/setup-and-run.mjs` |
+| **Windows (Double-Click)** | Double-click `start-myos.cmd` (or `setup-and-run.bat`) |
+| **All Platforms (npm)** | `npm run start:myos` (or `npm run setup`) |
+| **Windows (PowerShell)** | `.\start-myos.cmd` or `.\setup-and-run.ps1` |
+| **macOS / Linux** | `npm run start:myos` or `./setup-and-run.sh` |
+| **Node.js Direct** | `node scripts/start-myos.mjs` |
 
 > [!TIP]
-> The bootstrap script automatically checks your environment (Node.js ≥ 20, npm ≥ 10), installs dependencies, creates `.env`, finds a free port, starts the dev server, validates HTTP health, and launches your default browser to MyOS! See [docs/SETUP.md](docs/SETUP.md) and [docs/BOOTSTRAP.md](docs/BOOTSTRAP.md) for full details.
+> **Launch-Session Architecture:** Running `npm run start:myos` automatically generates a fresh launch session, verifies prerequisites (Node.js ≥ 20, npm ≥ 10), installs dependencies if missing, starts the server on loopback, and opens MyOS with the cinematic startup animation. Normal browser refreshes (F5 / reload) retain the session and skip the boot animation straight to login/desktop! See [docs/SETUP.md](docs/SETUP.md) and [docs/BOOTSTRAP.md](docs/BOOTSTRAP.md) for full details.
 
 ---
 

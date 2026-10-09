@@ -312,6 +312,30 @@ app.get('/api/v1/health', (req, res) => {
   });
 });
 
+// Boot & Launch Session Endpoints (Master Spec v9 & New-Updates.md §5)
+app.get('/api/v1/boot/launch-session', (_req, res) => {
+  successEnvelope(res, {
+    launchSessionId: bootState.launchId,
+    isColdBoot: bootState.isFirstRendererLoad,
+    processStartedAt: bootState.processStartedAt,
+  });
+});
+
+app.post('/api/v1/boot/consume-cold-signal', (_req, res) => {
+  const signal = consumeColdBootSignal();
+  successEnvelope(res, signal);
+});
+
+app.post('/api/v1/boot/new-launch-session', (req, res) => {
+  const { sessionId } = req.body || {};
+  bootState.launchId = sessionId || randomUUID();
+  bootState.isFirstRendererLoad = true;
+  successEnvelope(res, {
+    launchSessionId: bootState.launchId,
+    isColdBoot: true,
+  });
+});
+
 app.get('/api/v1/system/info', (req, res) => {
   const totalMemMb = Math.round(os.totalmem() / (1024 * 1024));
   const freeMemMb = Math.round(os.freemem() / (1024 * 1024));
