@@ -137,13 +137,6 @@ export const StartMenu: React.FC = () => {
             );
           })}
         </div>
-                <span className="text-[10px] text-[var(--text-muted)] truncate w-full">
-                  {app.category}
-                </span>
-              </motion.button>
-            );
-          })}
-        </div>
 
         {/* Recommended / Recent Items */}
         <div className="pt-2 border-t border-[var(--border-subtle)]">

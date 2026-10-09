@@ -14,6 +14,7 @@ import { useTheme } from '../design-system/ThemeProvider';
 import { soundEngine } from '../design-system/soundEngine';
 import { AppIconBadge } from '../design-system/AppIconBadge';
 import { DesktopWidgets } from './DesktopWidgets';
+import { motion, AnimatePresence } from 'motion/react';
 
 interface ContextMenuPos {
   x: number;
@@ -127,20 +128,23 @@ export const DesktopCanvas: React.FC = () => {
       <div className="p-4 pt-14 flex flex-col gap-3 w-28">
         {desktopIcons.map((item) => {
           return (
-            <div
+            <motion.div
               key={item.id}
+              whileHover={{ scale: 1.08, y: -2 }}
+              whileTap={{ scale: 0.94 }}
+              transition={{ type: 'spring', stiffness: 450, damping: 22 }}
               onDoubleClick={(e) => {
                 e.stopPropagation();
                 soundEngine.play('click');
                 openApp(item.appId, item.titleDisplay, item.appId);
               }}
-              className="flex flex-col items-center p-2 rounded-2xl hover:bg-white/15 hover:backdrop-blur-md cursor-pointer group transition-all text-center"
+              className="flex flex-col items-center p-2 rounded-2xl hover:bg-white/15 hover:backdrop-blur-md cursor-pointer group transition-colors text-center"
             >
               <AppIconBadge appId={item.appId} size="lg" className="mb-1" />
               <span className="text-[11px] font-medium text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)] line-clamp-2 px-1 rounded">
                 {item.title}
               </span>
-            </div>
+            </motion.div>
           );
         })}
       </div>
@@ -149,50 +153,55 @@ export const DesktopCanvas: React.FC = () => {
       <DesktopWidgets />
 
       {/* Right Click Desktop Context Menu */}
-      {contextMenu && (
-        <div
-          onClick={(e) => e.stopPropagation()}
-          style={{ top: contextMenu.y, left: contextMenu.x }}
-          className="fixed w-56 p-1.5 rounded-2xl bg-slate-900/90 border border-white/20 shadow-2xl backdrop-blur-2xl z-[var(--z-context-menu)] text-xs divide-y divide-white/10 text-white animate-in fade-in zoom-in-95 duration-100"
-        >
-          <div className="py-1">
-            <button
-              onClick={() => {
-                setContextMenu(null);
-                handleCycleWallpaper();
-              }}
-              className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-xl hover:bg-white/15 transition-colors text-left"
-            >
-              <ImageIcon className="w-4 h-4 text-rose-400" />
-              <span>Next Wallpaper</span>
-            </button>
-            <button
-              onClick={() => {
-                setContextMenu(null);
-                toggleWidgets();
-                soundEngine.play('click');
-              }}
-              className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-xl hover:bg-white/15 transition-colors text-left"
-            >
-              <LayoutGrid className="w-4 h-4 text-blue-400" />
-              <span>{widgetsVisible ? 'Hide Widgets' : 'Show Widgets'}</span>
-            </button>
-            <button
-              onClick={() => {
-                setContextMenu(null);
-                addStickyNote({
-                  text: 'New thought or note...',
-                  color: 'yellow',
-                  x: contextMenu.x,
-                  y: contextMenu.y,
-                });
-              }}
-              className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-xl hover:bg-white/15 transition-colors text-left"
-            >
-              <Plus className="w-4 h-4 text-amber-400" />
-              <span>Add Sticky Note</span>
-            </button>
-          </div>
+      <AnimatePresence>
+        {contextMenu && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.92, y: 6 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.92, y: 6 }}
+            transition={{ duration: 0.15, ease: 'easeOut' }}
+            onClick={(e) => e.stopPropagation()}
+            style={{ top: contextMenu.y, left: contextMenu.x }}
+            className="fixed w-56 p-1.5 rounded-2xl bg-slate-900/90 border border-white/20 shadow-2xl backdrop-blur-2xl z-[var(--z-context-menu)] text-xs divide-y divide-white/10 text-white"
+          >
+            <div className="py-1">
+              <button
+                onClick={() => {
+                  setContextMenu(null);
+                  handleCycleWallpaper();
+                }}
+                className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-xl hover:bg-white/15 transition-colors text-left cursor-pointer"
+              >
+                <ImageIcon className="w-4 h-4 text-rose-400" />
+                <span>Next Wallpaper</span>
+              </button>
+              <button
+                onClick={() => {
+                  setContextMenu(null);
+                  toggleWidgets();
+                  soundEngine.play('click');
+                }}
+                className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-xl hover:bg-white/15 transition-colors text-left cursor-pointer"
+              >
+                <LayoutGrid className="w-4 h-4 text-blue-400" />
+                <span>{widgetsVisible ? 'Hide Widgets' : 'Show Widgets'}</span>
+              </button>
+              <button
+                onClick={() => {
+                  setContextMenu(null);
+                  addStickyNote({
+                    text: 'New thought or note...',
+                    color: 'yellow',
+                    x: contextMenu.x,
+                    y: contextMenu.y,
+                  });
+                }}
+                className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-xl hover:bg-white/15 transition-colors text-left cursor-pointer"
+              >
+                <Plus className="w-4 h-4 text-amber-400" />
+                <span>Add Sticky Note</span>
+              </button>
+            </div>
 
           <div className="py-1">
             <button
@@ -248,14 +257,15 @@ export const DesktopCanvas: React.FC = () => {
                 setContextMenu(null);
                 addNotification('Desktop Refreshed', 'Refreshed desktop canvas matrix.', 'info', 'Shell');
               }}
-              className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-xl hover:bg-white/15 transition-colors text-left"
+              className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-xl hover:bg-white/15 transition-colors text-left cursor-pointer"
             >
               <RefreshCw className="w-4 h-4 text-sky-400" />
               <span>Refresh Desktop</span>
             </button>
           </div>
-        </div>
+        </motion.div>
       )}
+      </AnimatePresence>
     </div>
   );
 };

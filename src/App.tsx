@@ -12,6 +12,7 @@ import { LockScreen } from './shell/LockScreen';
 import { BootSequence } from './boot/BootSequence';
 import { LoginScreen } from './auth/LoginScreen';
 import { soundEngine } from './design-system/soundEngine';
+import { motion, AnimatePresence } from 'motion/react';
 import './design-system/tokens.css';
 import './design-system/themes.css';
 
@@ -37,34 +38,49 @@ export const App: React.FC = () => {
         )}
 
         {/* Layer 1: Integrated Authentication Login Screen with Corner Account Creation */}
-        {bootComplete && !isAuthenticated && (
-          <LoginScreen onLoginSuccess={handleLoginSuccess} />
-        )}
+        <AnimatePresence mode="wait">
+          {bootComplete && !isAuthenticated && (
+            <motion.div
+              key="auth-layer"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0, scale: 1.04, filter: 'blur(10px)' }}
+              transition={{ duration: 0.4, ease: 'easeInOut' }}
+              className="fixed inset-0 z-[99999]"
+            >
+              <LoginScreen onLoginSuccess={handleLoginSuccess} />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Layer 2: Main Desktop Environment Shell */}
-        <div
-          className={`relative w-screen h-screen overflow-hidden select-none bg-[var(--bg-desktop)] text-[var(--text-primary)] font-sans transition-opacity duration-500 ${
-            bootComplete && isAuthenticated ? 'opacity-100' : 'opacity-0 pointer-events-none'
-          }`}
-        >
-          {/* Layer 1: Desktop Canvas with Wallpapers & Icons */}
-          <DesktopCanvas />
+        {bootComplete && isAuthenticated && (
+          <motion.div
+            key="desktop-workspace"
+            initial={{ opacity: 0, scale: 0.97 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+            className="relative w-screen h-screen overflow-hidden select-none bg-[var(--bg-desktop)] text-[var(--text-primary)] font-sans"
+          >
+            {/* Layer 1: Desktop Canvas with Wallpapers & Icons */}
+            <DesktopCanvas />
 
-          {/* Layer 2: Window Manager Engine (Active Workspace Windows) */}
-          <WindowManager />
+            {/* Layer 2: Window Manager Engine (Active Workspace Windows) */}
+            <WindowManager />
 
-          {/* Layer 3: Desktop Shell Overlays */}
-          <StartMenu />
-          <QuickSettings />
-          <NotificationCenter />
-          <CommandPalette />
+            {/* Layer 3: Desktop Shell Overlays */}
+            <StartMenu />
+            <QuickSettings />
+            <NotificationCenter />
+            <CommandPalette />
 
-          {/* Layer 4: Hybrid Taskbar / Dock */}
-          <Taskbar />
+            {/* Layer 4: Hybrid Taskbar / Dock */}
+            <Taskbar />
 
-          {/* Layer 5: Session Lock Screen */}
-          <LockScreen />
-        </div>
+            {/* Layer 5: Session Lock Screen */}
+            <LockScreen />
+          </motion.div>
+        )}
       </DesktopProvider>
     </ThemeProvider>
   );
