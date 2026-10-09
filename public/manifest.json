@@ -1,11 +1,11 @@
 {
-  "name": "Windows-Like Desktop Environment & Productivity Suite",
-  "short_name": "Desktop Suite",
-  "description": "Production-grade hybrid Windows 11 + macOS + Ubuntu desktop workspace and productivity suite",
+  "name": "MyOS Desktop Environment & Productivity Suite",
+  "short_name": "MyOS",
+  "description": "MyOS — A hybrid desktop environment, productivity suite, and developer workspace.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0c1017",
-  "theme_color": "#0078d4",
+  "background_color": "#07090e",
+  "theme_color": "#4267d5",
   "orientation": "any",
   "categories": ["productivity", "utilities", "developer tools"],
   "icons": [

@@ -1,6 +1,7 @@
-# Windows-Like Desktop Environment & Productivity Suite (ADW-8)
+# MyOS — Hybrid Desktop Environment & Productivity Suite
 
-[![Version](https://img.shields.io/badge/version-8.0.0-blue.svg?style=flat-square)](docs/CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg?style=flat-square)](docs/CHANGELOG.md)
+[![Product](https://img.shields.io/badge/Product-MyOS-4267d5.svg?style=flat-square)](docs/SETUP.md)
 [![React](https://img.shields.io/badge/React-18.3.1-61dafb.svg?style=flat-square&logo=react)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7.3-3178c6.svg?style=flat-square&logo=typescript)](https://www.typescriptlang.org)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4.3.3-38bdf8.svg?style=flat-square&logo=tailwindcss)](https://tailwindcss.com)
@@ -11,7 +12,7 @@
 [![WCAG AA](https://img.shields.io/badge/Accessibility-WCAG_2.1_AA-00b894.svg?style=flat-square)](docs/ACCESSIBILITY.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
-A serious, production-grade desktop environment platform, productivity suite, and developer workstation designed for modern Windows 10/11 operating systems.
+A serious, production-grade hybrid desktop environment, productivity suite, and developer workspace designed for modern Windows 10/11 operating systems.
 
 Combining three dominant interface design philosophies into one cohesive, high-performance workspace:
 - **Windows 11 (40%)**: Taskbar with hover card window previews, Start Menu, System Tray, Quick Settings action center, Windows 11 hover snap layouts, edge magnet snapping, and Fluent mica/acrylic depth.
@@ -20,8 +21,26 @@ Combining three dominant interface design philosophies into one cohesive, high-p
 
 ---
 
+## 🚀 One-Click Quick Start
+
+Get running in seconds with a single command:
+
+| Platform | Recommended Command |
+| :--- | :--- |
+| **Windows (Double-Click)** | Double-click `setup-and-run.bat` |
+| **Windows (PowerShell)** | `.\setup-and-run.ps1` or `npm run setup` |
+| **Windows (Terminal / CMD)** | `npm run setup` |
+| **macOS / Linux** | `./setup-and-run.sh` or `npm run setup` |
+| **Any Platform (Node.js)** | `node scripts/setup-and-run.mjs` |
+
+> [!TIP]
+> The bootstrap script automatically checks your environment (Node.js ≥ 20, npm ≥ 10), installs dependencies, creates `.env`, finds a free port, starts the dev server, validates HTTP health, and launches your default browser to MyOS! See [docs/SETUP.md](docs/SETUP.md) and [docs/BOOTSTRAP.md](docs/BOOTSTRAP.md) for full details.
+
+---
+
 ## Table of Contents
 
+- [One-Click Quick Start](#-one-click-quick-start)
 - [Architectural Overview](#architectural-overview)
 - [Key Features & Highlights](#key-features--highlights)
 - [Application Catalog (24 Applications)](#application-catalog-24-applications)
@@ -31,11 +50,6 @@ Combining three dominant interface design philosophies into one cohesive, high-p
 - [Technology Stack](#technology-stack)
 - [Project Directory Structure](#project-directory-structure)
 - [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation & Setup](#installation--setup)
-  - [Environment Variables (.env)](#environment-variables-env)
-  - [Running the Application](#running-the-application)
-  - [Running Tests & Production Build](#running-tests--production-build)
 - [Essential Keyboard Shortcuts](#essential-keyboard-shortcuts)
 - [Architectural Documentation Sitemap](#architectural-documentation-sitemap)
 - [License](#license)

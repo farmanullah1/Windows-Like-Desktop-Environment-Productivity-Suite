@@ -12,7 +12,9 @@ export default defineConfig({
     },
   },
   server: {
-    port: 3000,
+    host: '127.0.0.1',
+    port: Number(process.env.PORT) || 5173,
+    strictPort: false,
     open: false,
     proxy: {
       '/api': {
@@ -20,5 +22,9 @@ export default defineConfig({
         changeOrigin: true,
       },
     },
+  },
+  define: {
+    __APP_NAME__: JSON.stringify('MyOS'),
+    __APP_VERSION__: JSON.stringify(process.env.npm_package_version || '1.0.0'),
   },
 });

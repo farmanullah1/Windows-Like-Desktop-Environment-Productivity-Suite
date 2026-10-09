@@ -6,6 +6,8 @@ import { StageLoader } from './stages/StageLoader';
 import { StageHandoff } from './stages/StageHandoff';
 import { useTheme } from '../design-system/ThemeProvider';
 
+import { setDocumentTitle } from '../lib/documentTitle';
+
 export type BootStage = 'CHECKING' | 'VOID' | 'LOGO' | 'LOADER' | 'HANDOFF' | 'COMPLETE';
 
 interface BootSequenceProps {
@@ -23,6 +25,7 @@ export const BootSequence: React.FC<BootSequenceProps> = ({ onComplete }) => {
       onComplete();
     } else if (coldState === 'cold') {
       // Cold boot: initiate deterministic state machine
+      setDocumentTitle('Starting…');
       setCurrentStage('VOID');
     }
   }, [coldState, onComplete]);

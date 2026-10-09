@@ -1,15 +1,24 @@
 {
-  "name": "windows-desktop-environment-productivity-suite",
-  "version": "5.0.0",
+  "name": "myos",
+  "productName": "MyOS",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Production-grade hybrid Windows 11 + macOS + Ubuntu desktop workspace and productivity suite",
+  "description": "MyOS — A hybrid desktop environment, productivity suite, and developer workspace.",
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  },
   "scripts": {
-    "dev": "node ./node_modules/vite/bin/vite.js",
+    "setup": "node scripts/setup-and-run.mjs",
+    "setup:ci": "npm ci && node scripts/setup-and-run.mjs",
+    "dev": "npm run dev:web",
+    "dev:web": "node ./node_modules/vite/bin/vite.js --host 127.0.0.1",
     "build": "node ./node_modules/typescript/lib/tsc.js -b && node ./node_modules/vite/bin/vite.js build",
-    "preview": "node ./node_modules/vite/bin/vite.js preview",
+    "preview": "node ./node_modules/vite/bin/vite.js preview --host 127.0.0.1",
     "server": "node server/index.js",
-    "test": "node --experimental-strip-types --test ./tests/contracts.test.mjs"
+    "test": "node --experimental-strip-types --test ./tests/contracts.test.mjs",
+    "start": "npm run dev:web"
   },
   "dependencies": {
     "clsx": "^2.1.1",
