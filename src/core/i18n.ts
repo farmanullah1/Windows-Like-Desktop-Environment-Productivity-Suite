@@ -86,6 +86,8 @@ export const translations: Record<LocaleCode, TranslationDictionary> = {
     textEditor: 'Text Editor',
     appCatalog: 'App Catalog',
     eventViewer: 'Event Viewer',
+    mediaPlayer: 'Media Player',
+    gallery: 'Photo Studio',
   },
   'ur-PK': {
     appName: 'اینٹی گریویٹی ڈیسک ٹاپ ورک اسپیس',
@@ -126,6 +128,8 @@ export const translations: Record<LocaleCode, TranslationDictionary> = {
     textEditor: 'ٹیکسٹ ایڈیٹر',
     appCatalog: 'ایپ کیٹلاگ',
     eventViewer: 'ایونٹ ویور',
+    mediaPlayer: 'میڈیا پلیئر',
+    gallery: 'فوٹو اسٹوڈیو',
   },
 };
 

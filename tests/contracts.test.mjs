@@ -69,4 +69,8 @@ test('i18n: translations provide complete en-US and ur-PK dictionaries and direc
   assert.equal(translations['ur-PK'].appCatalog, 'ایپ کیٹلاگ');
   assert.equal(translations['en-US'].eventViewer, 'Event Viewer');
   assert.equal(translations['ur-PK'].eventViewer, 'ایونٹ ویور');
+  assert.equal(translations['en-US'].mediaPlayer, 'Media Player');
+  assert.equal(translations['ur-PK'].mediaPlayer, 'میڈیا پلیئر');
+  assert.equal(translations['en-US'].gallery, 'Photo Studio');
+  assert.equal(translations['ur-PK'].gallery, 'فوٹو اسٹوڈیو');
 });
