@@ -5,6 +5,27 @@ All notable changes to the **Windows-Like Desktop Environment & Productivity Sui
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [8.2.0] - 2026-10-09
+
+### Added
+- **One-Click Bootstrap, Setup & Launch Engine**:
+  - Pure Node.js cross-platform bootstrap script (`scripts/setup-and-run.mjs`) executing with zero third-party dependencies before `npm install`.
+  - Automated environment verification (Node.js ≥ 20, npm ≥ 10, git optional check).
+  - Port conflict resolution scanning for free ports starting at 5173.
+  - Development server spawn bound securely to loopback `127.0.0.1`.
+  - HTTP health polling (`waitForHealth`) validating server readiness before triggering default browser auto-open.
+  - Graceful process termination on <kbd>Ctrl+C</kbd> with zero orphan background processes.
+  - Platform wrappers: `setup-and-run.bat` (Windows double-click), `setup-and-run.ps1` (PowerShell), and `setup-and-run.sh` (macOS/Linux).
+  - Registered `npm run setup` and `npm run dev:web` in `package.json`.
+- **MyOS Universal Branding & Identity**:
+  - Full original vector SVG suite in `assets/branding/` and `public/assets/branding/`: `logo.svg`, `logo-mono.svg`, `mask-icon.svg`, `wordmark.svg`, `splash.svg`.
+  - Multi-resolution PNG icon suite: `favicon-16.png`, `favicon-32.png`, `favicon-48.png`, `favicon-192.png`, `favicon-512.png`, `apple-touch-icon.png` (180×180), and `favicon.ico`.
+  - Centralized `document.title` manager (`src/lib/documentTitle.ts`) syncing browser tab title dynamically (`MyOS`, `MyOS — Starting…`, `MyOS — Sign In`, `MyOS — <AppName>`).
+  - Updated `index.html`, `public/manifest.json`, `Taskbar.tsx` start button, and `StartMenu.tsx` to MyOS.
+- **Documentation**:
+  - Created [docs/SETUP.md](docs/SETUP.md) and [docs/BOOTSTRAP.md](docs/BOOTSTRAP.md).
+  - Updated [README.md](README.md) with One-Click Quick Start section.
+
 ## [8.1.0] - 2026-10-09
 
 ### Added

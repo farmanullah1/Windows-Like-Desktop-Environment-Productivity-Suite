@@ -6,7 +6,6 @@ import {
   VolumeX,
   Battery,
   Bell,
-  Grid,
   X,
 } from 'lucide-react';
 import { useDesktop } from '../core/desktopStore';

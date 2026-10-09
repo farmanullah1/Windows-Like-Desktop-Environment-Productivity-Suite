@@ -37,14 +37,20 @@ All core architectural phases completed and aligned with Version 6.2 Master Spec
 - Cross-platform Windows execution fix for `npm run dev` and `npm run build`
 
 # Current Implementation Phase
-Phase B0-B4 / E8 — Boot Experience, Integrated Authentication & Master Expansion Pack 8.0
+Phase S0-S4 / B0-B4 — One-Click Bootstrap Engine & MyOS Brand Identity
 
 # Current Sprint/Task
-Boot & Login Experience implemented and verified:
-- Cold-boot sequence plays strictly once per process launch and never on renderer refresh (F5/Ctrl+R) or HMR.
-- Integrated acrylic login screen with CapsLock warning, password toggle, local workstation fallback, and permanent top-right corner "Create account" entry.
-- Clean desktop handoff transition with synthesized procedural welcome chime.
-- All documentation generated (`docs/BOOT_EXPERIENCE.md`, `docs/LOGIN_UX.md`, `docs/CAPABILITY_MATRIX.md`, `docs/CHANGELOG.md`).
+One-Click Bootstrap & MyOS Launch Experience:
+- Cross-platform Node.js bootstrap script (`scripts/setup-and-run.mjs`) with Node ≥ 20, npm ≥ 10, project verification, port hunting, dev server launch, and health polling.
+- Windows double-click wrapper (`setup-and-run.bat`), PowerShell wrapper (`setup-and-run.ps1`), and POSIX shell script (`setup-and-run.sh`).
+- Universal branding migration to MyOS: original vector logo, high-contrast monochrome, Safari mask-icon, wordmark, splash, multi-res favicons (`favicon.ico`, `favicon-16/32/48/192/512.png`), and Apple touch icon.
+- Centralized `document.title` synchronization (`src/lib/documentTitle.ts`) dynamically formatting active app titles (`MyOS — <AppName>`).
+- All documentation generated (`docs/SETUP.md`, `docs/BOOTSTRAP.md`, `README.md`).
+
+# Bootstrap Subsystem
+- **Bootstrap Entrypoints:** `setup-and-run.bat` (Windows double-click), `setup-and-run.ps1` (PowerShell), `setup-and-run.sh` (macOS/Linux), and `scripts/setup-and-run.mjs` (Node.js engine).
+- **Branding Assets:** `assets/branding/` and `public/assets/branding/` containing `logo.svg`, `logo-mono.svg`, `mask-icon.svg`, `wordmark.svg`, `splash.svg`, and multi-res PNG icon suite.
+- **Safety Boundary:** Zero elevated privileges required; zero global package installs; zero Windows Registry or system services modification. Clean reversibility (`rm -rf node_modules .env dist`).
 
 # Current Architecture
 - **Boot & Authentication Layer:** Boot Sequence State Machine (`src/boot/BootSequence.tsx`, `useColdBoot.ts`, `stages/`), Integrated Login Screen (`src/auth/LoginScreen.tsx`), Top-Right Create Account Entry (`src/auth/CreateAccountLink.tsx`), and Registration Screen (`src/auth/SignupScreen.tsx`).

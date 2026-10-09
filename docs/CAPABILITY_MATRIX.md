@@ -61,6 +61,8 @@ To preserve product integrity and prevent misrepresentation, every subsystem and
 | **System Startup Loader** | REAL | Honest initialization sequence reflecting real milestones (vault, design tokens, DB, app registry) | In-app milestone pipeline; no fake progress bars | Minimal spinner |
 | **Integrated Login Screen** | REAL | Acrylic authentication panel with email/password, CapsLock detection, show/hide toggle, and remember me | REST API JWT auth (`/api/v1/auth/login`) or local profile mode | Offline local profile |
 | **Top-Right Account Entry** | REAL | Fixed accessible corner link transitioning to registration flow without page reload or boot replay | In-app view transition; >= 44x44px touch target | Standard sign-in switch |
+| **One-Click Bootstrap Engine** | REAL | Cross-platform Node/Batch/Shell bootstrap verifying environment, installing deps, and launching browser | Loopback only (127.0.0.1); zero elevated privileges; non-invasive | Manual `npm run dev:web` |
+| **MyOS Universal Branding** | REAL | Original vector SVG and multi-res PNG icon set for MyOS across desktop, browser tab, and start menu | Pure client SVG/PNG artwork; zero external copyright assets | Fallback favicon |
 | **Registry Editor** | INFORMATIONAL / CONTROLLED | Read-only registry view of harmless application settings | Registry writes permanently disabled without explicit admin approval | In-app settings |
 | **Windows System Restore** | INFORMATIONAL | Displays restore point status and instructions | Does not initiate system restore points | Documentation link |
 | **Replacing `explorer.exe`** | UNSUPPORTED | Running as primary Windows shell replacement | Blocked by design; application operates as user-level productivity workspace | Standalone window |
