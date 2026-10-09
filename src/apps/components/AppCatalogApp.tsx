@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
 import {
-  Grid,
   Search,
   Pin,
   ExternalLink,
   Shield,
-  Layers,
-  Check,
   Folder,
   Settings as SettingsIcon,
   FileText,
@@ -19,8 +16,8 @@ import {
   Code,
   Box,
 } from 'lucide-react';
-import { APP_REGISTRY, getAllApps } from '../registry';
-import { useDesktopStore } from '../../core/desktopStore';
+import { getAllApps } from '../registry';
+import { useDesktop } from '../../core/desktopStore';
 
 const ICON_MAP: Record<string, React.FC<{ className?: string }>> = {
   Folder,
@@ -37,11 +34,19 @@ const ICON_MAP: Record<string, React.FC<{ className?: string }>> = {
 };
 
 export const AppCatalogApp: React.FC<{ windowId: string }> = () => {
-  const { openApp, pinnedAppIds, togglePinApp } = useDesktopStore();
+  const { openApp } = useDesktop();
+  const allApps = getAllApps();
+  const [pinnedAppIds, setPinnedAppIds] = useState<string[]>(() =>
+    allApps.filter((a) => a.isPinned).map((a) => a.id)
+  );
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  const allApps = getAllApps();
+  const togglePinApp = (appId: string) => {
+    setPinnedAppIds((prev) =>
+      prev.includes(appId) ? prev.filter((id) => id !== appId) : [...prev, appId]
+    );
+  };
   const categories = ['All', 'Core', 'Productivity', 'Developer', 'System'];
 
   const filteredApps = allApps.filter((app) => {

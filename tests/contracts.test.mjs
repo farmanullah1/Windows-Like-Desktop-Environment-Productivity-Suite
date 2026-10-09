@@ -61,4 +61,12 @@ test('i18n: translations provide complete en-US and ur-PK dictionaries and direc
   assert.deepEqual(enKeys.sort(), urKeys.sort());
   assert.equal(translations['en-US'].start, 'Start');
   assert.equal(translations['ur-PK'].start, 'شروع');
+  assert.equal(translations['en-US'].devWorkspace, 'Dev Workspace');
+  assert.equal(translations['ur-PK'].devWorkspace, 'ڈویلپر ورک اسپیس');
+  assert.equal(translations['en-US'].textEditor, 'Text Editor');
+  assert.equal(translations['ur-PK'].textEditor, 'ٹیکسٹ ایڈیٹر');
+  assert.equal(translations['en-US'].appCatalog, 'App Catalog');
+  assert.equal(translations['ur-PK'].appCatalog, 'ایپ کیٹلاگ');
+  assert.equal(translations['en-US'].eventViewer, 'Event Viewer');
+  assert.equal(translations['ur-PK'].eventViewer, 'ایونٹ ویور');
 });

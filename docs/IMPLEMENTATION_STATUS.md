@@ -34,6 +34,10 @@
 | **Built-in Apps** | System Information | IMPLEMENTED | WINDOWS-INTEGRATED | Verified system specs in `src/apps/components/SystemInfoApp.tsx` |
 | **Built-in Apps** | Calculator, Clock & Timer | IMPLEMENTED | REAL | Working Calculator and Clock apps in `src/apps/components/` |
 | **Built-in Apps** | Developer Tools (JSON Formatter, API Tester) | IMPLEMENTED | REAL | REST client & JSON formatter in `src/apps/components/` |
+| **Built-in Apps** | Developer Workspace | IMPLEMENTED | REAL | Multi-project workspace manager in `src/apps/components/DeveloperWorkspaceApp.tsx` |
+| **Built-in Apps** | Text Editor | IMPLEMENTED | REAL | Multi-tab code & text editor in `src/apps/components/TextEditorApp.tsx` |
+| **Built-in Apps** | Application Catalog | IMPLEMENTED | REAL | App store & registry viewer in `src/apps/components/AppCatalogApp.tsx` |
+| **Built-in Apps** | Diagnostics & Event Viewer | IMPLEMENTED | REAL | Audit events & system diagnostic suite in `src/apps/components/DiagnosticsApp.tsx` |
 | **Backend & DB** | SQL Server Schema Migration (`MyOS`) | IMPLEMENTED | REAL | Enterprise migration in `002_v6_enterprise_schema.sql` |
 | **Backend & DB** | REST API Service (`/api/v1`) | IMPLEMENTED | REAL | Express REST API in `server/index.js` |
 | **Testing** | Automated Isolated Unit Tests | IMPLEMENTED | REAL | Passing test suite in `tests/contracts.test.mjs` |

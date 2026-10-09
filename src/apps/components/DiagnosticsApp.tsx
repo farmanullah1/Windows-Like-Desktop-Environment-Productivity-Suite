@@ -2,15 +2,11 @@ import React, { useState } from 'react';
 import {
   Activity,
   CheckCircle,
-  AlertTriangle,
   FileDown,
-  RefreshCw,
   Copy,
   Check,
   Shield,
   Cpu,
-  Layers,
-  Database,
   Volume2,
 } from 'lucide-react';
 

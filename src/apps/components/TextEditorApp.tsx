@@ -1,11 +1,9 @@
 import React, { useState, useRef } from 'react';
 import {
-  FileText,
   Save,
   Search,
   Copy,
   Check,
-  RotateCcw,
   Plus,
   X,
   FileCode,
