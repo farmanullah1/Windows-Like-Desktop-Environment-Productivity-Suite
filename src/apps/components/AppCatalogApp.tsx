@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Search,
   Pin,
@@ -18,6 +18,22 @@ export const AppCatalogApp: React.FC<{ windowId: string }> = () => {
   );
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [isDbSynced, setIsDbSynced] = useState(false);
+
+  useEffect(() => {
+    let mounted = true;
+    fetch('/api/v1/applications')
+      .then((r) => r.json())
+      .then((res) => {
+        if (mounted && res.success) {
+          setIsDbSynced(true);
+        }
+      })
+      .catch(() => {});
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const togglePinApp = (appId: string) => {
     setPinnedAppIds((prev) =>
@@ -43,9 +59,17 @@ export const AppCatalogApp: React.FC<{ windowId: string }> = () => {
             <Box className="w-4 h-4 text-[var(--color-accent)]" />
             <h2 className="text-sm font-semibold">Application Catalog & Registry</h2>
           </div>
-          <span className="text-[11px] text-[var(--text-secondary)]">
-            {allApps.length} Registered Applications
-          </span>
+          <div className="flex items-center gap-2">
+            {isDbSynced && (
+              <span className="flex items-center gap-1 text-[10px] text-blue-400 font-mono bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/20">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                MS SQL Server Registry
+              </span>
+            )}
+            <span className="text-[11px] text-[var(--text-secondary)]">
+              {allApps.length} Registered Applications
+            </span>
+          </div>
         </div>
 
         <div className="flex items-center gap-3">
