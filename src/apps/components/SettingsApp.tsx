@@ -61,6 +61,8 @@ export const SettingsApp: React.FC<{ windowId: string }> = () => {
     deleteWorkspace,
     renameWorkspace,
     addNotification,
+    currentWallpaper,
+    setWallpaper,
   } = useDesktop();
 
   const [newWsName, setNewWsName] = useState('');
