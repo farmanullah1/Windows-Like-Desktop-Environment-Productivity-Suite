@@ -17,7 +17,6 @@ import {
   CheckCircle2,
   AlertCircle,
   Play,
-  Key,
 } from 'lucide-react';
 import { useTheme, ThemeType, EffectsModeType, ShellModeType } from '../../design-system/ThemeProvider';
 import { useDesktop } from '../../core/desktopStore';

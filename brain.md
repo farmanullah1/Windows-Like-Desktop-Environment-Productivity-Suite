@@ -1,7 +1,7 @@
 # Project Identity
 **Project Name:** Windows-Like Desktop Environment & Productivity Suite
 **Codename:** Antigravity Desktop OS Workspace (ADW-6)
-**Version:** 6.0.0 (Master Architecture Specification)
+**Version:** 6.2.0 (Master Architecture Specification)
 **Role:** Senior Production Desktop & Full-Stack System Architect
 
 # Product Vision
@@ -12,7 +12,12 @@ A serious, production-grade desktop application platform designed for Windows 10
 The outcome is a single, cohesive, original desktop environment that delivers high-performance productivity without looking like an operating system collage.
 
 # Current Project Status
-All core architectural phases completed and aligned with Version 6.1 Master Specifications:
+All core architectural phases completed and aligned with Version 6.2 Master Specifications:
+- Native Tailwind CSS v4 compiler integration via `@tailwindcss/vite`
+- Microsoft SQL Server enterprise connection pool and query engine (`server/db.js`, `mssql`) targeting `MyOS`
+- Live host telemetry replacing dummy data (Host OS, actual CPU model & cores, 32 GB RAM, live load sampling, Web Battery API)
+- Complete PWA, SEO & Social sharing suite (`manifest.json`, favicons, Apple touch icons, Open Graph, Twitter cards, `robots.txt`)
+- Dedicated MS SQL Server configuration, connection tester, and query runner in Settings (`SettingsApp.tsx`)
 - Full 23-document architectural specification in `docs/`
 - 16 registered production applications (including Groove Media Player and Photo Studio)
 - 4K real desktop wallpapers (`aurora.jpg`, `cyberpunk.jpg`, `fluent_silk.jpg`, `cosmic_nebula.jpg`)
@@ -23,16 +28,16 @@ All core architectural phases completed and aligned with Version 6.1 Master Spec
 - Enterprise contracts, error catalog, event system, and permissions (`src/core/contracts.ts`)
 - Internationalization architecture with `en-US` and `ur-PK` dictionaries (`src/core/i18n.ts`)
 - Version 6.0 enterprise SQL Server relational schema for database `MyOS` (`002_v6_enterprise_schema.sql`)
-- Version 6.0 REST API service with JWT authentication and session tracking (`server/index.js`)
-- Automated unit test suite (`tests/contracts.test.mjs`) passing with 100% success rate
+- Version 6.2 REST API service with JWT authentication, live telemetry, and SQL Server queries (`server/index.js`)
+- Automated unit test suite (`tests/contracts.test.mjs`) passing with 100% success rate (5 test suites)
 - Production Vite build and strict TypeScript compiler (`tsc --noEmit`) passing with 0 errors
 - Cross-platform Windows execution fix for `npm run dev` and `npm run build`
 
 # Current Implementation Phase
-Phase 17 — Production Deployment & Runtime Validation Complete
+Phase 18 — Enterprise Database Connectivity, Tailwind CSS Engine & PWA Deployment Ready
 
 # Current Sprint/Task
-Runtime validation verified: dev server daemon active on port 3000, production build verified, isolated unit test suite 100% green.
+Runtime validation verified: dev server daemon active on port 3000, backend daemon on port 5000, production build verified, isolated unit test suite 100% green.
 
 # Current Architecture
 - **Desktop Shell Layer:** Hybrid Taskbar/Dock (`src/shell/Taskbar.tsx`), Start Menu (`src/shell/StartMenu.tsx`), Quick Settings (`src/shell/QuickSettings.tsx`), Notification Center (`src/shell/NotificationCenter.tsx`), Universal Search & Command Palette (`src/shell/CommandPalette.tsx`), Desktop Canvas (`src/shell/DesktopCanvas.tsx`), Desktop Widgets (`src/shell/DesktopWidgets.tsx`), Session Lock Screen (`src/shell/LockScreen.tsx`).

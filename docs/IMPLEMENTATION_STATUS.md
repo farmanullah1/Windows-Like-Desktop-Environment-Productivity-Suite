@@ -43,9 +43,12 @@
 | **Desktop Shell** | Desktop Widgets Engine | IMPLEMENTED | REAL | Live weather, SVG CPU telemetry, clock & canvas sticky notes in `src/shell/DesktopWidgets.tsx` |
 | **Desktop Shell** | Session Lock Screen | IMPLEMENTED | REAL | PIN keypad unlock, blurred wallpaper backdrop, session security in `src/shell/LockScreen.tsx` |
 | **Design System** | 3D Squircle App Icon Badges | IMPLEMENTED | REAL | High-fidelity 3D squircle badges with sheen & ambient glow in `src/design-system/AppIconBadge.tsx` |
+| **Design System** | Tailwind CSS v4 Integration | IMPLEMENTED | REAL | Native Tailwind CSS v4 engine via `@tailwindcss/vite` in `vite.config.ts` |
+| **Backend & DB** | SQL Server Connection & Query Engine | IMPLEMENTED | REAL | Real Node `mssql` connection pool & testing in `server/db.js` |
+| **Metadata & SEO** | PWA Manifest, SEO & Social Share Tags | IMPLEMENTED | REAL | Favicons (16, 32, ico), Apple Touch Icon, `manifest.json`, Open Graph, `robots.txt` |
 | **Backend & DB** | SQL Server Schema Migration (`MyOS`) | IMPLEMENTED | REAL | Enterprise migration in `002_v6_enterprise_schema.sql` |
-| **Backend & DB** | REST API Service (`/api/v1`) | IMPLEMENTED | REAL | Express REST API in `server/index.js` |
-| **Testing** | Automated Isolated Unit Tests | IMPLEMENTED | REAL | Passing test suite in `tests/contracts.test.mjs` |
+| **Backend & DB** | REST API Service (`/api/v1`) | IMPLEMENTED | REAL | Express REST API in `server/index.js` with live OS telemetry |
+| **Testing** | Automated Isolated Unit Tests | IMPLEMENTED | REAL | 5 passing test suites in `tests/contracts.test.mjs` |
 | **Persistence** | Offline Persistence & Local Cache | IMPLEMENTED | REAL | LocalStorage state persistence with backup export in Settings |
 | **Native Bridge** | Windows OS Metrics Bridge & Safe Shell Runner | IMPLEMENTED | WINDOWS-INTEGRATED | Safe PowerShell inspector in `native/windows/querySystem.ps1` |
 | **OS Shell Swap** | Replace Windows Explorer Kernel Shell | UNSUPPORTED | UNSUPPORTED | Out of architectural scope for safety |

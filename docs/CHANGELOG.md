@@ -5,6 +5,27 @@ All notable changes to the **Windows-Like Desktop Environment & Productivity Sui
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [6.2.0] - 2026-10-09
+
+### Added
+- **Tailwind CSS v4 Integration**:
+  - Full installation and configuration via `@tailwindcss/vite` plugin.
+  - Native compile pipeline generating over 104 KB of optimized Tailwind CSS utilities while preserving centralized design tokens.
+- **Microsoft SQL Server Enterprise Data Layer** (`server/db.js`):
+  - Official Node `mssql` driver integration connecting securely using `.env` variables (`DB_SERVER`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_ENCRYPT`, `DB_TRUST_SERVER_CERTIFICATE`).
+  - Connection pool management, connection testing API (`/api/v1/db/test`), schema verification, and resilient local persistence fallback.
+  - Dedicated **MS SQL Server** management tab in [SettingsApp.tsx](file:///c:/Users/farma/Desktop/Windows-Like%20Desktop%20Environment%20&%20Productivity%20Suite/src/apps/components/SettingsApp.tsx) featuring live status badge, interactive credential tester, and SQL query playground.
+- **Live System Telemetry & Web APIs**:
+  - Replaced all dummy numbers with genuine host telemetry queried via Node.js `os` module (Host OS, actual CPU model & cores, 32 GB RAM, live load sampling, uptime).
+  - Real browser Battery Status API integration (`navigator.getBattery()`) with AC line power detection.
+  - Real Network Information API with online/offline event synchronization.
+- **Metadata, SEO, PWA & Social Sharing Suite**:
+  - Full Web App Manifest (`public/manifest.json`) and `robots.txt`.
+  - Production icon suite: `favicon.ico`, `favicon-16x16.png`, `favicon-32x32.png`, `apple-touch-icon.png` (180x180), `icon-192.png`, `icon-512.png`.
+  - Complete Open Graph (`og:*`), Twitter Card (`twitter:*`), Apple mobile web app, and canonical tags in `index.html`.
+- **Extended Contract Tests**:
+  - Added database error codes and REST error envelope tests to `tests/contracts.test.mjs` (5 passing test suites).
+
 ## [6.1.0] - 2026-10-09
 
 ### Added
