@@ -53,7 +53,17 @@ export type AppCategory =
   | 'Productivity'
   | 'System'
   | 'Developer'
+  | 'Media'
   | 'Utilities';
+
+export interface StickyNote {
+  id: string;
+  text: string;
+  color: 'yellow' | 'teal' | 'coral' | 'violet' | 'sky';
+  x: number;
+  y: number;
+  createdAt: string;
+}
 
 export interface AppDefinition {
   id: string;
