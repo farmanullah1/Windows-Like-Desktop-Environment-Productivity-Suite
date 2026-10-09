@@ -5,6 +5,37 @@ All notable changes to the **Windows-Like Desktop Environment & Productivity Sui
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [6.1.0] - 2026-10-09
+
+### Added
+- **4K Desktop Wallpapers**: High-resolution curated wallpapers (`aurora.jpg`, `cyberpunk.jpg`, `fluent_silk.jpg`, `cosmic_nebula.jpg`) served statically from `public/wallpapers/`.
+- **3D Squircle App Icon Badge System** (`AppIconBadge.tsx`): Skeuomorphic specular sheen, ambient drop shadow, and distinct thematic gradients applied across Desktop, Taskbar, Start Menu, and App Catalog.
+- **Desktop Widgets Engine** (`DesktopWidgets.tsx`):
+  - Live Weather widget with city cycling (SF, Tokyo, London, NYC), °C/°F toggle, and 4-day forecast.
+  - Live System Performance Telemetry widget with real-time SVG sparkline history and CPU/RAM/Disk gauges.
+  - Interactive Canvas Sticky Notes with real-time editing, 5 color palettes, and desktop positioning.
+  - Quick Clock & Date widget with instant '+ Note' creation action.
+- **Groove Media Player** (`MediaPlayerApp.tsx`):
+  - 100% real procedural Web Audio API synthesizer with Lo-Fi Beats, Ambient Space, Synthwave 80s, and Rain Lo-Fi sound engines.
+  - Real-time HTML5 Canvas 32-band FFT spectrum visualizer with dynamic gradients and peak meters.
+- **Photo & Wallpaper Studio** (`GalleryApp.tsx`):
+  - High-res photo browser with zoom/pan controls, camera metadata, and dimensions inspection.
+  - One-click "Set as Wallpaper" action that instantly updates the active desktop shell background.
+- **Session Lock Screen** (`LockScreen.tsx`):
+  - Fullscreen frosted acrylic overlay with blurred active wallpaper backdrop.
+  - Large digital clock & date display.
+  - Interactive PIN keypad with audio feedback and PIN authentication (`1234`).
+  - Integrated "Lock" action in Start Menu and desktop shortcuts.
+
+### Fixed
+- **`npm run dev` and `npm run build` Execution on Windows**:
+  - Resolved `cmd.exe` batch file syntax error caused by directory name ampersand (`& Productivity Suite`).
+  - Updated `package.json` scripts to invoke Node directly (`node ./node_modules/vite/bin/vite.js`), ensuring seamless operation across Windows PowerShell and Command Prompt.
+- **Desktop Widget Layout Anchoring**:
+  - Added dedicated CSS utility tokens (`.w-72`, `.top-14`, `.right-5`, `.right-6`) and z-index hierarchy classes in `src/index.css`.
+  - Added `--z-lockscreen: 9999` token in `src/design-system/tokens.css`.
+  - Enforced right-side docked positioning and z-index isolation for desktop widgets.
+
 ## [6.0.0] - 2026-10-08
 
 ### Added

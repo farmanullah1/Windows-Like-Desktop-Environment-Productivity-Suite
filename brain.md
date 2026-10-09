@@ -12,8 +12,13 @@ A serious, production-grade desktop application platform designed for Windows 10
 The outcome is a single, cohesive, original desktop environment that delivers high-performance productivity without looking like an operating system collage.
 
 # Current Project Status
-All core architectural phases completed and aligned with Version 6.0 Master Prompt:
+All core architectural phases completed and aligned with Version 6.1 Master Specifications:
 - Full 23-document architectural specification in `docs/`
+- 16 registered production applications (including Groove Media Player and Photo Studio)
+- 4K real desktop wallpapers (`aurora.jpg`, `cyberpunk.jpg`, `fluent_silk.jpg`, `cosmic_nebula.jpg`)
+- 3D Squircle `AppIconBadge` system with specular sheen, ambient glow, and distinct category gradients
+- Desktop Widgets Layer (`DesktopWidgets.tsx`): Live weather, SVG CPU sparkline, clock, and canvas sticky notes
+- Session Lock Screen (`LockScreen.tsx`): PIN keypad unlock (`1234`), blurred wallpaper, and session security
 - Typed Electron IPC boundaries and channels allowlist (`src/electron/ipc/`)
 - Enterprise contracts, error catalog, event system, and permissions (`src/core/contracts.ts`)
 - Internationalization architecture with `en-US` and `ur-PK` dictionaries (`src/core/i18n.ts`)
@@ -21,18 +26,20 @@ All core architectural phases completed and aligned with Version 6.0 Master Prom
 - Version 6.0 REST API service with JWT authentication and session tracking (`server/index.js`)
 - Automated unit test suite (`tests/contracts.test.mjs`) passing with 100% success rate
 - Production Vite build and strict TypeScript compiler (`tsc --noEmit`) passing with 0 errors
+- Cross-platform Windows execution fix for `npm run dev` and `npm run build`
 
 # Current Implementation Phase
-Phase 16 — Release Readiness, Static Validation & Verification
+Phase 17 — Production Deployment & Runtime Validation Complete
 
 # Current Sprint/Task
-Final verification of source code integrity, Git staging and commit creation for the Master Application Platform.
+Runtime validation verified: dev server daemon active on port 3000, production build verified, isolated unit test suite 100% green.
 
 # Current Architecture
-- **Desktop Shell Layer:** Hybrid Taskbar/Dock (`src/shell/Taskbar.tsx`), Start Menu (`src/shell/StartMenu.tsx`), Quick Settings (`src/shell/QuickSettings.tsx`), Notification Center (`src/shell/NotificationCenter.tsx`), Universal Search & Command Palette (`src/shell/CommandPalette.tsx`), Desktop Canvas (`src/shell/DesktopCanvas.tsx`).
+- **Desktop Shell Layer:** Hybrid Taskbar/Dock (`src/shell/Taskbar.tsx`), Start Menu (`src/shell/StartMenu.tsx`), Quick Settings (`src/shell/QuickSettings.tsx`), Notification Center (`src/shell/NotificationCenter.tsx`), Universal Search & Command Palette (`src/shell/CommandPalette.tsx`), Desktop Canvas (`src/shell/DesktopCanvas.tsx`), Desktop Widgets (`src/shell/DesktopWidgets.tsx`), Session Lock Screen (`src/shell/LockScreen.tsx`).
 - **Window Management Layer:** Full lifecycle window container (`src/window-manager/WindowFrame.tsx`) with dynamic z-index stacking, dragging, multi-border resizing, minimize/maximize/restore, and Windows 11 snap layouts hover menu.
-- **Workspace Layer:** Virtual desktop manager with window segregation, independent wallpapers, switcher pills, and persistent state in `src/core/desktopStore.ts`- **Application Registry & Lifecycle:** Centralized registry in `src/apps/registry.ts` with 14 built-in applications (File Explorer, Settings, Notes, Terminal, Task Manager, System Info, Calculator, Clock, API Tester, JSON Formatter, Developer Workspace, Text Editor, App Catalog, Diagnostics & Event Viewer).
-- **Design & Theme Engine:** Centralized tokens in `src/design-system/tokens.css`, 8 complete themes in `src/design-system/themes.css`, Web Audio procedural sound synthesizer in `src/design-system/soundEngine.ts`, and React `ThemeProvider`.
+- **Workspace Layer:** Virtual desktop manager with window segregation, independent wallpapers, switcher pills, and persistent state in `src/core/desktopStore.tsx`.
+- **Application Registry & Lifecycle:** Centralized registry in `src/apps/registry.ts` with 16 built-in applications (File Explorer, Settings, Notes, Terminal, Task Manager, System Info, Calculator, Clock, API Tester, JSON Formatter, Developer Workspace, Text Editor, App Catalog, Diagnostics & Event Viewer, Groove Media Player, Photo & Wallpaper Studio).
+- **Design & Theme Engine:** Centralized tokens in `src/design-system/tokens.css`, 8 complete themes in `src/design-system/themes.css`, 3D squircle badges in `src/design-system/AppIconBadge.tsx`, Web Audio procedural sound synthesizer in `src/design-system/soundEngine.ts`, and React `ThemeProvider`.
 - **Backend & Relational Persistence:** Node.js Express REST API in `server/index.js` (`/api/v1`), Microsoft SQL Server relational schema in `database/migrations/001_initial_schema.sql` and `002_v6_enterprise_schema.sql`.
 - **Windows Native Bridge:** Controlled, permission-gated PowerShell inspector in `native/windows/querySystem.ps1`.
 

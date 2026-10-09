@@ -38,6 +38,11 @@
 | **Built-in Apps** | Text Editor | IMPLEMENTED | REAL | Multi-tab code & text editor in `src/apps/components/TextEditorApp.tsx` |
 | **Built-in Apps** | Application Catalog | IMPLEMENTED | REAL | App store & registry viewer in `src/apps/components/AppCatalogApp.tsx` |
 | **Built-in Apps** | Diagnostics & Event Viewer | IMPLEMENTED | REAL | Audit events & system diagnostic suite in `src/apps/components/DiagnosticsApp.tsx` |
+| **Built-in Apps** | Groove Media Player | IMPLEMENTED | REAL | Procedural Web Audio synthesizer & live FFT spectrum visualizer in `src/apps/components/MediaPlayerApp.tsx` |
+| **Built-in Apps** | Photo & Wallpaper Studio | IMPLEMENTED | REAL | 4K image viewer, metadata, and 1-click desktop wallpaper engine in `src/apps/components/GalleryApp.tsx` |
+| **Desktop Shell** | Desktop Widgets Engine | IMPLEMENTED | REAL | Live weather, SVG CPU telemetry, clock & canvas sticky notes in `src/shell/DesktopWidgets.tsx` |
+| **Desktop Shell** | Session Lock Screen | IMPLEMENTED | REAL | PIN keypad unlock, blurred wallpaper backdrop, session security in `src/shell/LockScreen.tsx` |
+| **Design System** | 3D Squircle App Icon Badges | IMPLEMENTED | REAL | High-fidelity 3D squircle badges with sheen & ambient glow in `src/design-system/AppIconBadge.tsx` |
 | **Backend & DB** | SQL Server Schema Migration (`MyOS`) | IMPLEMENTED | REAL | Enterprise migration in `002_v6_enterprise_schema.sql` |
 | **Backend & DB** | REST API Service (`/api/v1`) | IMPLEMENTED | REAL | Express REST API in `server/index.js` |
 | **Testing** | Automated Isolated Unit Tests | IMPLEMENTED | REAL | Passing test suite in `tests/contracts.test.mjs` |
