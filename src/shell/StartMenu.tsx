@@ -109,9 +109,7 @@ export const StartMenu: React.FC = () => {
                 onClick={() => handleLaunch(app.id, app.displayName, app.icon)}
                 className="flex flex-col items-center p-3 rounded-xl hover:bg-[var(--surface-card)] hover:scale-105 active:scale-95 transition-all text-center group"
               >
-                <div className="w-10 h-10 rounded-xl bg-[var(--surface-elevated)] border border-[var(--border-subtle)] flex items-center justify-center text-[var(--accent-primary)] group-hover:border-[var(--accent-primary)] group-hover:shadow-md transition-all mb-2">
-                  <Icon className="w-5 h-5" />
-                </div>
+                <AppIconBadge appId={app.id} size="md" className="mb-2" />
                 <span className="text-xs font-medium text-[var(--text-primary)] truncate w-full">
                   {app.displayName}
                 </span>
