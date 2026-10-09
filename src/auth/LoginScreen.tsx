@@ -280,7 +280,8 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="admin@desktop.local"
-                      className="w-full pl-10 pr-4 py-3 rounded-2xl bg-white/5 hover:bg-white/[0.08] focus:bg-white/10 border border-white/10 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/40 transition-all shadow-inner"
+                      style={{ paddingLeft: '2.75rem', paddingRight: '1rem' }}
+                      className="w-full pl-11 pr-4 py-3 rounded-2xl bg-white/5 hover:bg-white/[0.08] focus:bg-white/10 border border-white/10 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/40 transition-all shadow-inner"
                     />
                   </div>
                 </div>
@@ -305,12 +306,13 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full pl-10 pr-10 py-3 rounded-2xl bg-white/5 hover:bg-white/[0.08] focus:bg-white/10 border border-white/10 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/40 font-mono transition-all shadow-inner"
+                      style={{ paddingLeft: '2.75rem', paddingRight: '2.75rem' }}
+                      className="w-full pl-11 pr-11 py-3 rounded-2xl bg-white/5 hover:bg-white/[0.08] focus:bg-white/10 border border-white/10 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/40 font-mono transition-all shadow-inner"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-3 text-zinc-400 hover:text-white p-0.5 rounded-lg transition-colors cursor-pointer"
+                      className="absolute right-3.5 top-3.5 text-zinc-400 hover:text-white p-0.5 rounded-lg transition-colors cursor-pointer"
                       title={showPassword ? 'Hide password' : 'Show password'}
                     >
                       {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}

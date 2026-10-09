@@ -180,7 +180,8 @@ export const SignupScreen: React.FC<SignupScreenProps> = ({
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
               placeholder="Farmanullah"
-              className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-white/5 hover:bg-white/[0.08] focus:bg-white/10 border border-white/10 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/40 transition-all shadow-inner"
+              style={{ paddingLeft: '2.75rem', paddingRight: '1rem' }}
+              className="w-full pl-11 pr-4 py-2.5 rounded-2xl bg-white/5 hover:bg-white/[0.08] focus:bg-white/10 border border-white/10 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/40 transition-all shadow-inner"
             />
           </div>
         </div>
@@ -199,7 +200,8 @@ export const SignupScreen: React.FC<SignupScreenProps> = ({
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="developer@desktop.local"
-              className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-white/5 hover:bg-white/[0.08] focus:bg-white/10 border border-white/10 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/40 transition-all shadow-inner"
+              style={{ paddingLeft: '2.75rem', paddingRight: '1rem' }}
+              className="w-full pl-11 pr-4 py-2.5 rounded-2xl bg-white/5 hover:bg-white/[0.08] focus:bg-white/10 border border-white/10 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/40 transition-all shadow-inner"
             />
           </div>
         </div>
@@ -219,7 +221,8 @@ export const SignupScreen: React.FC<SignupScreenProps> = ({
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full pl-8 pr-8 py-2.5 rounded-2xl bg-white/5 hover:bg-white/[0.08] focus:bg-white/10 border border-white/10 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/40 font-mono transition-all shadow-inner"
+                style={{ paddingLeft: '2.4rem', paddingRight: '2.4rem' }}
+                className="w-full pl-9 pr-9 py-2.5 rounded-2xl bg-white/5 hover:bg-white/[0.08] focus:bg-white/10 border border-white/10 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-500/40 font-mono transition-all shadow-inner"
               />
               <button
                 type="button"
@@ -255,7 +258,8 @@ export const SignupScreen: React.FC<SignupScreenProps> = ({
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="••••••••"
-                className={`w-full pl-8 pr-3 py-2.5 rounded-2xl bg-white/5 hover:bg-white/[0.08] focus:bg-white/10 border text-xs text-white placeholder-zinc-500 focus:outline-none font-mono transition-all shadow-inner ${
+                style={{ paddingLeft: '2.4rem', paddingRight: '1rem' }}
+                className={`w-full pl-9 pr-3 py-2.5 rounded-2xl bg-white/5 hover:bg-white/[0.08] focus:bg-white/10 border text-xs text-white placeholder-zinc-500 focus:outline-none font-mono transition-all shadow-inner ${
                   passwordsMatch
                     ? 'border-emerald-500/50 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-500/30'
                     : passwordsMismatch
