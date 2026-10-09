@@ -79,7 +79,7 @@ export const DesktopWidgets: React.FC = () => {
   };
 
   return (
-    <div className="absolute inset-0 pointer-events-none z-[var(--z-desktop)] overflow-hidden">
+    <div className="absolute inset-0 pointer-events-none z-[var(--z-widgets)] overflow-hidden">
       {/* Sticky Notes Canvas Layer */}
       {stickyNotes.map((note) => {
         const colorClass = STICKY_COLORS[note.color] || STICKY_COLORS.yellow;
@@ -126,7 +126,10 @@ export const DesktopWidgets: React.FC = () => {
       })}
 
       {/* Right-Hand Desktop Sidebar Widgets */}
-      <div className="absolute right-5 top-14 w-72 flex flex-col gap-3 pointer-events-auto">
+      <div
+        className="absolute right-5 top-14 w-72 flex flex-col gap-3 pointer-events-auto"
+        style={{ position: 'absolute', right: '1.25rem', top: '3.5rem', width: '18rem' }}
+      >
         {/* Weather Widget */}
         <div className="p-3.5 rounded-2xl bg-[var(--surface-translucent)] border border-[var(--border-subtle)] backdrop-blur-xl shadow-xl text-[var(--text-primary)] hover:border-[var(--accent-primary)]/40 transition-all">
           <div className="flex items-center justify-between mb-2">

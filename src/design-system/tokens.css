@@ -115,6 +115,7 @@
   --z-modal-overlay: 1400;
   --z-context-menu: 1500;
   --z-toast: 1600;
+  --z-lockscreen: 9999;
 }
 
 /* Base Body Styles */

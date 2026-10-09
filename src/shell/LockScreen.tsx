@@ -39,7 +39,10 @@ export const LockScreen: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-[var(--z-lockscreen)] select-none overflow-hidden flex flex-col items-center justify-between p-8 text-white animate-fadeIn">
+    <div
+      style={{ zIndex: 9999 }}
+      className="fixed inset-0 z-[var(--z-lockscreen)] select-none overflow-hidden flex flex-col items-center justify-between p-8 text-white animate-fadeIn"
+    >
       {/* Blurred Wallpaper Background with Dark Tint */}
       <div
         className="absolute inset-0 bg-cover bg-center filter blur-xl scale-110 pointer-events-none transition-all duration-700"

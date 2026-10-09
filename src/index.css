@@ -162,6 +162,7 @@ body.desktop-body {
 .w-52 { width: 13rem; }
 .w-56 { width: 14rem; }
 .w-64 { width: 16rem; }
+.w-72 { width: 18rem; }
 .w-80 { width: 20rem; }
 .w-88 { width: 22rem; }
 .max-w-fit { max-width: fit-content; }
@@ -183,15 +184,35 @@ body.desktop-body {
 .top-2 { top: 0.5rem; }
 .top-3 { top: 0.75rem; }
 .top-8 { top: 2rem; }
+.top-14 { top: 3.5rem; }
 .bottom-1 { bottom: 0.25rem; }
 .bottom-10 { bottom: 2.5rem; }
 .bottom-16 { bottom: 4rem; }
 .left-4 { left: 1rem; }
 .right-1 { right: 0.25rem; }
 .right-4 { right: 1rem; }
+.right-5 { right: 1.25rem; }
+.right-6 { right: 1.5rem; }
 .left-1\/2 { left: 50%; }
 .-translate-x-1\/2 { transform: translateX(-50%); }
 .-translate-y-1\/2 { transform: translateY(-50%); }
+
+/* Z-Index Hierarchy Classes */
+.z-\[var\(--z-desktop\)\] { z-index: var(--z-desktop); }
+.z-\[var\(--z-desktop-icons\)\] { z-index: var(--z-desktop-icons); }
+.z-\[var\(--z-widgets\)\] { z-index: var(--z-widgets); }
+.z-\[var\(--z-windows-base\)\] { z-index: var(--z-windows-base); }
+.z-\[var\(--z-snap-preview\)\] { z-index: var(--z-snap-preview); }
+.z-\[var\(--z-taskbar\)\] { z-index: var(--z-taskbar); }
+.z-\[var\(--z-dock\)\] { z-index: var(--z-dock); }
+.z-\[var\(--z-flyout-menu\)\] { z-index: var(--z-flyout-menu); }
+.z-\[var\(--z-quick-settings\)\] { z-index: var(--z-quick-settings); }
+.z-\[var\(--z-notification-center\)\] { z-index: var(--z-notification-center); }
+.z-\[var\(--z-command-palette\)\] { z-index: var(--z-command-palette); }
+.z-\[var\(--z-modal-overlay\)\] { z-index: var(--z-modal-overlay); }
+.z-\[var\(--z-context-menu\)\] { z-index: var(--z-context-menu); }
+.z-\[var\(--z-toast\)\] { z-index: var(--z-toast); }
+.z-\[var\(--z-lockscreen\)\] { z-index: var(--z-lockscreen); }
 
 .rounded { border-radius: var(--radius-xs); }
 .rounded-md { border-radius: var(--radius-sm); }
