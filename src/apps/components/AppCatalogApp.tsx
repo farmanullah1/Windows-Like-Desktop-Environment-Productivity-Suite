@@ -4,35 +4,11 @@ import {
   Pin,
   ExternalLink,
   Shield,
-  Folder,
-  Settings as SettingsIcon,
-  FileText,
-  Terminal,
-  Activity,
-  Monitor,
-  Calculator,
-  Clock,
-  Send,
-  Code,
   Box,
 } from 'lucide-react';
 import { getAllApps } from '../registry';
 import { useDesktop } from '../../core/desktopStore';
 import { AppIconBadge } from '../../design-system/AppIconBadge';
-
-const ICON_MAP: Record<string, React.FC<{ className?: string }>> = {
-  Folder,
-  Settings: SettingsIcon,
-  FileText,
-  Terminal,
-  Activity,
-  Monitor,
-  Calculator,
-  Clock,
-  Send,
-  Code,
-  Box,
-};
 
 export const AppCatalogApp: React.FC<{ windowId: string }> = () => {
   const { openApp } = useDesktop();
