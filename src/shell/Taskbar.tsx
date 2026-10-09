@@ -43,6 +43,9 @@ export const Taskbar: React.FC = () => {
   const { shellMode, soundEnabled } = useTheme();
   const [timeStr, setTimeStr] = useState('');
   const [dateStr, setDateStr] = useState('');
+  const [fullDateStr, setFullDateStr] = useState('');
+  const [fullTimeStr, setFullTimeStr] = useState('');
+  const [showClockCard, setShowClockCard] = useState(false);
   const [hoveredAppId, setHoveredAppId] = useState<string | null>(null);
 
   // Clock updates
@@ -51,6 +54,8 @@ export const Taskbar: React.FC = () => {
       const d = new Date();
       setTimeStr(d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
       setDateStr(d.toLocaleDateString([], { month: 'short', day: 'numeric' }));
+      setFullDateStr(d.toLocaleDateString([], { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }));
+      setFullTimeStr(d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
     };
     updateTime();
     const interval = setInterval(updateTime, 1000);
@@ -283,10 +288,46 @@ export const Taskbar: React.FC = () => {
             </div>
           </button>
 
-          {/* Clock & Date */}
-          <div className="text-right px-2 py-0.5 rounded-lg text-xs leading-tight font-medium hidden sm:block">
-            <span className="block font-semibold">{timeStr}</span>
-            <span className="text-[10px] text-[var(--text-muted)]">{dateStr}</span>
+          {/* Clock & Date with Interactive Flyout Card */}
+          <div className="relative">
+            <button
+              onClick={() => {
+                soundEngine.play('click');
+                const calWin = windows.find((w) => w.appId === 'calendar');
+                if (calWin) focusWindow(calWin.id);
+                else openApp('calendar', 'Calendar & Events', 'calendar');
+              }}
+              onMouseEnter={() => setShowClockCard(true)}
+              onMouseLeave={() => setShowClockCard(false)}
+              className="text-right px-2.5 py-1 rounded-xl text-xs leading-tight font-medium hidden sm:block hover:bg-[var(--border-medium)] transition-colors cursor-pointer select-none"
+              title="Click to launch Calendar & Events"
+            >
+              <span className="block font-semibold">{timeStr}</span>
+              <span className="text-[10px] text-[var(--text-muted)]">{dateStr}</span>
+            </button>
+
+            {/* Hover Tooltip Card */}
+            {showClockCard && (
+              <div className="absolute bottom-12 right-0 w-64 p-3 rounded-2xl bg-[var(--surface-taskbar)] border border-[var(--border-medium)] shadow-2xl backdrop-blur-3xl z-50 animate-in fade-in zoom-in-95 duration-150 pointer-events-none">
+                <div className="flex items-center justify-between pb-2 mb-2 border-b border-[var(--border-subtle)]">
+                  <div>
+                    <span className="text-xs font-bold text-[var(--text-primary)] block">
+                      {fullTimeStr}
+                    </span>
+                    <span className="text-[10px] text-[var(--text-muted)] block">
+                      {fullDateStr}
+                    </span>
+                  </div>
+                  <div className="w-7 h-7 rounded-lg bg-[var(--accent-primary)]/20 text-[var(--accent-primary)] flex items-center justify-center">
+                    <Clock className="w-4 h-4" />
+                  </div>
+                </div>
+                <div className="flex items-center justify-between text-[10px] text-[var(--text-muted)] font-mono">
+                  <span>Session Active</span>
+                  <span className="text-[var(--accent-primary)] font-semibold">Click for Calendar</span>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Notification Center Trigger */}
