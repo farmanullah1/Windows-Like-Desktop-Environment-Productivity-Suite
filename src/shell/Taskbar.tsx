@@ -7,6 +7,7 @@ import {
   Battery,
   Bell,
   Grid,
+  X,
 } from 'lucide-react';
 import { useDesktop } from '../core/desktopStore';
 import { useTheme } from '../design-system/ThemeProvider';
@@ -22,6 +23,7 @@ export const Taskbar: React.FC = () => {
     focusWindow,
     minimizeWindow,
     restoreWindow,
+    closeWindow,
     workspaces,
     activeWorkspaceId,
     switchWorkspace,
@@ -40,6 +42,7 @@ export const Taskbar: React.FC = () => {
   const { shellMode, soundEnabled } = useTheme();
   const [timeStr, setTimeStr] = useState('');
   const [dateStr, setDateStr] = useState('');
+  const [hoveredAppId, setHoveredAppId] = useState<string | null>(null);
 
   // Clock updates
   useEffect(() => {
@@ -162,27 +165,84 @@ export const Taskbar: React.FC = () => {
             const isFocused = activeWin && activeWin.id === activeWindowId;
 
             return (
-              <button
+              <div
                 key={app.id}
-                onClick={() => handleAppClick(app.id, app.displayName, app.icon)}
-                className={`group relative flex flex-col items-center justify-center w-10 h-10 rounded-xl transition-all ${
-                  isFocused
-                    ? 'bg-white/20 shadow-md ring-1 ring-white/30'
-                    : 'hover:bg-white/10'
-                }`}
-                title={app.displayName}
+                className="relative"
+                onMouseEnter={() => setHoveredAppId(app.id)}
+                onMouseLeave={() => setHoveredAppId(null)}
               >
-                <AppIconBadge appId={app.id} size="sm" showGlow={isFocused} />
+                <button
+                  onClick={() => handleAppClick(app.id, app.displayName, app.icon)}
+                  className={`group relative flex flex-col items-center justify-center w-10 h-10 rounded-xl transition-all ${
+                    isFocused
+                      ? 'bg-white/20 shadow-md ring-1 ring-white/30'
+                      : 'hover:bg-white/10'
+                  }`}
+                  title={app.displayName}
+                >
+                  <AppIconBadge appId={app.id} size="sm" showGlow={isFocused} />
 
-                {/* Running indicator dot */}
-                {isRunning && (
-                  <span
-                    className={`absolute bottom-0.5 rounded-full transition-all ${
-                      isFocused ? 'w-2.5 h-1 bg-white shadow-sm' : 'w-1 h-1 bg-white/60'
-                    }`}
-                  />
+                  {/* Running indicator dot */}
+                  {isRunning && (
+                    <span
+                      className={`absolute bottom-0.5 rounded-full transition-all ${
+                        isFocused ? 'w-2.5 h-1 bg-white shadow-sm' : 'w-1 h-1 bg-white/60'
+                      }`}
+                    />
+                  )}
+                </button>
+
+                {/* Window Thumbnail Preview Hover Card */}
+                {hoveredAppId === app.id && activeWin && (
+                  <div
+                    className="absolute bottom-12 left-1/2 -translate-x-1/2 w-48 p-2 rounded-xl bg-[var(--surface-taskbar)] border border-[var(--border-medium)] shadow-2xl backdrop-blur-3xl z-50 pointer-events-auto animate-in fade-in zoom-in-95 duration-150"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleAppClick(app.id, app.displayName, app.icon);
+                    }}
+                  >
+                    {/* Preview Header */}
+                    <div className="flex items-center justify-between pb-1.5 mb-1.5 border-b border-[var(--border-subtle)] text-[11px]">
+                      <div className="flex items-center gap-1.5 truncate pr-1">
+                        <AppIconBadge appId={app.id} size="sm" />
+                        <span className="font-semibold truncate text-[var(--text-primary)]">
+                          {activeWin.title}
+                        </span>
+                      </div>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          soundEngine.play('window_close');
+                          closeWindow(activeWin.id);
+                          setHoveredAppId(null);
+                        }}
+                        className="w-4 h-4 rounded flex items-center justify-center text-[var(--text-muted)] hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                        title="Close Window"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </div>
+
+                    {/* Thumbnail Body Simulation */}
+                    <div className="h-20 rounded-lg bg-[var(--surface-card)] border border-[var(--border-subtle)] p-2 flex flex-col justify-between overflow-hidden relative group/thumb hover:border-[var(--accent-primary)]/50 transition-colors">
+                      <div className="flex items-center gap-1 opacity-60">
+                        <span className="w-1.5 h-1.5 rounded-full bg-red-400/80" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-yellow-400/80" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-green-400/80" />
+                      </div>
+                      <div className="flex-1 flex items-center justify-center">
+                        <span className="text-[10px] text-[var(--text-muted)] font-mono text-center">
+                          {activeWin.width} × {activeWin.height}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between text-[9px] text-[var(--text-muted)] pt-1 border-t border-white/5 font-mono">
+                        <span>{activeWin.isMinimized ? 'Minimized' : 'Active'}</span>
+                        <span className="text-[var(--accent-primary)] font-semibold">Click to Switch</span>
+                      </div>
+                    </div>
+                  </div>
                 )}
-              </button>
+              </div>
             );
           })}
         </div>

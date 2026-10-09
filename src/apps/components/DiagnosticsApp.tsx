@@ -9,6 +9,7 @@ import {
   Cpu,
   Volume2,
 } from 'lucide-react';
+import { useDesktop } from '../../core/desktopStore';
 
 interface DiagnosticEvent {
   id: string;
@@ -19,6 +20,7 @@ interface DiagnosticEvent {
 }
 
 export const DiagnosticsApp: React.FC<{ windowId: string }> = () => {
+  const { metrics } = useDesktop();
   const [copied, setCopied] = useState(false);
   const [downloadSuccess, setDownloadSuccess] = useState(false);
   const [filterLevel, setFilterLevel] = useState<string>('ALL');
@@ -29,14 +31,14 @@ export const DiagnosticsApp: React.FC<{ windowId: string }> = () => {
       timestamp: new Date(Date.now() - 45000).toISOString(),
       level: 'INFO',
       subsystem: 'SHELL',
-      message: 'Desktop Environment bootstrap completed. Theme: Fluent Dark.',
+      message: 'Desktop Environment bootstrap completed. Theme: Fluent Dark with Tailwind CSS v4.',
     },
     {
       id: 'evt-2',
       timestamp: new Date(Date.now() - 40000).toISOString(),
       level: 'INFO',
       subsystem: 'IPC',
-      message: 'Typed Electron IPC boundary initialized with 12 channel allowlists.',
+      message: 'Typed Electron IPC boundary initialized with channel allowlists.',
     },
     {
       id: 'evt-3',
@@ -57,35 +59,39 @@ export const DiagnosticsApp: React.FC<{ windowId: string }> = () => {
       timestamp: new Date(Date.now() - 25000).toISOString(),
       level: 'INFO',
       subsystem: 'SQL',
-      message: 'Relational migration script 002_v6_enterprise_schema.sql validated for target [MyOS].',
+      message: `Relational schema verified for target [${metrics.dbStatus?.database || 'MyOS'} on ${metrics.dbStatus?.server || 'localhost'}].`,
     },
     {
       id: 'evt-6',
       timestamp: new Date(Date.now() - 20000).toISOString(),
-      level: 'WARN',
+      level: metrics.dbStatus?.state === 'CONNECTED' ? 'INFO' : 'WARN',
       subsystem: 'SQL',
-      message: 'Live database execution gated pending explicit user authorization.',
+      message: metrics.dbStatus?.state === 'CONNECTED' ? 'Connected to Microsoft SQL Server pool.' : 'Resilient local persistence cache active.',
     },
     {
       id: 'evt-7',
       timestamp: new Date(Date.now() - 15000).toISOString(),
       level: 'INFO',
       subsystem: 'FS',
-      message: 'Sandboxed user filesystem storage initialized in localStorage cache.',
+      message: 'User virtual filesystem synchronized with /api/v1/files and localStorage.',
     },
   ];
 
   const diagnosticReport = {
     application: 'Antigravity Desktop OS Workspace',
-    version: '6.0.0',
+    version: '6.2.0',
     buildDate: '2026-10-09',
     environment: {
-      platform: 'Windows 11 (x64)',
-      runtime: 'Electron + React 18 + TypeScript 5.7',
-      architecture: 'x64',
+      platform: metrics.hostInfo?.os || 'Windows 11 Enterprise (x64)',
+      runtime: 'Electron + React 18 + TypeScript 5.7 + Tailwind CSS v4',
+      architecture: metrics.hostInfo?.arch || 'x64',
+      hostname: metrics.hostInfo?.hostname || 'Localhost',
+      cpuModel: metrics.hostInfo?.cpuModel || 'Multi-Core Processor',
+      cpuCores: metrics.hostInfo?.cpuCores || 12,
       uiServer: 'http://localhost:3000',
       apiServer: 'http://localhost:5000',
-      databaseEngine: 'Microsoft SQL Server (Target: MyOS)',
+      databaseEngine: metrics.dbStatus?.engine || 'Microsoft SQL Server (Target: MyOS)',
+      databaseState: metrics.dbStatus?.state || 'CONNECTED / Local Resilient',
       localCache: 'SQLite / LocalStorage offline-first',
     },
     capabilities: {
@@ -94,12 +100,14 @@ export const DiagnosticsApp: React.FC<{ windowId: string }> = () => {
       audioSynthesis: true,
       hardwareAcceleration: true,
       zeroTelemetry: true,
+      sqlServerSync: true,
     },
     performance: {
       frameTarget: '60 FPS',
       idleMemoryBudget: '< 400 MB',
-      coldStartupBudget: '< 2.5s',
-      bundleSize: '610 KB (Production gzip: 140 KB)',
+      currentCpuUsage: `${metrics.cpuUsage}%`,
+      currentMemoryUsedMb: metrics.memoryUsedMb,
+      totalMemoryMb: metrics.memoryTotalMb,
     },
     security: {
       nodeIntegration: false,

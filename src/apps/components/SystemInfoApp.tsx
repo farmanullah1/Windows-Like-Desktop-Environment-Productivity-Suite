@@ -30,7 +30,7 @@ export const SystemInfoApp: React.FC<{ windowId: string }> = () => {
               {host?.hostname ? `${host.hostname} Workstation` : 'Desktop Environment & Productivity Suite'}
             </h2>
             <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-semibold">
-              v6.1 Production
+              v6.2 Production
             </span>
           </div>
           <p className="text-xs text-[var(--accent-primary)] font-medium">
