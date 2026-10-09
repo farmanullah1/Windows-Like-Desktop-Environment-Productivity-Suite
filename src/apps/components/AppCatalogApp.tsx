@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { getAllApps } from '../registry';
 import { useDesktop } from '../../core/desktopStore';
+import { AppIconBadge } from '../../design-system/AppIconBadge';
 
 const ICON_MAP: Record<string, React.FC<{ className?: string }>> = {
   Folder,
@@ -118,9 +119,7 @@ export const AppCatalogApp: React.FC<{ windowId: string }> = () => {
                 <div>
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-lg bg-[var(--bg-hover)] flex items-center justify-center text-[var(--color-accent)]">
-                        <IconComponent className="w-4 h-4" />
-                      </div>
+                      <AppIconBadge appId={app.id} size="sm" />
                       <div>
                         <h3 className="font-semibold text-xs text-[var(--text-primary)]">{app.displayName}</h3>
                         <span className="text-[10px] text-[var(--text-secondary)] font-mono">v{app.version} • {app.category}</span>
