@@ -9,6 +9,10 @@ import { CalculatorApp } from './components/CalculatorApp';
 import { ClockApp } from './components/ClockApp';
 import { ApiTesterApp } from './components/ApiTesterApp';
 import { JsonViewerApp } from './components/JsonViewerApp';
+import { DeveloperWorkspaceApp } from './components/DeveloperWorkspaceApp';
+import { TextEditorApp } from './components/TextEditorApp';
+import { AppCatalogApp } from './components/AppCatalogApp';
+import { DiagnosticsApp } from './components/DiagnosticsApp';
 
 export const APP_REGISTRY: Record<string, AppDefinition> = {
   'file-explorer': {
