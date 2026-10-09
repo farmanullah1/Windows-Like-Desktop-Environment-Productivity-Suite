@@ -29,17 +29,25 @@ All core architectural phases completed and aligned with Version 6.2 Master Spec
 - Internationalization architecture with `en-US` and `ur-PK` dictionaries (`src/core/i18n.ts`)
 - Version 6.0 enterprise SQL Server relational schema for database `MyOS` (`002_v6_enterprise_schema.sql`)
 - Version 6.2 REST API service with JWT authentication, live telemetry, and SQL Server queries (`server/index.js`)
-- Automated unit test suite (`tests/contracts.test.mjs`) passing with 100% success rate (5 test suites)
+- Cinematic Cold-Boot Startup Sequence (`src/boot/`) with process-local single-use signal (`/api/v1/boot/consume-cold-signal`)
+- Integrated Acrylic Login Experience (`src/auth/LoginScreen.tsx`) and Top-Right Corner Account Creation Entry (`src/auth/CreateAccountLink.tsx`)
+- Synthesized Web Audio procedural boot chime and welcome chime (`src/design-system/soundEngine.ts`)
+- Automated unit test suite (`tests/contracts.test.mjs`) passing with 100% success rate (7 test suites)
 - Production Vite build and strict TypeScript compiler (`tsc --noEmit`) passing with 0 errors
 - Cross-platform Windows execution fix for `npm run dev` and `npm run build`
 
 # Current Implementation Phase
-Phase E8 — Master Expansion Pack 8.0 (Daily Utilities, Productivity Suite, Security Vault & On-Device AI)
+Phase B0-B4 / E8 — Boot Experience, Integrated Authentication & Master Expansion Pack 8.0
 
 # Current Sprint/Task
-Runtime validation verified: dev server daemon active on port 3000, backend daemon on port 5000, production build verified, isolated unit test suite 100% green, 24 registered platform applications.
+Boot & Login Experience implemented and verified:
+- Cold-boot sequence plays strictly once per process launch and never on renderer refresh (F5/Ctrl+R) or HMR.
+- Integrated acrylic login screen with CapsLock warning, password toggle, local workstation fallback, and permanent top-right corner "Create account" entry.
+- Clean desktop handoff transition with synthesized procedural welcome chime.
+- All documentation generated (`docs/BOOT_EXPERIENCE.md`, `docs/LOGIN_UX.md`, `docs/CAPABILITY_MATRIX.md`, `docs/CHANGELOG.md`).
 
 # Current Architecture
+- **Boot & Authentication Layer:** Boot Sequence State Machine (`src/boot/BootSequence.tsx`, `useColdBoot.ts`, `stages/`), Integrated Login Screen (`src/auth/LoginScreen.tsx`), Top-Right Create Account Entry (`src/auth/CreateAccountLink.tsx`), and Registration Screen (`src/auth/SignupScreen.tsx`).
 - **Desktop Shell Layer:** Hybrid Taskbar/Dock (`src/shell/Taskbar.tsx`), Start Menu (`src/shell/StartMenu.tsx`), Quick Settings (`src/shell/QuickSettings.tsx`), Notification Center (`src/shell/NotificationCenter.tsx`), Universal Search & Command Palette (`src/shell/CommandPalette.tsx`), Desktop Canvas (`src/shell/DesktopCanvas.tsx`), Desktop Widgets (`src/shell/DesktopWidgets.tsx`), Session Lock Screen (`src/shell/LockScreen.tsx`).
 - **Window Management Layer:** Full lifecycle window container (`src/window-manager/WindowFrame.tsx`) with dynamic z-index stacking, dragging, multi-border resizing, minimize/maximize/restore, and Windows 11 snap layouts hover menu.
 - **Workspace Layer:** Virtual desktop manager with window segregation, independent wallpapers, switcher pills, and persistent state in `src/core/desktopStore.tsx`.

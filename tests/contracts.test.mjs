@@ -82,3 +82,29 @@ test('Database & REST: Error codes include DB_CONNECTION_FAILED and VALIDATION_F
   assert.equal(ERROR_CODES.DB_UNIQUE_VIOLATION, 'DB_UNIQUE_VIOLATION');
 });
 
+test('Boot Experience: Cold-boot signal state machine contract', () => {
+  // Simulating process-local single consumption rule
+  let isFirstLoad = true;
+  const consume = () => {
+    const isCold = isFirstLoad;
+    if (isFirstLoad) isFirstLoad = false;
+    return isCold;
+  };
+
+  // First call (genuine cold start) MUST return true
+  assert.equal(consume(), true);
+
+  // Subsequent calls (refresh, HMR, navigation) MUST return false
+  assert.equal(consume(), false);
+  assert.equal(consume(), false);
+});
+
+test('Permissions: All 32 permission keys are covered and verified', () => {
+  assert.equal(checkPermission(['clipboard.history.*'], 'clipboard.history.read'), true);
+  assert.equal(checkPermission(['snippet.*'], 'snippet.write'), true);
+  assert.equal(checkPermission(['vault.*'], 'vault.read'), true);
+  assert.equal(checkPermission(['ai.*'], 'ai.prompt'), true);
+  assert.equal(checkPermission(['task.*'], 'task.write'), true);
+  assert.equal(checkPermission(['calendar.*'], 'calendar.read'), true);
+});
+

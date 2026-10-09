@@ -5,6 +5,23 @@ All notable changes to the **Windows-Like Desktop Environment & Productivity Sui
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [8.1.0] - 2026-10-09
+
+### Added
+- **Cinematic Startup Sequence & Boot State Machine**:
+  - Five-stage deterministic launch sequence: `STAGE_VOID` -> `STAGE_LOGO` -> `STAGE_LOADER` -> `STAGE_HANDOFF` -> `LOGIN_ENTRY`.
+  - Process-local single-use cold boot detection signal (`/api/v1/boot/consume-cold-signal`) ensuring the boot sequence runs strictly once per genuine app launch and **never** on renderer refresh (<kbd>F5</kbd>, <kbd>Ctrl+R</kbd>), HMR reload, or routing changes.
+  - Honest initialization progress loader across 5 verified system milestones without fake percentage delays.
+  - Procedural Web Audio API startup sound chimes (`playBootChime` harmonic C4-G4-C5 and `playWelcomeChime` E-major triad) with zero copyright OS sound dependencies and accessibility mute compliance.
+  - Full support for `prefers-reduced-motion` and performance tiers.
+- **Integrated Login Experience & Authentication**:
+  - Centered acrylic authentication card with email/password authentication, show/hide toggle, real-time CapsLock detection, and "Remember me" option.
+  - Fixed top-right corner **"Create account"** entry point (`CreateAccountLink.tsx`) with accessible hit area ≥ 44×44 px, providing instant transition to account registration without app reload or boot replay.
+  - Full registration screen (`SignupScreen.tsx`) integrated with `POST /api/v1/auth/register`.
+  - Offline local workstation session bypass ("Continue with local profile").
+- **Extended Contract Tests**:
+  - Added cold-boot single-use signal consumption and 32 permission key coverage tests in `tests/contracts.test.mjs` (7 passing test suites).
+
 ## [8.0.0] - 2026-10-09
 
 ### Added

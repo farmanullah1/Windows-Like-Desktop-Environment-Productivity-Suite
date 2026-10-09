@@ -57,6 +57,10 @@ To preserve product integrity and prevent misrepresentation, every subsystem and
 | **Focus Mode** | REAL | Pomodoro countdown, deep work sessions, procedural Web Audio ambient sound synthesizer | Synthesized procedural audio (Rain, Forest, Ocean) | Silent timer |
 | **Security Vault** | REAL | Client-side encrypted credential store with master PIN, live 30s TOTP generator, password maker | Client-side hashing and concealed memory fields | Locked local vault |
 | **Antigravity AI** | REAL | On-device desktop AI assistant for SQL schema queries, React tips, and workspace commands | High-speed client-side inference heuristics | Contextual help docs |
+| **Cinematic Boot Sequence** | APPLICATION-SIMULATED | Deterministic startup animation with VOID, animated SVG logo, and handoff (runs strictly once per cold start) | Sandboxed in-app canvas; does not simulate booting Windows OS | Direct login screen bypass |
+| **System Startup Loader** | REAL | Honest initialization sequence reflecting real milestones (vault, design tokens, DB, app registry) | In-app milestone pipeline; no fake progress bars | Minimal spinner |
+| **Integrated Login Screen** | REAL | Acrylic authentication panel with email/password, CapsLock detection, show/hide toggle, and remember me | REST API JWT auth (`/api/v1/auth/login`) or local profile mode | Offline local profile |
+| **Top-Right Account Entry** | REAL | Fixed accessible corner link transitioning to registration flow without page reload or boot replay | In-app view transition; >= 44x44px touch target | Standard sign-in switch |
 | **Registry Editor** | INFORMATIONAL / CONTROLLED | Read-only registry view of harmless application settings | Registry writes permanently disabled without explicit admin approval | In-app settings |
 | **Windows System Restore** | INFORMATIONAL | Displays restore point status and instructions | Does not initiate system restore points | Documentation link |
 | **Replacing `explorer.exe`** | UNSUPPORTED | Running as primary Windows shell replacement | Blocked by design; application operates as user-level productivity workspace | Standalone window |
