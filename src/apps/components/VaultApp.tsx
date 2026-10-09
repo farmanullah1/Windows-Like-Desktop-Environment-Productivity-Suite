@@ -2,17 +2,14 @@ import React, { useState, useEffect } from 'react';
 import {
   ShieldCheck,
   Lock,
-  Unlock,
   Key,
   Eye,
   EyeOff,
   Copy,
   Check,
-  Plus,
   Trash2,
   RefreshCw,
   Search,
-  Fingerprint,
 } from 'lucide-react';
 import { soundEngine } from '../../design-system/soundEngine';
 

@@ -3,15 +3,8 @@ import {
   CheckSquare,
   Plus,
   Trash2,
-  Calendar,
-  Tag,
-  Clock,
-  AlertCircle,
-  CheckCircle2,
-  ListFilter,
   Kanban,
   List as ListIcon,
-  ChevronRight,
 } from 'lucide-react';
 import { soundEngine } from '../../design-system/soundEngine';
 import { useDesktop } from '../../core/desktopStore';
@@ -212,6 +205,17 @@ export const TasksApp: React.FC<{ windowId: string }> = () => {
             <option value="medium">Medium</option>
             <option value="high">High</option>
             <option value="urgent">Urgent</option>
+          </select>
+
+          <select
+            value={newTaskProject}
+            onChange={(e) => setNewTaskProject(e.target.value)}
+            className="px-2 py-1.5 rounded-lg bg-[var(--surface-input)] border border-[var(--border-subtle)] text-xs focus:outline-none"
+          >
+            <option value="Core Platform">Core Platform</option>
+            <option value="Database">Database</option>
+            <option value="UI/UX">UI/UX</option>
+            <option value="QA & Security">QA & Security</option>
           </select>
 
           <button

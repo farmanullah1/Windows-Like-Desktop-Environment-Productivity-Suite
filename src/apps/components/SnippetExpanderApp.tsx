@@ -6,10 +6,7 @@ import {
   Trash2,
   Copy,
   Check,
-  Code2,
-  Variable,
   Play,
-  Download,
 } from 'lucide-react';
 import { soundEngine } from '../../design-system/soundEngine';
 
