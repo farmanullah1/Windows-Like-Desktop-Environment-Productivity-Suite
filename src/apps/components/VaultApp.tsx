@@ -263,6 +263,16 @@ export const VaultApp: React.FC<{ windowId: string }> = () => {
                         >
                           {copiedId === entry.id ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                         </button>
+                        <button
+                          onClick={() => {
+                            soundEngine.play('click');
+                            setEntries((prev) => prev.filter((e) => e.id !== entry.id));
+                          }}
+                          className="p-1.5 rounded-lg border border-[var(--border-subtle)] hover:bg-rose-500/10 text-rose-400"
+                          title="Delete Entry"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
                       </div>
                     </div>
                   );
@@ -284,6 +294,29 @@ export const VaultApp: React.FC<{ windowId: string }> = () => {
                   <RefreshCw className="w-3 h-3" />
                   <span>Generate</span>
                 </button>
+              </div>
+
+              <div className="flex items-center gap-4 text-[11px] text-[var(--text-muted)]">
+                <label className="flex items-center gap-1.5">
+                  <span>Length: {genLength}</span>
+                  <input
+                    type="range"
+                    min="8"
+                    max="32"
+                    value={genLength}
+                    onChange={(e) => setGenLength(Number(e.target.value))}
+                    className="accent-[var(--accent-primary)] cursor-pointer"
+                  />
+                </label>
+                <label className="flex items-center gap-1.5 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={genIncludeSymbols}
+                    onChange={(e) => setGenIncludeSymbols(e.target.checked)}
+                    className="rounded accent-[var(--accent-primary)]"
+                  />
+                  <span>Include Symbols</span>
+                </label>
               </div>
 
               {generatedPassword && (
