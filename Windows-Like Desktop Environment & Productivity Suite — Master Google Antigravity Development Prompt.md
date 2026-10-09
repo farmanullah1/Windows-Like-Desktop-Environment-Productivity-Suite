@@ -7576,3 +7576,2764 @@ This edition consolidates the previous product requirements and expands the spec
 17. **Quality over quantity:** Clarified that “more animations” means richer, better-designed motion rather than constant movement or effects that impair usability.
 
 18. **Implementation status honesty:** Features that are coded but untested, blocked by authorization, partially implemented, or unsupported must remain explicitly classified rather than being reported as complete.
+
+
+
+
+MASTER GOOGLE ANTIGRAVITY DEVELOPMENT PROMPT
+Hybrid Desktop Environment, Productivity Suite & Developer Workspace
+Production Engineering Edition — Version 7.0
+Status: Master Implementation Prompt
+Target Platform: Windows 10/11 (x64 first, ARM64 evaluated)
+Primary Architecture: Electron + React + TypeScript + Node.js + MySQL (primary) / SQL Server (supported) + SQLite (local-first)
+Development Environment: Google Antigravity
+Implementation Standard: Production-oriented, secure, maintainable, testable, reversible
+Execution Mode: BUILD-FIRST / USER-AUTHORIZED EXECUTION ONLY
+
+0. ABSOLUTE DIRECTIVE
+DO NOT MAKE ANY MISTAKES, ANTIGRAVITY.
+You act as principal software architect, senior Windows engineer, senior full-stack engineer, UI/UX architect, security engineer, QA engineer, DevOps engineer, and technical product manager.
+
+You are not building a superficial prototype, a visual mockup, a fake operating system, or a collection of disconnected demo screens.
+
+You are building a real, production-oriented Windows desktop application: a desktop environment, productivity suite, developer workspace, application launcher, file manager, workspace manager, system-information layer, and controlled Windows integration surface.
+
+It must feel like a coherent desktop product inspired by Windows 11, macOS, and Ubuntu/Linux, while not illegally copying proprietary assets, sounds, branding, artwork, source code, or exact proprietary UI implementations.
+
+Every feature must be classified as one of:
+
+genuinely implemented,
+
+integrated with Windows,
+
+simulated inside the application,
+
+informational only,
+
+planned for the future,
+
+unsupported.
+
+Never claim simulated functionality is native Windows functionality.
+
+1. PRIMARY PRODUCT OBJECTIVE
+Build a polished desktop application combining:
+
+Windows-like desktop interaction
+
+macOS-inspired visual polish and motion
+
+Ubuntu/Linux-inspired workspace and developer workflows
+
+productivity applications (notes, editor, files, calculator, clock, media)
+
+file and folder management
+
+terminal integration
+
+application launching and registry
+
+virtual workspaces and window management
+
+universal search and command palette
+
+notifications and quick settings
+
+settings / control center
+
+system information and task/process monitoring
+
+developer tooling
+
+authentication and authorization
+
+local persistence and SQL synchronization
+
+offline-first behavior
+
+controlled Windows integration
+
+security controls, accessibility, internationalization
+
+diagnostics, recovery, update management
+
+release engineering
+
+The final product must feel like one unified application, not a collection of unrelated React pages.
+
+2. CRITICAL EXECUTION RULE
+2.1 BUILD THE PRODUCT, DO NOT RUN THE PRODUCT
+DO NOT RUN, LAUNCH, INSTALL, EXECUTE, ELEVATE, MIGRATE, OR MODIFY THE SYSTEM WITHOUT EXPLICIT USER AUTHORIZATION.
+
+This includes: launching the app; starting Electron; starting a dev server; opening an app window; installing npm/Python/system packages; installing drivers; running database migrations; creating or modifying a MySQL or SQL Server database; modifying the Windows Registry; modifying services; changing firewall rules; changing Windows settings; creating scheduled tasks; creating startup entries; changing network, power, or security configuration; deleting user files; modifying protected Windows directories; executing arbitrary PowerShell, Bash, Python, or executables.
+
+Safe operations allowed without additional approval
+Non-system-modifying repository work:
+
+reading files; inspecting source; creating/editing source files
+
+creating documentation, schemas, migrations as files, tests
+
+static analysis, linting, formatting, TypeScript typechecking
+
+static dependency inspection, static security analysis
+
+repository diff inspection, Git status, Git diff
+
+Git branch creation (not affecting shared history), Git commits
+
+safe unit tests that do not launch the app, install dependencies, modify the system, touch a real database, or start services
+
+If an operation is uncertain: treat it as requiring explicit authorization.
+
+3. TEST EXECUTION AUTHORIZATION GATE
+3.1 Test classification
+Test / Operation	Default permission
+Static analysis	Allowed
+ESLint / Prettier check	Allowed
+TypeScript typecheck	Allowed
+Schema / JSON validation	Allowed
+Unit tests with isolated in-memory data	Allowed
+Pure utility / reducer / state tests	Allowed
+Static security analysis	Allowed
+App launch	Requires approval
+Electron startup	Requires approval
+React dev server	Requires approval
+Backend server	Requires approval
+E2E / Playwright against running app	Requires approval
+Database connection	Requires approval
+SQL migration execution	Requires approval
+Dependency installation	Requires approval
+Native bridge execution	Requires approval
+PowerShell / Python affecting system	Requires approval
+Windows API write, Registry, Service modification	Requires approval
+Installer execution, auto-update testing	Requires approval
+3.2 Authorization message template
+text
+EXECUTION AUTHORIZATION REQUIRED
+
+Operation:      [exact operation]
+Reason:         [why it is needed]
+Potential effects: [what it may change]
+Risk:           [LOW / MEDIUM / HIGH / CRITICAL]
+Rollback:       [rollback method]
+Required authorization: Explicit user approval.
+Do not proceed until approval is received.
+
+4. PRODUCT CAPABILITY TRUTH MODEL
+Classification	Meaning
+REAL	Fully implemented application functionality
+WINDOWS-INTEGRATED	Uses genuine Windows APIs / native integration
+APPLICATION-SIMULATED	Simulated inside the application
+INFORMATIONAL	Displays information but does not control the underlying system
+FUTURE	Designed but intentionally not implemented yet
+UNSUPPORTED	Not safely or technically supported
+Documented in docs/CAPABILITY_MATRIX.md.
+
+Feature	Classification	Implementation	Limitations
+File Explorer	REAL + WINDOWS-INTEGRATED	Native filesystem bridge	Protected paths restricted
+Task Manager	WINDOWS-INTEGRATED	Windows process APIs	Read-only by default
+Registry Editor	INFORMATIONAL / CONTROLLED	Read-only registry access	Writes disabled by default
+System Restore	INFORMATIONAL	Displays availability	Does not perform restore
+Virtual Desktop	APPLICATION-SIMULATED	Internal workspace engine	Not Windows virtual desktops
+Terminal	WINDOWS-INTEGRATED	Controlled process bridge	Allowlisted shells
+Lock Screen	APPLICATION-SIMULATED	Internal session lock	Does not lock Windows
+Window Thumbnails	APPLICATION-SIMULATED	In-app window capture	Not the Windows taskbar
+Media Keys	WINDOWS-INTEGRATED (where permitted)	Global shortcut / SMTC	Falls back to in-app controls
+5. DECISION AUTHORITY MATRIX
+5.1 Autonomous decisions
+Reversible, local, consistent with this spec, not security-sensitive, not destructive, not licensing, not system-modifying:
+
+component naming, folder organization, internal TypeScript interfaces
+
+CSS architecture, React component decomposition, Zustand store structure
+
+utility naming, test organization, icon placement
+
+animation duration within defined limits, UI spacing
+
+non-destructive default settings
+
+5.2 User approval required
+changing core technology choices, database architecture, or authentication architecture
+
+introducing a new privileged native capability
+
+system modification, Registry writes, service creation, firewall modification, scheduled tasks, startup persistence
+
+installer execution, package installation, dependency upgrades with material impact
+
+destructive file or database operations, deleting user data
+
+telemetry activation, external data transmission
+
+production deployment, signing credentials, publishing releases
+
+remote Git operations affecting shared history
+
+5.3 Default decisions
+DEFAULT DECISION: low-risk + reversible + within product vision → choose sensibly and document.
+DEFAULT DECISION: multiple implementations → prefer the simplest secure architecture.
+DEFAULT DECISION: ambiguous but non-critical → reasonable default + recorded assumption.
+DEFAULT DECISION: could lose data, weaken security, modify Windows, incur cost, or expose private data → stop and ask.
+
+6. TECHNOLOGY DECISION MATRIX
+Decision	Default	Rationale	Alternatives	Reversibility
+Desktop shell	Electron	Mature Windows integration, Node ecosystem, reliable packaging	Tauri	Medium
+Frontend	React + TypeScript	Mature component architecture	Vue, Svelte	High
+Styling	CSS Modules / organized CSS + design tokens	Predictable, explicit control	Tailwind for suitable parts	High
+UI state	Zustand + local component state	Lightweight, testable	Redux Toolkit, Context	High
+Server state	TanStack Query	Caching, retries, lifecycle	Equivalent library	Medium
+Backend	NestJS on Fastify adapter	Module boundaries, DI, validation	Fastify, Express	Medium
+Local persistence	SQLite (better-sqlite3 or vetted driver)	Offline-first, transactional, portable	IndexedDB, JSON	Medium
+Remote database	MySQL 8.0+ (primary) / SQL Server (supported)	Fits .env deployment target	—	Medium
+ORM / query layer	Prisma or Drizzle (decided in Phase 1)	Schema discipline, migrations	Knex, TypeORM	Medium
+IPC	Electron contextBridge + typed IPC	Explicit secure boundary	MessagePort	High
+Native bridge	Narrow Node/C# bridge	Isolated privileged ops	C# executable	Medium
+Windows APIs	Native bridge where necessary	Avoid shell emulation	PowerShell (restricted)	Medium
+Python	Specialized offline tooling only	Avoid unnecessary runtime dependency	Node.js	High
+Bash	Developer workflow only (Git Bash / WSL, explicitly identified)	—	PowerShell	High
+Testing	Vitest + Playwright	Fast unit + strong E2E	Jest, Cypress	High
+Accessibility	axe-core + manual keyboard/screen-reader review	Automated + human	Pa11y	High
+Visual regression	Playwright screenshots	Integrated with E2E	Chromatic	High
+Packaging	NSIS signed EXE (per-user default)	Flexible Windows distribution	MSI / MSIX / portable	Medium
+CI	GitHub Actions or existing provider	Repeatable validation	—	Medium
+Version control	Git (mandatory)	Required	—	N/A
+DEFAULT DECISION: Use Electron. This product requires extensive Windows integration, controlled native process access, filesystem integration, display/audio/device information, and developer tooling. Do not switch to Tauri without a documented engineering evaluation demonstrating significant advantage.
+
+7. ARCHITECTURE
+text
+┌──────────────────────────────────────────┐
+│ React Renderer                           │
+│ UI / UX / Desktop Shell / Applications   │
+└───────────────────┬──────────────────────┘
+                    │ Typed IPC (validated)
+┌───────────────────▼──────────────────────┐
+│ Electron Main Process                    │
+│ Window lifecycle / security / IPC        │
+└───────────────────┬──────────────────────┘
+        ┌───────────┼──────────────┐
+        ▼           ▼              ▼
+ Native Bridge   Local DB       Services
+ Windows APIs    SQLite         Application Logic
+        │           │              │
+        └───────────┼──────────────┘
+                    ▼
+              NestJS Backend
+                    │
+                    ▼
+        MySQL / SQL Server
+Layers: UI → Domain logic → Application services → Repository interfaces → Local persistence → Remote API → Sync → Native Windows capabilities. UI components must never touch database drivers directly. The renderer must never receive unrestricted Node.js or filesystem access.
+
+7.1 Project structure
+text
+project/
+├── apps/
+│   ├── desktop/
+│   │   ├── electron/
+│   │   ├── preload/
+│   │   └── renderer/
+│   └── server/
+├── packages/
+│   ├── contracts/     (auth, applications, files, windows, workspaces,
+│   │                   notifications, settings, sync, system, plugins,
+│   │                   commands, media, widgets, errors)
+│   ├── ui/
+│   ├── config/
+│   ├── validation/
+│   ├── database/
+│   ├── security/
+│   └── utilities/
+├── native/windows/
+├── scripts/
+├── database/{migrations,seeds,schemas}
+├── tests/{unit,integration,e2e,accessibility,visual,security}
+├── assets/{icons,sounds,wallpapers,fonts,media}
+├── docs/
+├── brain.md
+├── README.md
+├── LICENSE
+├── TERMS_OF_SERVICE.md
+├── PRIVACY_POLICY.md
+├── package.json
+└── .gitignore
+Adapt to the existing repository. Do not destroy a functioning project.
+
+8. SECURITY ARCHITECTURE
+8.1 Electron security (mandatory)
+text
+nodeIntegration: false
+contextIsolation: true
+sandbox: true where compatible
+webSecurity: true
+Strict preload bridge. Never expose require, process, fs, child_process, shell, os, net, http, crypto directly to the renderer. Expose only explicit typed functions.
+
+8.2 Threat model
+Categories: malicious plugin, compromised dependency, XSS, CSRF, CORS abuse, IPC injection, command injection, path traversal, privilege escalation, token theft, credential theft, database injection, file overwrite, symlink attacks, DLL/EXE side-loading, supply-chain attack, malicious update, log injection, sensitive data leakage, unauthorized telemetry, audio/media file parsing exploits.
+
+Each threat records: Threat / Impact / Likelihood / Mitigation / Detection / Recovery / Residual Risk → docs/RISK_REGISTER.md.
+
+8.3 Filesystem security
+Reject .., path traversal, unsafe UNC paths, unexpected device paths, invalid control characters. Canonicalize paths before sensitive operations. Use allowlists. Never trust user-supplied filenames.
+
+8.4 Subprocess security
+Every executable launch uses an explicit executable allowlist, explicit argument validation, shell: false, and no shell interpretation. Never build powershell -Command "<user input>". Never concatenate user-controlled input into shell commands. Never download and execute remote scripts.
+
+8.5 Web security
+Strict Content Security Policy; no unsafe inline scripts where avoidable; strict CORS; CSRF protection where cookie auth is used; output encoding; input validation; HTML sanitization; safe URL handling. Never use dangerouslySetInnerHTML unless content is sanitized by a trusted sanitizer.
+
+8.6 Encryption
+In transit: TLS 1.2+ (prefer 1.3). At rest: Windows DPAPI / Credential Manager for local secrets; database encryption where deployed; encrypted sensitive local storage. Do not invent custom cryptography.
+
+8.7 Telemetry & privacy
+DEFAULT DECISION: Telemetry OFF by default. If implemented: explicit consent, privacy settings, minimal data, no passwords, no file contents, no personal document contents, no raw command lines, no secret values, transparent documentation, deletion/export support.
+
+Provide architecture for data export, data deletion, account deletion, privacy preferences, retention. Clearly identify: local-only data, synchronized data, server data, diagnostic data, telemetry data.
+
+8.8 Audit logging
+Audit: login, logout, authentication failures, permission changes, file operations, plugin installation, plugin permission changes, privileged operations, security settings, account changes. Never log secrets.
+
+DEFAULT DECISION: 90-day default retention, configurable.
+
+8.9 Plugin security
+Plugins are untrusted by default. Permission request UI:
+
+text
+Plugin: [Name]
+Requests: [permissions]
+Reason: [description]
+[Allow] [Deny]
+High-risk permissions (terminal.execute, filesystem.protected.write, network.write, process.control, registry.write, media.library.read) must never be granted silently. Plugin execution must be permission-checked, logged, cancellable where possible, versioned, validated, and isolated from the renderer.
+
+9. DATA CONTRACTS, IPC, EVENTS & REGISTRIES
+9.1 Contracts
+All cross-layer data uses explicit runtime-validated contracts (Zod or equivalent).
+
+9.2 Standard API response contract
+Success:
+
+json
+{
+  "success": true,
+  "data": {},
+  "meta": { "requestId": "uuid", "timestamp": "2026-01-01T00:00:00.000Z" }
+}
+Error:
+
+json
+{
+  "success": false,
+  "error": {
+    "code": "AUTH_INVALID_CREDENTIALS",
+    "message": "The supplied credentials are invalid.",
+    "details": {},
+    "retryable": false
+  },
+  "meta": { "requestId": "uuid", "timestamp": "2026-01-01T00:00:00.000Z" }
+}
+Never return stack traces to users.
+
+9.3 Error code catalog
+text
+AUTH_INVALID_CREDENTIALS        AUTH_SESSION_EXPIRED
+AUTH_SESSION_REVOKED            AUTH_EMAIL_NOT_VERIFIED
+AUTH_MFA_REQUIRED               AUTH_MFA_INVALID
+AUTH_RESET_TOKEN_INVALID        AUTH_FORBIDDEN
+AUTH_PERMISSION_DENIED          AUTH_ACCOUNT_LOCKED
+AUTH_RATE_LIMITED               AUTH_WEAK_PASSWORD
+AUTH_EMAIL_ALREADY_EXISTS       AUTH_TOKEN_REUSE_DETECTED
+
+FILE_NOT_FOUND                  FILE_ALREADY_EXISTS
+FILE_ACCESS_DENIED              FILE_OPERATION_BLOCKED
+FILE_PATH_INVALID               FILE_PATH_PROTECTED
+
+APP_NOT_FOUND                   APP_DISABLED
+APP_LAUNCH_BLOCKED              WINDOW_INVALID_STATE
+WORKSPACE_NOT_FOUND
+
+SYNC_CONFLICT                   SYNC_OFFLINE
+SYNC_FAILED                     SYNC_VERSION_MISMATCH
+
+DB_CONNECTION_FAILED            DB_TRANSACTION_FAILED
+DB_CONSTRAINT_VIOLATION         DB_MIGRATION_REQUIRED
+
+NATIVE_UNSUPPORTED              NATIVE_PERMISSION_DENIED
+NATIVE_OPERATION_FAILED
+
+PLUGIN_INVALID                  PLUGIN_PERMISSION_DENIED
+PLUGIN_EXECUTION_BLOCKED
+
+MEDIA_DECODE_FAILED             MEDIA_LIBRARY_UNAVAILABLE
+MEDIA_UNSUPPORTED_FORMAT        WIDGET_LOAD_FAILED
+WALLPAPER_IMPORT_FAILED         WALLPAPER_UNSUPPORTED_FORMAT
+
+SYSTEM_OPERATION_BLOCKED        USER_AUTHORIZATION_REQUIRED
+
+VALIDATION_FAILED               RATE_LIMITED
+INTERNAL_ERROR
+9.4 Event system
+typescript
+interface ApplicationEvent<T = unknown> {
+  id: string;
+  type: string;
+  version: number;
+  timestamp: string;
+  source: string;
+  correlationId?: string;
+  payload: T;
+}
+Event names include: window.created|closed|focused|minimized|maximized|restored|snapped|thumbnail.requested, workspace.created|deleted|switched, application.registered|launched|closed, notification.created|read, file.created|moved|copied|deleted|restored, sync.started|completed|failed|conflict, auth.login|logout|session.revoked|locked|unlocked, native.capability.available|unavailable, media.playback.started|paused|stopped|track.changed, widget.mounted|unmounted|updated, wallpaper.changed, theme.changed.
+
+9.5 IPC contract
+Renderer → Preload → Main → Native/Services.
+
+typescript
+interface IPCRequest<T> {
+  requestId: string;
+  channel: string;
+  version: number;
+  payload: T;
+}
+Requirements: runtime schema validation, maximum payload size, allowed channel list, permission check, argument validation, timeout, cancellation where appropriate, structured errors, no arbitrary channel creation. Never allow ipcRenderer.send(userControlledChannel) without strict channel validation.
+
+9.6 Application manifest
+json
+{
+  "id": "com.example.notes",
+  "name": "Notes",
+  "version": "1.0.0",
+  "description": "Application notes manager",
+  "icon": "notes",
+  "entry": "internal:notes",
+  "classification": "REAL",
+  "permissions": ["storage.notes.read", "storage.notes.write"],
+  "window": {
+    "defaultWidth": 900, "defaultHeight": 650,
+    "minWidth": 500, "minHeight": 400,
+    "resizable": true, "multipleInstances": false
+  }
+}
+Registry must support internal, external, developer, and plugin applications; aliases; disabled applications; permissions; capabilities; window configuration; lifecycle; versioning.
+
+9.7 Command registry
+typescript
+interface CommandDefinition {
+  id: string;
+  title: string;
+  description?: string;
+  category: string;
+  keywords?: string[];
+  shortcut?: string;
+  requiredPermissions?: string[];
+  enabled: boolean;
+  execute: string;
+}
+Examples: app.launch, window.minimize|maximize|close|snap.left|snap.right|snap.layout, workspace.next|previous|create, search.open, command-palette.open, settings.open, notifications.open, terminal.open, file-explorer.open, session.lock, media.play|pause|next, wallpaper.next, widgets.toggle.
+
+Commands must be permission-aware and centrally registered.
+
+9.8 Permission schema
+Format: domain.resource.action
+
+text
+filesystem.user.read            filesystem.user.write
+filesystem.protected.read       filesystem.protected.write
+system.info.read                system.process.read
+system.process.control          network.read
+network.write                   power.read
+power.control                   audio.read
+audio.control                   display.read
+display.control                 terminal.execute
+plugin.install                  plugin.execute
+database.read                   database.write
+media.library.read              media.library.write
+media.playback.control          widgets.install
+widgets.execute                 wallpaper.import
+session.lock                    biometric.unlock
+Sensitive permissions require explicit user approval.
+
+9.9 Plugin manifest
+json
+{
+  "id": "com.example.plugin",
+  "name": "Example Plugin",
+  "version": "1.0.0",
+  "apiVersion": "1",
+  "permissions": ["storage.user.read"],
+  "entry": "plugin/index.js"
+}
+Plugins never receive unrestricted filesystem, process, network, shell, registry, or native API access. Capability-based access only.
+
+10. ENVIRONMENT CONFIGURATION
+10.1 Authoritative development .env
+env
+PORT=3000
+
+SERVER=localhost
+
+DATABASE=MyOS
+
+NODE_ENV=development
+
+JWT_SECRET=bac0a2b3e80af8c0fef9ca6a7f1466251047834cf15ee33f5af23b26e2012d09
+
+JWT_EXPIRES_IN=7d
+
+# Additional application defaults
+
+API_PORT=3000
+
+DB_SERVER=localhost
+
+DB_PORT=1433
+
+DB_NAME=MyOS
+
+DEFAULT_EFFECTS_MODE=balanced
+
+ENABLE_WEB_AUDIO_SOUNDS=true
+
+LOG_LEVEL=info
+10.2 Configuration rules
+Commit .env.example with placeholders only. Never commit a real .env.
+
+ASM-002 (assumption to validate): DB_PORT=1433 is the SQL Server default. If MySQL is the target engine (per your request), the standard port is 3306. Confirm the intended engine and port in Phase 0 before connecting. Both are supported; the app must not hardcode either.
+
+JWT_SECRET above is a development placeholder and must be rotated before any non-local use. Generate with a CSPRNG (≥ 256 bits of entropy). Never reuse the example value. Never log it. Never ship it.
+
+JWT_EXPIRES_IN=7d is the refresh horizon convention; access tokens remain short-lived (15 minutes) — see §15.
+
+DEFAULT_EFFECTS_MODE=balanced maps directly to the animation profile default in §28.
+
+ENABLE_WEB_AUDIO_SOUNDS=true gates the centralized sound engine (§32) and the Antigravity Groove audio engine (§34).
+
+LOG_LEVEL=info controls structured logging verbosity (debug|info|warn|error|security|audit).
+
+10.3 .env.example
+env
+NODE_ENV=development
+PORT=3000
+API_PORT=3000
+
+# Database — engine: mysql | sqlserver
+DB_ENGINE=mysql
+DB_SERVER=localhost
+DB_PORT=3306
+DB_NAME=MyOS
+DB_USER=
+DB_PASSWORD=
+DATABASE_URL=
+
+# Auth
+JWT_SECRET=
+JWT_EXPIRES_IN=7d
+JWT_ACCESS_EXPIRES_IN=15m
+JWT_REFRESH_EXPIRES_IN=30d
+
+# Effects
+DEFAULT_EFFECTS_MODE=balanced
+ENABLE_WEB_AUDIO_SOUNDS=true
+LOG_LEVEL=info
+11. DATABASE SETUP — MySQL (PRIMARY) AND SQL SERVER (SUPPORTED)
+Execution gate: Creating databases, creating users, running migrations, and starting database services all require explicit authorization (§3). This section documents the required setup; Antigravity prepares scripts and migrations as files but does not execute them.
+
+11.1 MySQL server setup (primary path)
+Minimum version: MySQL 8.0+ (utf8mb4, CTEs, window functions, JSON type).
+
+Installation options (documented, not executed):
+
+Option	Notes
+MySQL Installer for Windows	Recommended for a local developer instance
+MySQL Community Server (ZIP/MSI)	Manual service configuration
+Docker container	Reproducible, isolated; requires user-approved container runtime
+Remote MySQL	Team/central deployment; TLS required
+Required steps (prepared as scripts, executed only with approval):
+
+Install MySQL Server and confirm the Windows service is running.
+
+Set a strong root password at install time. Never use root for the application.
+
+Create the application database:
+
+sql
+CREATE DATABASE IF NOT EXISTS MyOS
+  CHARACTER SET utf8mb4
+  COLLATE utf8mb4_0900_ai_ci;
+Create a least-privilege application user:
+
+sql
+CREATE USER 'myos_app'@'localhost'
+  IDENTIFIED BY '<STRONG_RANDOM_PASSWORD>';
+
+GRANT SELECT, INSERT, UPDATE, DELETE
+  ON MyOS.* TO 'myos_app'@'localhost';
+
+-- Migrations run under a separate, narrower account:
+CREATE USER 'myos_migrator'@'localhost'
+  IDENTIFIED BY '<SEPARATE_STRONG_PASSWORD>';
+
+GRANT SELECT, INSERT, UPDATE, DELETE,
+      CREATE, ALTER, DROP, INDEX, REFERENCES
+  ON MyOS.* TO 'myos_migrator'@'localhost';
+
+FLUSH PRIVILEGES;
+Verify connectivity and charset:
+
+sql
+SELECT VERSION(), @@character_set_database, @@collation_database;
+Connection configuration (development, matches .env):
+
+env
+DB_ENGINE=mysql
+DB_SERVER=localhost
+DB_PORT=3306
+DB_NAME=MyOS
+DB_USER=myos_app
+DB_PASSWORD=<from secure store, never committed>
+DATABASE_URL=mysql://myos_app:<password>@localhost:3306/MyOS
+Connection pool defaults (initial, tune after measurement): connectionLimit: 10, acquireTimeout: 10000, idleTimeout: 30000, enableKeepAlive: true, timezone: 'Z', charset: 'utf8mb4'.
+
+Operational requirements: UTC timestamps, utf8mb4 everywhere, prepared/parameterized statements only, explicit transactions for multi-step mutations, automated backups with verified restore, slow-query logging in development, TLS for any non-localhost connection.
+
+11.2 SQL Server (supported path)
+When DB_ENGINE=sqlserver, use:
+
+env
+DB_ENGINE=sqlserver
+DB_SERVER=localhost
+DB_PORT=1433
+DB_NAME=MyOS
+DATABASE_URL=sqlserver://<user>:<password>@localhost:1433;database=MyOS;encrypt=true;trustServerCertificate=false
+SQL Server type mapping: CHAR(36) → UNIQUEIDENTIFIER (with NEWSEQUENTIALID()), VARCHAR(n) → NVARCHAR(n), DATETIME(3) → DATETIME2(3), TINYINT(1) → BIT, JSON → NVARCHAR(MAX) validated JSON, LONGTEXT → NVARCHAR(MAX).
+
+The application must not assume a database is installed, running, or reachable. Detect configuration problems and present clear setup guidance.
+
+11.3 Migration discipline
+Versioned migration files committed to Git.
+
+up and down for every migration.
+
+No destructive migration without explicit approval.
+
+No production migration without explicit approval.
+
+Migrations validated statically in CI; executed only under authorization.
+
+12. CORE DATABASE SCHEMA
+Identifiers are UUID/GUID (CHAR(36) in MySQL, UNIQUEIDENTIFIER in SQL Server). Timestamps are UTC with millisecond precision.
+
+12.1 Users
+sql
+CREATE TABLE Users (
+  UserId            CHAR(36)     NOT NULL PRIMARY KEY,
+  Email             VARCHAR(320) NOT NULL,
+  NormalizedEmail   VARCHAR(320) NOT NULL,
+  PasswordHash      VARCHAR(500) NULL,
+  DisplayName       VARCHAR(200) NOT NULL,
+  AvatarPath        VARCHAR(1000) NULL,
+  EmailVerified     TINYINT(1)   NOT NULL DEFAULT 0,
+  IsActive          TINYINT(1)   NOT NULL DEFAULT 1,
+  IsLocked          TINYINT(1)   NOT NULL DEFAULT 0,
+  FailedLoginCount  INT          NOT NULL DEFAULT 0,
+  LockedUntil       DATETIME(3)  NULL,
+  PreferredLocale   VARCHAR(20)  NOT NULL DEFAULT 'en-US',
+  PreferredTheme    VARCHAR(40)  NOT NULL DEFAULT 'system',
+  CreatedAt         DATETIME(3)  NOT NULL DEFAULT UTC_TIMESTAMP(3),
+  UpdatedAt         DATETIME(3)  NOT NULL DEFAULT UTC_TIMESTAMP(3),
+  LastLoginAt       DATETIME(3)  NULL,
+  UNIQUE KEY UQ_Users_NormalizedEmail (NormalizedEmail),
+  KEY IX_Users_IsActive (IsActive)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+12.2 Roles, Permissions, UserRoles, RolePermissions
+sql
+CREATE TABLE Roles (
+  RoleId      CHAR(36)     NOT NULL PRIMARY KEY,
+  Name        VARCHAR(100) NOT NULL,
+  Description VARCHAR(500) NULL,
+  UNIQUE KEY UQ_Roles_Name (Name)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE Permissions (
+  PermissionId  CHAR(36)     NOT NULL PRIMARY KEY,
+  PermissionKey VARCHAR(200) NOT NULL,
+  Description   VARCHAR(500) NULL,
+  UNIQUE KEY UQ_Permissions_Key (PermissionKey)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE UserRoles (
+  UserId     CHAR(36)    NOT NULL,
+  RoleId     CHAR(36)    NOT NULL,
+  AssignedAt DATETIME(3) NOT NULL DEFAULT UTC_TIMESTAMP(3),
+  PRIMARY KEY (UserId, RoleId),
+  FOREIGN KEY (UserId) REFERENCES Users(UserId),
+  FOREIGN KEY (RoleId) REFERENCES Roles(RoleId)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE RolePermissions (
+  RoleId       CHAR(36) NOT NULL,
+  PermissionId CHAR(36) NOT NULL,
+  PRIMARY KEY (RoleId, PermissionId),
+  FOREIGN KEY (RoleId) REFERENCES Roles(RoleId),
+  FOREIGN KEY (PermissionId) REFERENCES Permissions(PermissionId)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+12.3 Sessions
+sql
+CREATE TABLE Sessions (
+  SessionId         CHAR(36)     NOT NULL PRIMARY KEY,
+  UserId            CHAR(36)     NOT NULL,
+  RefreshTokenHash  VARCHAR(500) NOT NULL,
+  TokenFamilyId     CHAR(36)     NOT NULL,
+  CreatedAt         DATETIME(3)  NOT NULL DEFAULT UTC_TIMESTAMP(3),
+  ExpiresAt         DATETIME(3)  NOT NULL,
+  RevokedAt         DATETIME(3)  NULL,
+  RevokedReason     VARCHAR(200) NULL,
+  DeviceName        VARCHAR(200) NULL,
+  DeviceFingerprint VARCHAR(500) NULL,
+  IpAddress         VARCHAR(64)  NULL,
+  UserAgent         VARCHAR(1000) NULL,
+  FOREIGN KEY (UserId) REFERENCES Users(UserId),
+  KEY IX_Sessions_UserId (UserId),
+  KEY IX_Sessions_ExpiresAt (ExpiresAt),
+  KEY IX_Sessions_TokenFamily (TokenFamilyId)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+12.4 Auth support tables
+sql
+CREATE TABLE EmailVerificationTokens (
+  TokenId   CHAR(36)     NOT NULL PRIMARY KEY,
+  UserId    CHAR(36)     NOT NULL,
+  TokenHash VARCHAR(500) NOT NULL,
+  ExpiresAt DATETIME(3)  NOT NULL,
+  UsedAt    DATETIME(3)  NULL,
+  CreatedAt DATETIME(3)  NOT NULL DEFAULT UTC_TIMESTAMP(3),
+  FOREIGN KEY (UserId) REFERENCES Users(UserId),
+  KEY IX_EVT_UserId (UserId)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE PasswordResetTokens (
+  TokenId   CHAR(36)     NOT NULL PRIMARY KEY,
+  UserId    CHAR(36)     NOT NULL,
+  TokenHash VARCHAR(500) NOT NULL,
+  ExpiresAt DATETIME(3)  NOT NULL,
+  UsedAt    DATETIME(3)  NULL,
+  CreatedAt DATETIME(3)  NOT NULL DEFAULT UTC_TIMESTAMP(3),
+  FOREIGN KEY (UserId) REFERENCES Users(UserId),
+  KEY IX_PRT_UserId (UserId)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE MfaMethods (
+  MfaMethodId CHAR(36)     NOT NULL PRIMARY KEY,
+  UserId      CHAR(36)     NOT NULL,
+  MethodType  VARCHAR(30)  NOT NULL,   -- totp | recovery | webauthn
+  SecretEnc   VARBINARY(500) NULL,
+  Label       VARCHAR(120) NULL,
+  IsPrimary   TINYINT(1)   NOT NULL DEFAULT 0,
+  ConfirmedAt DATETIME(3)  NULL,
+  CreatedAt   DATETIME(3)  NOT NULL DEFAULT UTC_TIMESTAMP(3),
+  FOREIGN KEY (UserId) REFERENCES Users(UserId),
+  KEY IX_Mfa_UserId (UserId)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE RecoveryCodes (
+  RecoveryCodeId CHAR(36)     NOT NULL PRIMARY KEY,
+  UserId         CHAR(36)     NOT NULL,
+  CodeHash       VARCHAR(500) NOT NULL,
+  UsedAt         DATETIME(3)  NULL,
+  FOREIGN KEY (UserId) REFERENCES Users(UserId),
+  KEY IX_Recovery_UserId (UserId)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE OAuthIdentities (
+  IdentityId   CHAR(36)     NOT NULL PRIMARY KEY,
+  UserId       CHAR(36)     NOT NULL,
+  Provider     VARCHAR(60)  NOT NULL,
+  Subject      VARCHAR(255) NOT NULL,
+  EmailAtLink  VARCHAR(320) NULL,
+  LinkedAt     DATETIME(3)  NOT NULL DEFAULT UTC_TIMESTAMP(3),
+  UNIQUE KEY UQ_OAuth_Provider_Subject (Provider, Subject),
+  FOREIGN KEY (UserId) REFERENCES Users(UserId)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE LoginAttempts (
+  AttemptId   CHAR(36)     NOT NULL PRIMARY KEY,
+  NormalizedEmail VARCHAR(320) NOT NULL,
+  IpAddress   VARCHAR(64)  NULL,
+  Succeeded   TINYINT(1)   NOT NULL,
+  Reason      VARCHAR(120) NULL,
+  CreatedAt   DATETIME(3)  NOT NULL DEFAULT UTC_TIMESTAMP(3),
+  KEY IX_LoginAttempts_Email_Time (NormalizedEmail, CreatedAt),
+  KEY IX_LoginAttempts_Ip_Time (IpAddress, CreatedAt)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+12.5 Applications, UserFiles, Notes, Workspaces, WindowStates, Notifications, AuditLogs, SyncQueue
+sql
+CREATE TABLE Applications (
+  ApplicationId      CHAR(36)     NOT NULL PRIMARY KEY,
+  ApplicationKey     VARCHAR(150) NOT NULL,
+  Name               VARCHAR(200) NOT NULL,
+  Version            VARCHAR(50)  NOT NULL,
+  Description        VARCHAR(1000) NULL,
+  Classification     VARCHAR(50)  NOT NULL,
+  IsEnabled          TINYINT(1)   NOT NULL DEFAULT 1,
+  IsSystemApplication TINYINT(1)  NOT NULL DEFAULT 0,
+  ManifestJson       JSON         NULL,
+  CreatedAt          DATETIME(3)  NOT NULL DEFAULT UTC_TIMESTAMP(3),
+  UpdatedAt          DATETIME(3)  NOT NULL DEFAULT UTC_TIMESTAMP(3),
+  UNIQUE KEY UQ_Applications_Key (ApplicationKey)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE UserFiles (
+  FileId       CHAR(36)      NOT NULL PRIMARY KEY,
+  UserId       CHAR(36)      NOT NULL,
+  ParentFileId CHAR(36)      NULL,
+  Name         VARCHAR(500)  NOT NULL,
+  Path         VARCHAR(2000) NOT NULL,
+  IsDirectory  TINYINT(1)    NOT NULL DEFAULT 0,
+  SizeBytes    BIGINT        NULL,
+  MimeType     VARCHAR(200)  NULL,
+  ContentHash  VARCHAR(128)  NULL,
+  CreatedAt    DATETIME(3)   NOT NULL DEFAULT UTC_TIMESTAMP(3),
+  UpdatedAt    DATETIME(3)   NOT NULL DEFAULT UTC_TIMESTAMP(3),
+  DeletedAt    DATETIME(3)   NULL,
+  FOREIGN KEY (UserId) REFERENCES Users(UserId),
+  FOREIGN KEY (ParentFileId) REFERENCES UserFiles(FileId),
+  KEY IX_UserFiles_UserId (UserId),
+  KEY IX_UserFiles_Parent (ParentFileId),
+  KEY IX_UserFiles_Path (Path(255))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE Notes (
+  NoteId     CHAR(36)     NOT NULL PRIMARY KEY,
+  UserId     CHAR(36)     NOT NULL,
+  Title      VARCHAR(500) NOT NULL,
+  Content    LONGTEXT     NOT NULL,
+  TagsJson   JSON         NULL,
+  IsPinned   TINYINT(1)   NOT NULL DEFAULT 0,
+  IsArchived TINYINT(1)   NOT NULL DEFAULT 0,
+  DeletedAt  DATETIME(3)  NULL,
+  CreatedAt  DATETIME(3)  NOT NULL DEFAULT UTC_TIMESTAMP(3),
+  UpdatedAt  DATETIME(3)  NOT NULL DEFAULT UTC_TIMESTAMP(3),
+  FOREIGN KEY (UserId) REFERENCES Users(UserId),
+  KEY IX_Notes_UserId (UserId),
+  KEY IX_Notes_UpdatedAt (UpdatedAt),
+  FULLTEXT KEY FT_Notes_Title_Content (Title, Content)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE Workspaces (
+  WorkspaceId       CHAR(36)     NOT NULL PRIMARY KEY,
+  UserId            CHAR(36)     NOT NULL,
+  Name              VARCHAR(200) NOT NULL,
+  SortOrder         INT          NOT NULL DEFAULT 0,
+  WallpaperId       CHAR(36)     NULL,
+  ConfigurationJson JSON         NULL,
+  CreatedAt         DATETIME(3)  NOT NULL DEFAULT UTC_TIMESTAMP(3),
+  UpdatedAt         DATETIME(3)  NOT NULL DEFAULT UTC_TIMESTAMP(3),
+  FOREIGN KEY (UserId) REFERENCES Users(UserId)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE WindowStates (
+  WindowStateId CHAR(36)     NOT NULL PRIMARY KEY,
+  UserId        CHAR(36)     NOT NULL,
+  WorkspaceId   CHAR(36)     NULL,
+  ApplicationKey VARCHAR(150) NOT NULL,
+  X INT NULL, Y INT NULL, Width INT NULL, Height INT NULL,
+  IsMaximized TINYINT(1) NOT NULL DEFAULT 0,
+  IsMinimized TINYINT(1) NOT NULL DEFAULT 0,
+  ZIndex      INT        NOT NULL DEFAULT 0,
+  StateJson   JSON       NULL,
+  UpdatedAt   DATETIME(3) NOT NULL DEFAULT UTC_TIMESTAMP(3),
+  FOREIGN KEY (UserId) REFERENCES Users(UserId),
+  FOREIGN KEY (WorkspaceId) REFERENCES Workspaces(WorkspaceId)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE Notifications (
+  NotificationId CHAR(36)      NOT NULL PRIMARY KEY,
+  UserId         CHAR(36)      NOT NULL,
+  Title          VARCHAR(300)  NOT NULL,
+  Message        VARCHAR(2000) NOT NULL,
+  Severity       VARCHAR(30)   NOT NULL,
+  Category       VARCHAR(100)  NULL,
+  IsRead         TINYINT(1)    NOT NULL DEFAULT 0,
+  CreatedAt      DATETIME(3)   NOT NULL DEFAULT UTC_TIMESTAMP(3),
+  ReadAt         DATETIME(3)   NULL,
+  MetadataJson   JSON          NULL,
+  FOREIGN KEY (UserId) REFERENCES Users(UserId),
+  KEY IX_Notifications_User_Read (UserId, IsRead)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE AuditLogs (
+  AuditLogId   CHAR(36)      NOT NULL PRIMARY KEY,
+  UserId       CHAR(36)      NULL,
+  Action       VARCHAR(200)  NOT NULL,
+  ResourceType VARCHAR(100)  NULL,
+  ResourceId   VARCHAR(200)  NULL,
+  Severity     VARCHAR(30)   NOT NULL,
+  IpAddress    VARCHAR(64)   NULL,
+  UserAgent    VARCHAR(1000) NULL,
+  MetadataJson JSON          NULL,
+  CreatedAt    DATETIME(3)   NOT NULL DEFAULT UTC_TIMESTAMP(3),
+  FOREIGN KEY (UserId) REFERENCES Users(UserId),
+  KEY IX_AuditLogs_UserId (UserId),
+  KEY IX_AuditLogs_CreatedAt (CreatedAt),
+  KEY IX_AuditLogs_Action (Action)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE SyncQueue (
+  SyncOperationId CHAR(36)      NOT NULL PRIMARY KEY,
+  UserId          CHAR(36)      NOT NULL,
+  EntityType      VARCHAR(100)  NOT NULL,
+  EntityId        VARCHAR(200)  NOT NULL,
+  Operation       VARCHAR(30)   NOT NULL,
+  PayloadJson     JSON          NOT NULL,
+  AttemptCount    INT           NOT NULL DEFAULT 0,
+  Status          VARCHAR(30)   NOT NULL DEFAULT 'PENDING',
+  LastError       VARCHAR(2000) NULL,
+  CreatedAt       DATETIME(3)   NOT NULL DEFAULT UTC_TIMESTAMP(3),
+  UpdatedAt       DATETIME(3)   NOT NULL DEFAULT UTC_TIMESTAMP(3),
+  FOREIGN KEY (UserId) REFERENCES Users(UserId),
+  KEY IX_SyncQueue_Status (Status)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+12.6 Additional required tables
+Implement normalized equivalents for: MFA methods, password reset tokens, email verification tokens, OAuth/OIDC identities, device registrations, plugin registrations, application permissions, command definitions, user settings, themes, wallpaper library, wallpaper assignments, media library, playlists, sound preferences, widget instances, widget settings, focus/quiet-hours schedules, accessibility preferences, keyboard shortcuts, file operation history, recovery snapshots, update metadata, release channels, feature flags.
+
+Do not create tables purely for theoretical completeness.
+
+13. DATABASE RULES
+UTC timestamps everywhere.
+
+Parameterized SQL only — never string concatenation.
+
+Transactions for multi-step mutations.
+
+Foreign keys enforced.
+
+Indexes based on actual query patterns.
+
+Unique constraints where appropriate.
+
+Soft deletion where recovery is required.
+
+Optimistic concurrency where synchronization requires it.
+
+Migration files committed to Git.
+
+No production database mutation without authorization.
+
+No destructive migration without explicit approval.
+
+Least-privilege database accounts (separate app and migrator accounts).
+
+Backups must be verified, not merely scheduled.
+
+14. API CONTRACT
+Base path: /api/v1
+
+Authentication
+text
+POST   /auth/signup
+POST   /auth/login
+POST   /auth/logout
+POST   /auth/logout-all
+POST   /auth/refresh
+POST   /auth/verify-email
+POST   /auth/resend-verification
+POST   /auth/forgot-password
+POST   /auth/reset-password
+POST   /auth/change-password
+POST   /auth/mfa/challenge
+POST   /auth/mfa/verify
+POST   /auth/mfa/setup
+POST   /auth/mfa/disable
+GET    /auth/me
+PATCH  /auth/me
+GET    /auth/sessions
+DELETE /auth/sessions/:id
+DELETE /auth/sessions
+Applications / Workspaces / Notes / Files / Notifications / Sync / System
+text
+GET|POST|PATCH|DELETE  /applications[/:id]
+GET|POST|PATCH|DELETE  /workspaces[/:id]
+
+GET|POST|PATCH|DELETE  /notes[/:id]
+GET                    /notes/search
+
+GET                    /files
+POST                   /files/folder
+POST                   /files/move
+POST                   /files/copy
+DELETE                 /files/:id
+POST                   /files/restore
+
+GET                    /notifications
+POST                   /notifications/:id/read
+POST                   /notifications/read-all
+DELETE                 /notifications/:id
+
+GET                    /sync/status
+POST                   /sync/push
+POST                   /sync/pull
+POST                   /sync/resolve-conflict
+
+GET                    /system/info
+GET                    /system/health
+GET                    /system/capabilities
+
+GET|POST|PATCH|DELETE  /wallpapers[/:id]
+POST                   /wallpapers/import
+GET|POST|PATCH|DELETE  /widgets[/:id]
+GET|POST|PATCH|DELETE  /media/tracks[/:id]
+GET|POST|PATCH|DELETE  /media/playlists[/:id]
+POST                   /media/playback/control
+GET|POST|PATCH|DELETE  /sessions/lock  (lock/unlock state)
+Rate limiting (mandatory on auth endpoints): /auth/signup, /auth/login, /auth/forgot-password, /auth/reset-password, /auth/mfa/verify, /auth/refresh.
+
+15. AUTHENTICATION & IDENTITY SYSTEM (SIGNUP, LOGIN, SESSIONS, MFA)
+15.1 Authentication model
+DEFAULT DECISION: Server-backed authentication when a backend is configured, with secure local session persistence for offline use. A local profile mode must also work without a remote account, clearly distinguished in the UI.
+
+Supported: email/password, email verification, password reset, MFA (TOTP + recovery codes), optional OAuth/OIDC, session management, session revocation, account deletion, data export.
+
+15.2 Signup flow
+text
+Launch
+→ Signup screen
+→ Client-side validation
+→ POST /auth/signup
+→ Server validation + normalization
+→ Duplicate-email check
+→ Argon2id password hash
+→ User + default role created
+→ Email verification token generated (hashed, single-use, 24h expiry)
+→ Verification email queued (or skipped if email not configured)
+→ Session created (if verification not required to proceed)
+→ First-run onboarding
+→ Desktop
+Signup validation rules
+Field	Rule
+Email	RFC-compliant, ≤ 320 chars, normalized (trim + lowercase), uniqueness enforced on NormalizedEmail
+Display name	1–200 chars, trimmed, control characters rejected
+Password	≥ 12 chars; must contain upper, lower, digit, symbol; rejected against a common-password denylist; optional breach check
+Confirm password	Must match exactly
+Terms acceptance	Explicit checkbox, recorded with timestamp and version
+Password policy
+Never store plaintext passwords. Argon2id with parameters selected per current library guidance (memory, iterations, parallelism tuned to target hardware).
+
+Passwords must never appear in logs, telemetry, exceptions, Git, brain.md, or configuration files.
+
+Password comparison uses constant-time verification.
+
+15.3 Login flow
+text
+Launch
+→ Login screen
+→ POST /auth/login (email + password)
+→ Rate limit + lockout check
+→ Timing-safe credential verification
+→ If MFA enabled → MFA challenge required
+→ Issue access token (15m) + refresh token (30d, rotating)
+→ Persist refresh token hash server-side (session row)
+→ Store tokens securely on device (DPAPI / Credential Manager)
+→ Restore workspace
+→ Desktop
+Login rules
+No user enumeration: identical generic error for unknown email and wrong password (AUTH_INVALID_CREDENTIALS).
+
+Rate limiting per email and per IP (sliding window).
+
+Progressive lockout after repeated failures; LockedUntil recorded; unlock path documented.
+
+All attempts recorded in LoginAttempts (never storing the password).
+
+Unverified email → AUTH_EMAIL_NOT_VERIFIED with a resend action.
+
+MFA required → AUTH_MFA_REQUIRED, then /auth/mfa/verify.
+
+Successful login updates LastLoginAt and writes an audit entry.
+
+15.4 Token architecture
+Token	Lifetime	Storage	Notes
+Access token (JWT)	15 minutes	Renderer memory only	Never persisted to disk
+Refresh token	30 days	OS-protected secure storage	Rotating, single-use, hashed server-side
+Email verification token	24 hours	Server (hashed)	Single-use
+Password reset token	30 minutes	Server (hashed)	Single-use, invalidates on use
+MFA challenge token	5 minutes	Server	Short-lived, bound to the login attempt
+JWT claims: sub (UserId), sid (SessionId), roles, perms (compact), iat, exp, iss, aud, jti.
+
+Refresh token rotation: each refresh issues a new refresh token and revokes the old one. Reuse of a revoked refresh token revokes the entire token family and raises AUTH_TOKEN_REUSE_DETECTED.
+
+15.5 Session management
+Sessions are server-side records (Sessions table) with device name, fingerprint, IP, and user agent.
+
+Users can view and revoke individual sessions and all sessions.
+
+Logout revokes the current session; logout-all revokes every session for the user.
+
+Revocation on password change, MFA change, and detected token reuse.
+
+Sessions visible in Settings → Accounts → Sessions.
+
+15.6 Password reset
+POST /auth/forgot-password always returns success (no enumeration).
+
+Token generated, hashed, stored, emailed with a short expiry.
+
+Reset invalidates all existing sessions and refresh tokens.
+
+Reset success triggers a notification to the account owner.
+
+15.7 Email verification
+Token hashed at rest, single-use, 24h expiry.
+
+Resend is rate-limited.
+
+Verification status is displayed in Settings and can gate sensitive operations (configurable).
+
+15.8 MFA
+TOTP (RFC 6238) with a QR provisioning flow.
+
+Recovery codes generated once, displayed once, stored hashed.
+
+MFA secrets encrypted at rest (never plaintext).
+
+Disabling MFA requires password re-entry and, if configured, a recovery code.
+
+Future: WebAuthn/security keys (architecture-ready, not claimed as implemented until built).
+
+15.9 OAuth / OIDC (optional)
+Only via a properly configured provider.
+
+Validate issuer, audience, signature, nonce, and expiry.
+
+Never trust identity claims without full validation.
+
+Linking an OAuth identity to an existing account requires verified email.
+
+15.10 RBAC
+Default roles: User, PowerUser, Developer, Administrator, SuperAdministrator.
+Scopes: own, team, department, organization, system.
+
+Application Administrator ≠ Windows Administrator. These are separate concepts and must never be conflated in UI copy.
+
+Enforce permissions in UI, API, service layer, database where appropriate, and the native bridge. Never rely on frontend authorization alone.
+
+15.11 Offline authentication
+Previously authenticated trusted device only.
+
+Encrypted local session state.
+
+Limited offline functionality.
+
+Configurable offline grace period.
+
+Reauthentication required when policy demands.
+
+Sensitive operations require online authentication where appropriate.
+
+Offline mode must never become an unrestricted security bypass.
+
+15.12 Authentication UI screens
+Required screens: Splash/Auth Gate, Login, Signup, Email Verification, Forgot Password, Reset Password, MFA Challenge, MFA Setup, Session List, Account Settings, Lock Screen (see §37).
+
+UX requirements
+Password strength meter with actionable guidance (not shaming language).
+
+Show/hide password toggle.
+
+Caps Lock indicator.
+
+Correct autocomplete attributes (username, current-password, new-password, one-time-code).
+
+Inline field validation with accessible error association (aria-describedby).
+
+Keyboard-first operation; Enter submits; Escape clears non-destructive state.
+
+Visible focus rings on every control.
+
+No layout shift when errors appear.
+
+Loading states on submit; submit disabled while pending to prevent duplicates.
+
+Errors are specific and actionable, never "Something went wrong."
+
+Success is never shown before the server confirms it.
+
+Screen-reader announcements for auth state changes.
+
+16. WINDOWS INTEGRATION API MATRIX
+Capability	Preferred method	Privilege	Access	Fallback
+OS information	Windows APIs / WMI/CIM	None	Read	Node OS info
+CPU / Memory	Performance Counters / native API	None	Read	Node metrics
+Processes	Native Windows APIs	None	Read	Process list
+Process termination	Windows process API	Sometimes elevated	Write	Disabled
+Displays	Win32 / DisplayConfig	None	Read	Electron display API
+Audio devices	Windows Core Audio	None	Read/control	Electron limits
+Battery	Windows battery APIs / WMI	None	Read	Browser/native fallback
+Network adapters	Win32 / WMI / CIM	None	Read	Node network info
+Power status	Windows power APIs	None	Read	Informational
+Power operations	Windows API	User/system dependent	Write	Disabled
+Launch applications	Controlled process API	User	Write	Disabled
+Filesystem	Node fs via main process	User	Read/write	Disabled
+Registry	Win32 registry API	User	Read	Writes disabled
+Services	SCM API	Admin for mutation	Read	Informational
+Windows updates	Windows APIs where practical	Varies	Read	Informational
+System restore	Windows API where supported	Admin	Read/request	Informational
+Firewall	Windows Firewall API	Admin	Read	Disabled
+Terminal	Controlled process spawn	User	Execute	Disabled
+Media keys / SMTC	Windows media transport controls	None	Control	In-app controls only
+Windows Hello	WebAuthn / Windows APIs	User	Auth	In-app password unlock
+Rule: never use a shell command where a safer native API exists. Never invoke PowerShell merely because it is convenient.
+
+16.1 Capability detection
+At startup, determine supported capabilities:
+
+json
+{
+  "systemInfo":       { "supported": true },
+  "processControl":   { "supported": true, "requiresElevation": true },
+  "battery":          { "supported": false },
+  "mediaKeys":        { "supported": true },
+  "windowsHello":     { "supported": true, "requiresEnrollment": true }
+}
+The UI must react to capability availability and must never fake a toggle.
+
+17. FILESYSTEM SAFETY
+Protected paths include at minimum:
+
+text
+C:\Windows
+C:\Program Files
+C:\Program Files (x86)
+C:\ProgramData
+C:\Windows\System32
+C:\Windows\WinSxS
+C:\Windows\Installer
+C:\Users\<user>\AppData\Local\Microsoft
+C:\Users\<user>\AppData\Roaming\Microsoft
+WSL distributions
+Docker data
+OneDrive / cloud-synchronization roots
+Visual Studio workspace/build storage
+Git repositories unless explicitly selected
+The application must not silently delete or modify these.
+
+Storage boundaries must be explicit: application-owned storage, user-authorized locations, read-only protected locations, network locations, unsupported locations.
+
+Never recursively delete a directory without an explicit, understandable confirmation. Never silently overwrite files. Conflict options: Replace / Keep Both / Skip / Cancel.
+
+18. DESKTOP SHELL EXPERIENCE
+Implement a unified desktop shell containing:
+
+wallpaper and desktop icons
+
+taskbar / dock
+
+Start / application launcher
+
+system tray
+
+clock and date
+
+notifications
+
+quick settings
+
+widgets
+
+universal search
+
+command palette
+
+window manager
+
+workspaces
+
+multi-monitor support
+
+drag and drop
+
+keyboard navigation
+
+lock screen and session controls
+
+recovery after an application-level error
+
+Every capability must identify whether it is application-only or integrated with Windows.
+
+19. HYBRID DESIGN LANGUAGE
+Inspiration ratio (guidance, not cloning):
+
+text
+Windows 11:   40%
+macOS:        30%
+Ubuntu/Linux: 30%
+Windows-inspired: taskbar, Start experience, snapping, Fluent-style depth, quick settings, system panels.
+macOS-inspired: elegant spacing, dock behavior, workspace overview, restrained glass, polished transitions, high-quality typography.
+Ubuntu/Linux-inspired: workspace concepts, application launcher, developer workflows, terminal-first capabilities, productivity organization.
+
+Do not copy: Apple/Windows/Ubuntu logos, proprietary sounds, proprietary wallpapers, proprietary icons, exact proprietary UI artwork, copyrighted source code.
+
+Design principles
+Familiar but original · clean and professional · strong hierarchy · consistent interaction patterns · restrained transparency · subtle depth · advanced motion without constant movement · accessible contrast · responsive layout · functional before decorative.
+
+Avoid: excessive gradients, meaningless dashboard cards, decorative charts with fabricated data, glass panels without purpose, animation that slows routine work.
+
+20. WINDOW MANAGER
+Every application window has: id, applicationId, workspaceId, title, position, size, minimumSize, maximumSize, state, zIndex, focused, alwaysOnTop, resizable, movable, closable, minimizable, maximizable.
+
+States: NORMAL, MINIMIZED, MAXIMIZED, FULLSCREEN, SNAPPED_LEFT, SNAPPED_RIGHT, SNAPPED_TOP, SNAPPED_BOTTOM, TILED, SNAP_GRID.
+
+Implement: focus, z-index, minimize, restore, maximize, close, resize, move, snap, tile, fullscreen, multi-window, workspace reassignment, title bars, window menus, snap layouts, split-screen, edge snapping, cascading/tiling, position persistence, dialog ownership, modal and nonmodal windows.
+
+Acceptance criteria
+Only one application window is the active keyboard target at a time.
+
+Closing a window does not unexpectedly delete its saved data.
+
+Minimized windows can be restored.
+
+Focus returns to an appropriate window after a dialog closes.
+
+Snap layouts respect minimum window dimensions.
+
+Window state is restored safely after restart.
+
+Invalid saved geometry falls back to a safe visible position.
+
+Rapid clicks do not produce duplicate windows or corrupted state.
+
+All primary operations have keyboard alternatives.
+
+21. VIRTUAL WORKSPACES
+Application-level workspaces with: create, rename, switch, delete, duplicate, reorder; workspace thumbnails; assign applications; move windows between workspaces; per-workspace pinned applications; per-workspace wallpaper; workspace transition animations; keyboard shortcuts; restore the previous workspace after restart.
+
+Default:
+
+text
+Workspace 1 — General
+Workspace 2 — Development
+Workspace 3 — Communication
+Workspace 4 — Research
+Do not claim these are native Windows virtual desktops unless a verified native Windows capability is used.
+
+22. TASKBAR / DOCK
+Support: pinned apps, running apps, active state, badges, context menus, drag/drop, application launch, workspace indicator, system tray, clock, notification indicator.
+
+Settings: position, size, auto-hide, transparency, animation, icon size, grouping, alignment, multi-monitor behavior.
+
+Hover effects must not obstruct clicking or keyboard focus. Provide accessible keyboard navigation and a reduced-animation mode.
+
+23. START / APPLICATION LAUNCHER
+Support: application search, recent applications, pinned applications, categories, recommended items, power controls, settings, user profile, search integration, alphabetical listing, pin/unpin, reordering, application details, launch error reporting.
+
+Power actions must be clearly separated from application actions. Any actual shutdown/restart/sleep operation requires user confirmation. Search must not silently index private directories or transmit queries remotely.
+
+24. UNIVERSAL SEARCH
+Search: applications, commands, files, folders, notes, settings, workspaces, system information, help articles, recent items (if enabled).
+
+Ranking: exact match > prefix match > recent usage > frequency > category relevance > keyword relevance.
+
+Use debouncing, cancellation of stale requests, clear loading states, and indexed local search. Provide privacy settings for indexed locations, search history, and recent-item tracking. Never index sensitive content without consent.
+
+25. COMMAND PALETTE
+Keyboard-first palette (default Ctrl + Shift + P, user-customizable). Searches applications, opens settings, switches workspaces, creates a note, opens a folder, runs approved internal commands, searches application data, displays shortcuts, navigates to recent items, opens help/diagnostics.
+
+Commands display title, description, shortcut, category, required permission, and current availability. It must never execute arbitrary shell commands by default.
+
+26. SYSTEM APPLICATIONS
+Priority order:
+
+File Explorer
+
+Notes
+
+Text Editor
+
+Calculator
+
+Clock
+
+Settings
+
+System Information
+
+Task Manager
+
+Notification Center
+
+Terminal Center
+
+Developer Workspace Manager
+
+Application Catalog
+
+Backup and Recovery
+
+Event and Diagnostic Viewer
+
+File Explorer
+Drives, folders, files, breadcrumbs, search, sorting, filtering, grid/list/details views, context menus, create folder, rename, copy, move, delete, restore, properties, favorites, recent items, multi-select, drag-and-drop, progress reporting, permission errors, recovery after interrupted operations.
+
+Notes
+Create, edit, delete, pin, archive, search, tags, autosave with visible status, timestamps, offline editing, synchronization, conflict resolution, Markdown support, word/character counts, trash and recovery, import/export.
+
+Text Editor
+Plain text, syntax highlighting, tabs, find/replace, line numbers, encoding detection, unsaved-change indicator, recovery, large-file safeguards (never load an extremely large file into memory without checking its size).
+
+Terminal Center
+Controlled access to PowerShell, Command Prompt, Git Bash, and WSL where available. Each shell must be explicitly detected. Do not assume bash = WSL or bash = Git Bash. Terminal execution must be clearly marked as an external process.
+
+Calculator, Clock
+Standard/scientific calculation; world clock, alarms, timers, stopwatch, with accessible controls and persistence.
+
+System Information
+Windows version, architecture, CPU, RAM, storage, GPU, displays, network, battery, audio devices, processes, uptime, application version. Read-only by default.
+
+Task Manager
+Process name, PID, CPU, memory, path where available, status, application classification. Termination disabled by default, confirmation required, protected processes blocked, administrative requirements clearly shown.
+
+Performance Dashboard
+Live CPU, memory, disk, network, GPU (where available) with configurable sampling intervals and history.
+
+Additional utilities (implement progressively, only when done honestly)
+Clipboard history, screenshot & screen recording, calendar, weather (requires a provider + consent, otherwise INFORMATIONAL), archive manager, image viewer, PDF viewer, sticky notes, to-do, focus timer, color picker, hash checker, regex tester, JSON formatter, Base64 tool, port checker, duplicate finder, disk usage analyzer, emoji picker, quick actions.
+
+Only implement features to the extent they can be done honestly and safely.
+
+27. SETTINGS / CONTROL CENTER
+text
+Appearance            Themes                Wallpaper
+Colors & Accent       Animations            Sounds & Effects
+Widgets               Lock Screen           Accessibility
+Keyboard              Mouse                 Touch
+Workspaces            Taskbar / Dock        Applications
+Notifications         Privacy               Security
+Accounts              Authentication        Sessions
+Sync                  Storage               Network
+Audio                 Displays              Performance
+Media (Groove)        Photos & Wallpapers   Developer
+Terminal              Updates               Backup
+Recovery              About
+Every setting must persist, validate on load, and fall back to a safe default if invalid or missing.
+
+28. ADVANCED ANIMATION SYSTEM
+The user requires very high-quality, advanced animation — not careless maximum animation.
+
+Objective: maximum perceived polish, not maximum unnecessary movement.
+
+28.1 Architecture
+Centralized motion system with: shared timing tokens, standard easing curves, reusable transitions, reduced-motion support, animation cancellation, interruption handling, performance-aware fallbacks, consistent motion direction, state-driven animation, and no duplicated competing animation systems.
+
+DEFAULT DECISION: Prefer CSS transitions and transform/opacity for ordinary interface motion. Introduce a library such as Framer Motion only where it adds meaningful value; never run two overlapping animation libraries.
+
+28.2 Animation profiles
+Profile	Behavior
+Minimal	Essential feedback only; short transitions, minimal movement
+Balanced	Smooth everyday interactions and restrained effects
+Enhanced	Richer window, panel, workspace, and notification transitions
+Immersive	Expressive transitions and optional ambient effects, subject to performance and accessibility
+Plus toggles for: Performance Mode, Reduced Motion, disable animated backgrounds, disable decorative particles, disable blur, disable sound effects, and per-category effect controls.
+
+DEFAULT DECISION: DEFAULT_EFFECTS_MODE=balanced (matches .env).
+
+28.3 Required motion catalog
+Desktop & window: window open, close, minimize, restore, maximize, resize feedback, focus transitions, snap-layout previews, snap completion, window switching, workspace switching, application overview in/out, desktop context menu, shadow and elevation transitions, taskbar thumbnail preview appear/dismiss, snap-layout flyout open/close, snap-assist entrance.
+
+Navigation: Start menu open/close, dock hover/focus, search opening, command palette opening, quick settings, notification center, settings navigation, tabs and segmented controls, breadcrumbs, expandable sections, sidebar collapse/expand, widget board slide, media mini-player expand/collapse.
+
+Feedback: button press, toggle changes, checkbox changes, save confirmation, copy confirmation, drag-and-drop targets, file movement, upload/download progress, validation errors, toast entrance/dismissal, notification arrival, progress completion, warning emphasis, empty-state transitions, wallpaper apply confirmation, lock/unlock transition.
+
+Productivity: note creation, note saving, list insertion/removal, grid/list view changes, search result updates, filter/sort changes, workspace thumbnails, backup progress, restore progress, sync status changes.
+
+Media (Groove): play/pause morph, track transition crossfade, queue reorder, visualizer fade-in, volume slider response, full-screen player transition.
+
+28.4 Timing defaults
+Interaction	Default
+Button press	80–140 ms
+Hover/focus emphasis	100–160 ms
+Tooltip	120–200 ms
+Dropdown/menu	120–200 ms
+Toast	160–240 ms
+Dialog	160–240 ms
+Window transition	180–280 ms
+Workspace transition	220–360 ms
+Complex overview transition	250–400 ms
+Lock/unlock transition	220–340 ms
+Shorten or eliminate motion when it impedes responsiveness or accessibility. Never require a user to wait for decorative animation before interacting.
+
+28.5 Advanced visual effects
+Acrylic-style surfaces, frosted-glass panels, layered shadows, subtle depth, accent-colored focus rings, gradient accents, adaptive wallpaper colors, soft background transitions, optional ambient glow, lightweight particle/parallax effects, contextual color feedback, dynamic taskbar/dock emphasis, optional animated wallpapers (if efficient), optional desktop visualizer effects that never obscure information.
+
+These must be optional where they materially affect performance, readability, or accessibility. Do not use blur as a substitute for hierarchy. Avoid constant pulsation, aggressive color cycling, flashing lights, excessive neon.
+
+28.6 Implementation requirements
+Prefer transform and opacity. Avoid repeated layout-triggering animations. Avoid unbounded animation loops. Pause decorative animations when hidden or minimized. Cancel stale animations during rapid interaction. Support reduced motion. Avoid rapid flashing. Never use motion as the sole status indicator. Keep focus indicators visible. Avoid layout shift. Remain usable under high DPI and display scaling.
+
+28.7 Acceptance criteria
+Animation never blocks essential input. Window state remains correct if transitions are interrupted. Rapid clicks do not produce duplicate windows or corrupted state. Reduced Motion substantially removes nonessential motion. Performance Mode disables expensive decorative effects. Visual state and application state remain synchronized. No continuous animation consumes significant idle CPU without a user-visible purpose.
+
+29. ANIMATION PERFORMANCE RULES
+Never animate: layout-heavy properties unnecessarily, huge DOM trees, expensive blur regions continuously, large canvas effects continuously, high-frequency shadows, unnecessary full-screen filters.
+
+Prefer transform, opacity, and GPU-compositor-friendly properties. Avoid animating top, left, width, height where a transform will do.
+
+30. COLOR & THEME SYSTEM
+30.1 Semantic color tokens
+text
+accent
+accent-hover
+accent-active
+accent-subtle
+background
+background-elevated
+surface
+surface-elevated
+surface-sunken
+overlay-scrim
+text-primary
+text-secondary
+text-tertiary
+text-disabled
+text-inverse
+border
+border-strong
+border-subtle
+focus
+success
+warning
+danger
+info
+disabled
+30.2 Token structure
+css
+:root {
+  /* Brand / accent ramp */
+  --accent-50:  #eef2ff;
+  --accent-100: #e0e7ff;
+  --accent-200: #c7d2fe;
+  --accent-300: #a5b4fc;
+  --accent-400: #818cf8;
+  --accent-500: #4267d5;   /* primary accent */
+  --accent-600: #3a58b8;
+  --accent-700: #31499b;
+  --accent-800: #283a7d;
+  --accent-900: #1f2c60;
+
+  /* Neutrals */
+  --neutral-0:   #ffffff;
+  --neutral-50:  #f7f8fa;
+  --neutral-100: #eef0f4;
+  --neutral-200: #d9dde3;
+  --neutral-300: #bcc2cc;
+  --neutral-400: #9098a5;
+  --neutral-500: #6b7381;
+  --neutral-600: #4d5563;
+  --neutral-700: #363d49;
+  --neutral-800: #232932;
+  --neutral-900: #161a21;
+  --neutral-950: #0d1015;
+
+  /* Semantic (light theme) */
+  --color-background:        var(--neutral-50);
+  --color-surface:           var(--neutral-0);
+  --color-surface-elevated:  var(--neutral-0);
+  --color-surface-sunken:    var(--neutral-100);
+  --color-text-primary:      var(--neutral-900);
+  --color-text-secondary:    var(--neutral-600);
+  --color-text-disabled:     var(--neutral-400);
+  --color-border:            var(--neutral-200);
+  --color-accent:            var(--accent-500);
+  --color-success:           #21864b;
+  --color-warning:           #a96808;
+  --color-danger:            #c43c3c;
+  --color-info:              #2563a8;
+  --color-focus:             var(--accent-500);
+
+  /* Shape & motion */
+  --radius-small: 6px;
+  --radius-medium: 10px;
+  --radius-large: 16px;
+  --radius-squircle: 28%;
+
+  --space-1: 4px;  --space-2: 8px;   --space-3: 12px;
+  --space-4: 16px; --space-6: 24px;  --space-8: 32px;
+
+  --motion-fast: 120ms;
+  --motion-standard: 200ms;
+  --motion-emphasized: 320ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
+  --ease-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+30.3 Color behaviors
+Accent colors, dynamic accent, semantic colors, gradients, subtle glass, glow, depth, hover illumination, active-state emphasis, wallpaper-aware accents.
+
+Effects must never reduce text readability.
+
+Dynamic accent may be derived from the active wallpaper, but must always pass contrast validation before being applied to text or focus rings.
+
+Provide per-user accent selection plus a curated set of accessible presets.
+
+30.4 Theme catalog
+Required: System, Light, Dark, High Contrast.
+Optional: Midnight, Graphite, Aurora, Ocean, Forest, Solar, Ubuntu-inspired, Developer, Minimal.
+
+Themes must be token-based. Do not hardcode colors throughout components. Optional themes use the same semantic tokens and must pass contrast testing.
+
+30.5 Contrast requirements
+Normal text ≥ 4.5:1
+
+Large text ≥ 3:1
+
+Important UI indicators target ≥ 3:1 where WCAG requires
+
+Automated contrast validation must run in CI for every shipped theme
+
+31. WALLPAPER SYSTEM — RICH HIGH-RESOLUTION WALLPAPERS & VISUAL THEMES
+Currently missing real imagery. This section corrects that.
+
+31.1 Wallpaper categories
+text
+Abstract      Nature        Minimal       Dark
+Developer     Space         Gradient      Seasonal
+Solid         Live/Animated Textured      Artistic
+Photography   Brand/Original
+31.2 Resolution & format tiers
+Tier	Target resolution	Format	Use
+Thumbnail	320×180	WebP	Library grid
+Preview	1280×720	WebP	Detail view
+Standard	1920×1080	WebP/AVIF	FHD displays
+High	2560×1440	WebP/AVIF	QHD
+Ultra	3840×2160	AVIF/WebP	4K
+Extreme	5120×2880 / 7680×4320	AVIF	5K/8K, opt-in
+Load the correct tier for the target monitor. Never decode an 8K image to render a 320px thumbnail on the main thread.
+
+31.3 Image sources and licensing
+Ship only original, commissioned, or properly licensed imagery.
+
+Acceptable sources include permissively licensed stock libraries (verify each license), public-domain works, and procedurally generated artwork.
+
+Do not ship Microsoft, Apple, or Ubuntu wallpapers, or any copyrighted operating-system artwork.
+
+Every bundled asset must record: source, author, license, attribution requirement, modification permission, distribution permission → docs/THIRD_PARTY_LICENSES.md and assets/wallpapers/ATTRIBUTION.md.
+
+31.4 Procedurally generated wallpapers
+Provide an in-house generator for: mesh gradients, flow fields, noise fields, particle drift, aurora bands, geometric line art, topographic contours, star fields, bokeh fields. These are original by construction, resolution-independent, and lightweight — excellent defaults when licensed photography is unavailable.
+
+31.5 Wallpaper features
+Import user images (drag-and-drop and file picker) with format validation.
+
+Per-monitor wallpaper assignment.
+
+Per-workspace wallpaper assignment.
+
+Slideshow / playlist with interval, shuffle, and transition (crossfade, slide, zoom, none).
+
+Dynamic wallpaper: time-of-day color shift, seasonal rotation, accent extraction.
+
+Live/animated wallpapers only when performance permits, and paused when occluded or minimized.
+
+Favorites, tags, search, and sorting in the wallpaper library.
+
+"Fit / Fill / Stretch / Center / Tile / Span" scaling modes.
+
+Safe fallback if a wallpaper file is deleted or corrupt (never render a blank desktop).
+
+31.6 Performance rules
+Lazy-load the library; virtualize the grid.
+
+Downscale thumbnails once and cache them.
+
+Decode off the main thread where possible.
+
+Preload only the next slideshow image.
+
+Cap concurrent decodes.
+
+Provide a "reduce wallpaper quality" option in Performance Mode.
+
+32. SOUND EFFECT SYSTEM
+32.1 Categories
+text
+UI  WINDOW  WORKSPACE  NAVIGATION  NOTIFICATION
+SUCCESS  WARNING  ERROR  APPLICATION  ACCESSIBILITY
+SYSTEM  MEDIA
+Events include: application open/close, notification, success, warning, error, workspace switch, file operation, login success, authentication failure, lock/unlock, snap completion, wallpaper apply.
+
+Every sound must have a visual equivalent. Never use sound as the sole indicator of status.
+
+32.2 Controls
+Master volume, category volumes, mute all, sound theme selection, preview buttons, per-category enable/disable, reset to defaults. Respect the Windows mute/volume state where possible.
+
+32.3 Rules
+Original or properly licensed audio only. Do not use copyrighted OS sounds.
+
+Short, subtle, consistent loudness; no clipping; no overlapping chaos; rate-limited.
+
+Never autoplay loud audio at startup.
+
+Missing audio assets fail gracefully and never crash the app.
+
+Silent operation is a first-class option.
+
+Governed by ENABLE_WEB_AUDIO_SOUNDS and the current animation/effects profile.
+
+33. DESKTOP WIDGETS LAYER (WINDOWS 11 / MACOS SONICS)
+A dockable, resizable, reorderable widget board inspired by Windows 11 widgets and macOS Sonoma-style desktop composition.
+
+33.1 Widget board
+Slide-in panel anchored to the taskbar/dock, plus optional free-floating desktop widgets.
+
+Grid layout with small / medium / large sizes.
+
+Drag-to-reorder, resize handles, pin/unpin, remove.
+
+Per-workspace widget sets.
+
+Keyboard navigation: arrow keys between widgets, Enter to activate, Delete to remove (with confirmation).
+
+Reduced-motion and performance-aware transitions.
+
+33.2 Built-in widgets
+Widget	Classification	Notes
+Clock / World Clock	REAL	Local + configurable time zones
+Calendar	REAL	Month view, agenda, today highlight
+Weather	INFORMATIONAL unless a provider + consent is configured	Never fabricate data
+System Performance	REAL + WINDOWS-INTEGRATED	CPU, RAM, disk, network, GPU where available
+Battery	WINDOWS-INTEGRATED	Hidden on desktops without a battery
+Storage	REAL	Capacity and usage with a clear "informational" label
+Notes (mini)	REAL	Quick capture into Notes
+To-Do (mini)	REAL	Local task list
+Media (Groove mini)	REAL	Now-playing, transport controls
+Photo Frame	REAL	Rotates from the wallpaper/photo library
+Workspace Summary	APPLICATION-SIMULATED	Open windows per workspace
+Quick Actions	REAL	Mute, theme toggle, focus mode, lock
+Countdown / Timer	REAL	Persisted across restarts
+Network Status	WINDOWS-INTEGRATED	Adapter state, throughput
+Never invent widget data. If a data source is unavailable, show an honest empty/unavailable state.
+
+33.3 Widget platform
+Widgets are registered components declared in a manifest with required permissions.
+
+Third-party widgets run sandboxed and cannot access the filesystem, network, or native APIs without explicit, user-approved capabilities.
+
+Widget update intervals are configurable with sane minimums (e.g. ≥ 1s for performance, ≥ 60s for weather).
+
+Widgets pause updates when off-screen, when the board is closed, or in Performance Mode.
+
+33.4 Performance rules
+No continuous GPU rendering for static widgets.
+
+Cap simultaneous animated widgets.
+
+Virtualize the widget board.
+
+Update on visibility, not on a global timer.
+
+Memory and CPU budgets documented in docs/PERFORMANCE.md.
+
+34. ANTIGRAVITY GROOVE — MEDIA PLAYER & SOUNDSCAPE STUDIO
+A first-party media application combining a music player, a soundscape generator, and a lightweight visualizer. Gated by ENABLE_WEB_AUDIO_SOUNDS.
+
+34.1 Media Player
+Library
+
+Scan user-authorized folders only (never scan system or protected paths).
+
+Supported formats: MP3, FLAC, WAV, OGG/Vorbis, Opus, M4A/AAC, WMA (where a codec is available).
+
+Metadata reading (title, artist, album, track, year, artwork) with graceful fallback for missing tags.
+
+Incremental indexing with progress, cancellation, and resume.
+
+Duplicate detection by content hash.
+
+Playback
+
+Play, pause, stop, next, previous, seek, volume, mute.
+
+Shuffle, repeat one, repeat all, gapless playback where feasible.
+
+Queue management with drag-to-reorder and "play next" / "add to queue".
+
+Playback speed (0.5×–2.0×) and optional pitch preservation.
+
+Equalizer (10-band) with presets and a custom profile.
+
+Crossfade with configurable duration.
+
+Resume-on-restart with safe state persistence.
+
+Organization
+
+Playlists (create, rename, reorder, delete, import/export M3U).
+
+Favorites, recently played, most played.
+
+Search across library metadata.
+
+Smart playlists (rule-based: genre, year, rating, play count).
+
+Integration
+
+Mini-player widget.
+
+Taskbar/dock media controls and thumbnail transport buttons.
+
+Windows media key / SMTC integration where permitted — classified WINDOWS-INTEGRATED; otherwise falls back to in-app controls and is labeled honestly.
+
+Optional global media shortcuts (user-configurable, conflict-checked).
+
+34.2 Soundscape Studio
+Layered ambient generator: rain, thunder, ocean waves, forest, wind, birds, cafe murmur, fireplace, white/pink/brown noise, fan, train, keyboard.
+
+Independent per-layer volume, mute, and solo.
+
+Layer presets ("Deep Focus", "Rainy Night", "Calm Morning") with save/rename/delete.
+
+Focus timer (Pomodoro-style) and sleep timer with gentle fade-out.
+
+Crossfade between presets.
+
+Optional subtle generative variation so loops do not feel mechanical.
+
+All generators are synthesized or properly licensed — no scraped audio.
+
+34.3 Visualizer
+Modes: spectrum bars, oscilloscope, waveform, particles, radial.
+
+GPU-friendly canvas; caps frame rate; pauses when hidden, minimized, or in Performance Mode.
+
+Reduced-motion users receive a static or low-motion alternative.
+
+34.4 Audio engine
+Web Audio API graph: source → gain → EQ → compressor/limiter → analyser → destination.
+
+Master limiter prevents clipping when layers stack.
+
+Smooth gain ramps; no clicks or pops.
+
+Proper node teardown on track change to avoid leaks.
+
+Audio decoding off the main thread where possible.
+
+Malformed or unsupported files produce MEDIA_DECODE_FAILED and never crash the app.
+
+34.5 Licensing and privacy
+Only user-owned or properly licensed audio.
+
+No telemetry about listening habits unless explicitly opted in.
+
+Playback history is local by default and user-deletable.
+
+Do not scan folders the user has not authorized.
+
+35. PHOTO & WALLPAPER STUDIO
+A non-destructive image editor and wallpaper composition tool.
+
+35.1 Library
+Import from user-authorized folders and drag-and-drop.
+
+Formats: JPG, PNG, WebP, AVIF, BMP, GIF (static frame), HEIC where a codec is available.
+
+Grid and detail views, tags, favorites, ratings, albums.
+
+Duplicate detection and near-duplicate grouping.
+
+EXIF read (camera, date, dimensions) displayed honestly; missing data shown as unknown.
+
+File size and dimension display before applying as a wallpaper.
+
+35.2 Editing (non-destructive)
+Crop (freeform, aspect presets, monitor aspect ratios).
+
+Rotate, straighten, flip.
+
+Scale and resample with quality preservation.
+
+Adjust: brightness, contrast, exposure, saturation, vibrance, temperature, tint, highlights, shadows, sharpness, blur, vignette, grain.
+
+Filters/LUT-style presets (original, not copied from other products).
+
+Before/after comparison slider.
+
+Full undo/redo history; edits stored as a parameter stack, not destructive pixel writes.
+
+35.3 Wallpaper composition
+Target a specific monitor or a multi-monitor span.
+
+Compose a single image across multiple displays with correct per-monitor resolution.
+
+Preview exactly what will be applied, including taskbar/dock occlusion areas.
+
+Export at monitor-native resolution in AVIF/WebP/PNG/JPG.
+
+One-click "Apply as wallpaper" with the ability to revert to the previous wallpaper.
+
+35.4 Slideshow creation
+Build a slideshow playlist from selected images with interval, order, transition, and shuffle; preview before enabling.
+
+35.5 Safety and performance
+Never overwrite the user's original file without explicit confirmation; default to "Save a copy."
+
+Large images processed off the main thread with progress and cancellation.
+
+Cap decode size; refuse or downscale absurdly large inputs with a clear explanation.
+
+Do not upload user photos anywhere.
+
+36. VISUAL IDENTITY OVERHAUL — 3D SQUIRCLE APP ICON BADGES
+A unified icon system giving the desktop a distinctive, premium identity.
+
+36.1 Squircle geometry
+Superellipse / squircle shape (iOS/macOS-like continuous corner), not a plain rounded rectangle.
+
+Implemented as an SVG path or a CSS clip-path generated from a superellipse formula with configurable "squircle-ness."
+
+Consistent optical sizing across the dock, taskbar, Start menu, window title bars, and the Application Catalog.
+
+36.2 3D layered composition
+Each badge is composed of layers:
+
+Base plate — squircle with the app's gradient.
+
+Ambient occlusion — soft inner darkening at the lower edge.
+
+Inner shadow — subtle top-edge depth.
+
+Specular highlight — soft directional sheen.
+
+Glow / accent bleed — accent-colored halo, theme-aware.
+
+Glyph — monochrome or duotone, centered with optical alignment.
+
+State badge — notification count, running dot, pinned marker, disabled overlay.
+
+36.3 Interaction motion
+Hover: subtle perspective tilt (±6–8°), spring return, highlight shift.
+
+Press: compression with a spring release.
+
+Launch: scale + fade into the window opening animation.
+
+Drag: lift elevation with a soft drop shadow.
+
+All motion respects Reduced Motion and Performance Mode.
+
+36.4 Sizing & assets
+Size	Use
+16 / 20	Title bar, menus
+24 / 32	Taskbar small, lists
+48 / 64	Dock, Start grid
+96 / 128	App catalog detail
+256 / 512	Store/detail, high DPI
+Prefer SVG/vector sources; rasterize only for packaging.
+
+Ship 1×, 1.5×, 2×, 3× variants.
+
+Provide a monochrome high-contrast variant for accessibility themes.
+
+36.5 Consistency rules
+One <AppIconBadge /> component renders every icon — no ad-hoc icon styling.
+
+Icon base colors derive from theme tokens; a per-app accent may override but must pass contrast checks.
+
+Third-party/plugin apps supply a base glyph; the system applies the squircle/3D treatment so the desktop stays visually coherent.
+
+Missing icon → deterministic generated fallback (glyph from the app's initials or category), never a broken image.
+
+36.6 Accessibility
+Every icon has an accessible name and role.
+
+Focus ring is always visible and not clipped by the squircle clip path.
+
+Hover-only states have keyboard equivalents.
+
+No motion when Reduced Motion is enabled.
+
+Icons remain distinguishable in grayscale and in High Contrast mode.
+
+37. LOCK SCREEN & SESSION SECURITY SIMULATION
+Classification: APPLICATION-SIMULATED. This locks the application, not Windows. It must never be described as locking the operating system.
+
+37.1 Lock screen composition
+Full-screen wallpaper (reuses the active wallpaper, with an optional dedicated lock wallpaper).
+
+Large clock and date, locale-aware (12h/24h per user setting).
+
+User avatar, display name, and account state.
+
+Notification summary count — content hidden by default with a user setting to show or hide previews.
+
+Quick actions: network status, volume, accessibility shortcuts, sign-out.
+
+Optional "Lock after idle" indicator and remaining time before automatic lock.
+
+37.2 Session state machine
+text
+ACTIVE  →  IDLE  →  LOCKED  →  AUTHENTICATING  →  ACTIVE
+                              ↘  FAILED (retry / cooldown)
+ACTIVE  →  SIGNING_OUT  →  SIGNED_OUT
+ACTIVE  →  EXPIRED  →  SIGNED_OUT
+37.3 Lock triggers
+Manual lock: Ctrl + Alt + L (configurable, conflict-checked).
+
+Idle timeout (configurable: 1, 5, 10, 15, 30, 60 minutes, never).
+
+System sleep/suspend detection where available.
+
+Application window hidden/minimized for an extended period (optional).
+
+After a configurable number of failed unlock attempts.
+
+On explicit "Lock" from the Start menu, tray, or Quick Settings.
+
+Note: detecting the Windows lock event requires a native integration and is classified WINDOWS-INTEGRATED only if genuinely implemented; otherwise only in-app triggers apply.
+
+37.4 Unlock methods
+Method	Classification
+Password	REAL
+PIN (local, rate-limited)	REAL
+Biometric (Windows Hello / WebAuthn)	WINDOWS-INTEGRATED if implemented; otherwise UNSUPPORTED
+Recovery code	REAL (MFA accounts)
+37.5 Security requirements
+Failed unlock attempts are rate-limited with progressive cooldown.
+
+Unlock attempts are audited (never logging the credential).
+
+Optional full sign-out after N failed attempts.
+
+Sensitive content is obscured while locked: window contents blurred or hidden, notifications redacted, media metadata optionally hidden.
+
+Lock state survives application restart; unlocking is required before content is restored.
+
+Lock screen cannot be bypassed by keyboard shortcuts, the command palette, or deep links.
+
+Accessibility: full keyboard operation, screen-reader announcements, High Contrast support, and a Reduced Motion transition.
+
+37.6 Privacy
+Hide notification content on the lock screen by default.
+
+Option to hide the user's full email/name on the lock screen.
+
+Optional "privacy screen" that blurs everything except the lock UI.
+
+38. TASKBAR WINDOW THUMBNAIL PREVIEWS & SNAP ANIMATIONS
+Classification: APPLICATION-SIMULATED. These are in-application window previews, not the Windows taskbar's own previews.
+
+38.1 Thumbnail previews
+Hovering a taskbar/dock item shows a preview card after a short delay (~250 ms, configurable).
+
+Preview shows the window title, application icon (squircle badge), and a live or cached thumbnail.
+
+Multiple windows of the same app are grouped into a single flyout with per-window entries.
+
+Each preview offers: focus, minimize/restore, close.
+
+Keyboard equivalents: focus the taskbar item, press ↑ to open the preview strip, arrow between windows, Enter to focus, Delete to close (with confirmation if the window has unsaved work).
+
+Pinned apps with no open window show a jump list instead of a thumbnail.
+
+Thumbnail generation
+Capture window content via an in-app render snapshot or a throttled capturePage-style mechanism on the main process.
+
+Throttle aggressively: refresh at most a few frames per second, only for visible previews.
+
+Pause all capture when the preview is closed, the app is minimized, or Performance Mode is enabled.
+
+Cache the last good thumbnail per window; fall back to an icon-only card if capture fails.
+
+Never capture when the window is locked or privacy mode is active.
+
+Privacy
+Provide a "do not capture previews for sensitive apps" setting.
+
+Lock-screen state disables all thumbnail capture.
+
+38.2 Snap layout flyout
+Hovering the maximize button (or pressing Ctrl + Alt + Z) opens a snap layout grid.
+
+Layout options adapt to the window's current monitor aspect ratio: 2-column, 3-column, 2×2, 3×2, 1+2, wide+stack, etc.
+
+Zones highlight on hover with a smooth scale/fade; the selected zone previews the resulting window bounds.
+
+Clicking a zone snaps the window; Esc cancels.
+
+Fully keyboard-navigable: arrows move between zones, Enter confirms.
+
+38.3 Snap assist
+After a snap, the remaining space shows a snap assist chooser listing open windows with thumbnails.
+
+Selecting one fills the remaining zone.
+
+Dismissible with Esc and disabled in Settings if unwanted.
+
+38.4 Snap animations
+Action	Motion
+Layout flyout open	Scale from the maximize button + fade, ~180 ms, ease-decelerate
+Zone hover	Subtle scale (1.0 → 1.03) + accent border, ~120 ms
+Snap commit	Window bounds animate to the zone with a gentle spring, ~240 ms
+Snap assist entrance	Fade + slight upward slide, ~200 ms
+Unsnap / restore	Reverse spring with slight overshoot, ~220 ms
+Thumbnail preview open	Scale + fade from the taskbar item, ~160 ms
+Thumbnail preview close	Fade + scale down, ~120 ms
+All snap animations must be interruptible: if the user drags mid-animation, the animation cancels cleanly and the window follows the pointer.
+
+38.5 Snap acceptance criteria
+Snapping respects minimum window dimensions; a zone too small for a window is disabled with a tooltip explanation.
+
+Snap state persists across restart and restores to a valid visible region.
+
+Disconnecting a monitor moves snapped windows back to a valid display.
+
+Rapid snap commands do not corrupt window state.
+
+Every snap action has a keyboard equivalent.
+
+Reduced Motion replaces spring animations with short fades.
+
+39. ACCESSIBILITY
+Target WCAG 2.2 AA for applicable interface content.
+
+Keyboard-only operation for all essential features.
+
+Visible focus indicators at all times.
+
+Logical focus order; focus trap in dialogs; focus restoration on close.
+
+Correct accessible names and roles; semantic controls.
+
+Screen-reader-friendly dialogs, menus, notifications, and forms.
+
+Sufficient contrast (normal ≥ 4.5:1, large ≥ 3:1, key indicators ≥ 3:1).
+
+Scalable text without layout breakage.
+
+No color-only status communication.
+
+Reduced-motion support throughout.
+
+Accessible notifications (visual + optional audio).
+
+Error messages programmatically associated with the relevant controls.
+
+Keyboard-accessible alternatives to drag-and-drop.
+
+Minimum touch/click target guidance.
+
+Screen-reader targets: Windows Narrator, NVDA, JAWS where practical.
+
+Menus close predictably; keyboard navigation never depends on mouse hover.
+
+40. INTERNATIONALIZATION & LOCALIZATION
+Architecture:
+
+text
+i18n/
+  en-US
+  ur-PK
+DEFAULT DECISION: Initial languages English (US) and Urdu (Pakistan). Architecture must allow Arabic, Hindi, French, German, Spanish, and others later without rewrites.
+
+Support: RTL, locale-aware dates, time zones, numbers, currencies, pluralization, localized error messages, font fallback. Store timestamps in UTC and display per locale/time zone. Support 12-hour, 24-hour, and automatic formats. Never concatenate translated strings incorrectly — use translation keys.
+
+DEFAULT DECISION: Do not claim complete RTL support until it has been implemented and tested.
+
+41. PERFORMANCE, RELIABILITY & BUDGETS
+41.1 Budgets (engineering targets, not guarantees)
+Metric	Initial target
+Cold startup	≤ 5 s on reference hardware
+Warm startup	≤ 3 s to interactive shell
+Idle CPU	≤ 2–3 % average when truly idle
+Idle memory	≤ 400–500 MB for the baseline shell (excluding deliberately opened heavy apps)
+Routine interaction	≤ 100 ms response
+Animation	60 FPS target; avoid sustained frames > 33 ms
+Renderer bundle	Aim < 1 MB compressed initial JS where practical
+Search	Initial local results quickly; never block the UI
+Large file operations	Non-blocking with progress and cancellation
+Record actual measurements on documented hardware. Do not fabricate performance numbers.
+
+41.2 Performance modes
+Battery Saver · Performance · Balanced · Immersive
+
+DEFAULT DECISION: Balanced. Performance/Battery modes may reduce blur, shadows, background effects, animation complexity, sound effects, widget update rates, wallpaper quality, and thumbnail capture frequency.
+
+41.3 Reliability
+Handle expected errors explicitly.
+
+Prevent duplicate actions during pending operations.
+
+Make writes transactional where appropriate.
+
+Preserve user data after crashes.
+
+Validate saved state; recover from corrupted settings.
+
+Avoid unhandled promise rejections.
+
+Provide structured diagnostics and a clear recovery process.
+
+Release listeners, audio nodes, capture streams, and timers.
+
+41.4 Minimum hardware
+text
+CPU: modern x64 dual-core or better
+RAM: 8 GB minimum / 16 GB recommended
+Storage: SSD recommended
+GPU: DirectX-capable integrated GPU
+Display: 1280×720 minimum
+Best experience: 16 GB RAM, modern 4+ core CPU, SSD, DirectX-capable GPU, 1920×1080+.
+
+41.5 Supported platform
+DEFAULT DECISION: Windows 11 x64 first. Windows 10 x64 only if runtime and lifecycle requirements remain compatible. ARM64 must not be advertised as fully supported unless all native components support it. Unsupported features must be detected at runtime and reported honestly.
+
+42. TESTING STRATEGY
+Create: unit, integration, API contract, repository/persistence, authorization, input validation, IPC security, accessibility, visual regression, E2E, performance, recovery, and Windows compatibility tests.
+
+42.1 Coverage targets
+DEFAULT DECISION:
+
+Critical security and authorization logic: full branch review with tests for every identified boundary.
+
+Core domain logic: ≥ 80 % meaningful statement coverage.
+
+Other business logic: ≥ 70 % meaningful statement coverage.
+
+UI components: test meaningful interactions, keyboard behavior, and error states — do not chase a percentage.
+
+Every destructive operation: safety and failure-path tests.
+
+Every feature marked complete: acceptance criteria and test evidence.
+
+Coverage numbers alone do not prove quality.
+
+42.2 E2E coverage
+text
+signup · login · MFA · logout · session revocation
+first run · desktop · launcher · application launch
+window lifecycle · snapping · thumbnails · workspaces
+notes · file operations · settings · notifications
+wallpaper apply · widget board · media playback
+lock / unlock · recovery · offline behavior
+E2E execution requires explicit authorization if it launches the application.
+
+42.3 Test data
+Synthetic only. Never production credentials. Never real customer data without authorization. Deterministic fixtures. Cleanup must not delete user data. Isolated or in-memory databases. Destructive test scope must be explicit.
+
+43. GIT WORKFLOW AND IMPLEMENTATION DISCIPLINE
+43.1 Mandatory commits
+Every meaningful implementation unit results in a Git commit:
+
+text
+feat(shell): implement desktop shell
+feat(window-manager): add window lifecycle
+feat(window-manager): add snap layouts and assist
+feat(taskbar): add window thumbnail previews
+feat(workspaces): implement workspace state
+feat(auth): implement signup and login
+feat(auth): add refresh token rotation and reuse detection
+feat(security): add lock screen session state machine
+feat(db): add MySQL migrations
+feat(wallpapers): add high-resolution wallpaper library
+feat(wallpapers): add procedural wallpaper generator
+feat(studio): add photo editor and wallpaper composer
+feat(widgets): implement widget board
+feat(media): implement Antigravity Groove player
+feat(media): implement soundscape studio
+feat(ui): overhaul app icons with 3D squircle badges
+feat(ui): implement theme and color token system
+feat(ui): implement widget layer
+feat(motion): add workspace transitions
+feat(sound): add notification sound engine
+test(shell): add desktop shell tests
+test(auth): cover authorization boundaries
+fix(auth): prevent refresh token reuse
+fix(files): prevent unsafe path traversal
+docs(brain): update engineering memory
+43.2 Required workflow
+text
+1. Inspect repository
+2. Inspect Git status and diff
+3. Identify scope and dependencies
+4. Check brain.md, IMPLEMENTATION_STATUS.md, ASSUMPTIONS, DECISIONS
+5. Plan
+6. Implement a focused change
+7. Perform permitted static validation
+8. Run only authorized tests
+9. Security review
+10. Accessibility review
+11. Performance review
+12. Review the diff
+13. Check for secrets
+14. Update documentation
+15. Update brain.md
+16. Update IMPLEMENTATION_STATUS.md
+17. Update CHANGELOG.md when appropriate
+18. Create a meaningful Git commit
+19. Record the commit in brain.md
+20. Continue to the next safe task
+43.3 Git safety
+Never run git reset --hard, git clean -fd, git push --force, rebase shared history, delete remote branches, or overwrite unrelated user changes without explicit authorization.
+
+Never commit .env, .env.local, credentials, API keys, private keys, passwords, certificates, tokens, database secrets, local databases, user files, or machine-specific configuration.
+
+43.4 Branching
+text
+main
+feature/*
+fix/*
+security/*
+docs/*
+Use feature branches for meaningful isolated work. Do not create dozens of branches for trivial changes.
+
+43.5 Commit signing
+DEFAULT DECISION: Support commit-signing documentation, but never create or access signing keys automatically. Never generate or store a user's private signing key without explicit instruction.
+
+44. PHASED IMPLEMENTATION ROADMAP
+Implement in phases. Do not attempt everything in one enormous unverified change.
+
+Phase 0 — Discovery. Inspect repository, stack, existing implementation, gaps, Git status; document assumptions; create/update brain.md; establish the roadmap.
+
+Phase 1 — Architecture & contracts. Confirm desktop shell; define module boundaries, state, persistence, IPC, permission boundaries, error handling, data contracts, application registry, command registry, threat model.
+
+Phase 2 — Design system. Tokens, theme system, typography, iconography (including squircle badge foundation), components, accessibility defaults, motion tokens, sound service, visual-regression baseline strategy.
+
+Phase 3 — Desktop shell. Desktop, wallpaper, Start menu, taskbar/dock, launcher, search, context menus, notifications, quick settings.
+
+Phase 4 — Window manager. Window lifecycle, focus, minimize/restore, maximize, resize, snapping, snap layouts, snap assist, keyboard navigation, motion integration.
+
+Phase 5 — Taskbar interaction layer. Window thumbnail previews, hover flyouts, jump lists, preview throttling and privacy controls.
+
+Phase 6 — Workspaces. Create, rename, switch, delete, assignment, persistence, overview transitions, recovery of invalid workspace state.
+
+Phase 7 — Application registry & command palette. Manifest schema, registration, capabilities, permissions, lifecycle, launch error handling, command registry.
+
+Phase 8 — Storage & productivity. Local persistence (SQLite), File Explorer, Notes, Text Editor, Search, backup/recovery foundations.
+
+Phase 9 — Authentication & authorization. Signup, login, sessions, JWT access/refresh rotation, email verification, password reset, MFA, RBAC, offline authentication, lock screen and session state machine.
+
+Phase 10 — Database (MySQL / SQL Server). Schema, migrations (as files), indexes, constraints, seeds. Do not execute migrations without authorization.
+
+Phase 11 — API. NestJS modules, validation, error contracts, authentication, authorization, rate limiting, logging.
+
+Phase 12 — Offline & sync. Queue, sync states, conflict detection, conflict resolution, retry with backoff.
+
+Phase 13 — Windows integration. Read-only first: system, processes, displays, audio, battery, network, filesystem. Then evaluate writable capabilities individually.
+
+Phase 14 — System applications. Task Manager, System Information, Settings, Terminal, Calculator, Clock, Performance Dashboard, Notifications, Diagnostics.
+
+Phase 15 — Visual identity & personalization. 3D squircle icon overhaul, color/accent system, theme catalog, rich high-resolution wallpaper library, procedural wallpapers, slideshow, per-monitor/per-workspace assignment.
+
+Phase 16 — Desktop widgets layer. Widget board, built-in widgets, widget platform, performance rules.
+
+Phase 17 — Antigravity Groove. Media library, playback engine, playlists, EQ, soundscape studio, visualizer, media-key integration.
+
+Phase 18 — Photo & Wallpaper Studio. Import, non-destructive editing, multi-monitor composition, slideshow creation, wallpaper export.
+
+Phase 19 — Visual polish. Animation refinement, sound effects, advanced visual effects, transitions, microinteractions, empty/error states, accessibility polish.
+
+Phase 20 — Quality & security. Static validation, authorized tests, security review, performance review, accessibility review, recovery review, visual-regression review.
+
+Phase 21 — Packaging & release preparation. Packaging config, versioning, installer design, signing plan, update architecture, uninstall behavior, release notes, checklist. Do not publish or install without authorization.
+
+Phase 22 — Final review. Requirements-to-implementation review, Git history review, documentation review, claim verification, remaining work, final engineering report.
+
+45. DEFINITION OF DONE
+A feature is complete only when:
+
+Implementation meets documented acceptance criteria.
+
+UI matches the design system.
+
+Loading, empty, success, and error states are handled.
+
+Keyboard navigation is supported for essential interactions.
+
+Accessibility has been reviewed.
+
+Permissions and data boundaries are enforced.
+
+Relevant tests have been written.
+
+Permitted tests have been run, with results recorded.
+
+Unauthorized tests have not been run.
+
+Error handling and recovery are considered.
+
+Documentation is updated.
+
+brain.md is updated.
+
+IMPLEMENTATION_STATUS.md is updated.
+
+The Git diff has been reviewed.
+
+No secrets have been committed.
+
+A meaningful Git commit has been created.
+
+Known limitations are disclosed.
+
+Capability classification is recorded in docs/CAPABILITY_MATRIX.md.
+
+If testing is blocked by the authorization rules, label the feature accordingly. Do not misrepresent untested functionality as fully verified.
+
+46. RELEASE, PACKAGING, SIGNING, UPDATE, UNINSTALL
+46.1 Packaging
+DEFAULT DECISION: Signed EXE installer using NSIS, per-user installation by default. Support architecture for per-machine install, portable mode, and future MSIX. Do not require administrator rights for per-user installation where possible.
+
+46.2 Code signing
+Production releases use a trusted code-signing certificate, a secure signing process, protected signing keys, and timestamping. Never commit .pfx, .p12, private keys, passwords, or tokens to Git.
+
+46.3 Auto-update
+Channels: Stable, Beta, Canary. Process: check → verify metadata → verify signature → download → verify integrity → stage → install → verify → roll back if necessary.
+
+DEFAULT DECISION: Auto-update is designed but remains disabled until explicitly configured for a real release environment.
+
+46.4 Versioning
+Semantic Versioning MAJOR.MINOR.PATCH, with pre-release identifiers (1.2.0-beta.1, 1.2.0-canary.1).
+
+46.5 Uninstallation
+Offer: remove application only · remove application + local data · remove application + cached data · preserve user documents. Never delete user documents silently. Clearly explain what will be removed.
+
+46.6 CI/CD
+text
+Checkout → Dependency integrity check → Lint → Typecheck → Unit tests
+→ Security scan → Build → Package → Artifact verification → E2E
+→ Accessibility → Visual regression → Sign → Release
+Antigravity must not trigger production deployment without explicit approval.
+
+46.7 SBOM & third-party licenses
+Generate a CycloneDX (or equivalent) SBOM tracking package, version, license, source, and vulnerability status. Maintain docs/THIRD_PARTY_LICENSES.md with dependency, version, license, attribution, usage, and modifications. Do not use dependencies with incompatible licenses without explicit review.
+
+46.8 Fonts, icons, sounds, wallpapers
+Every external asset must record: source, license, attribution requirement, modification permission, distribution permission. Do not use proprietary operating-system assets merely because they are visually convenient.
+
+47. LEGAL, LICENSING & COMPLIANCE
+The project must contain placeholders/documentation for:
+
+text
+LICENSE
+TERMS_OF_SERVICE.md
+PRIVACY_POLICY.md
+THIRD_PARTY_LICENSES.md
+ATTRIBUTIONS.md
+docs/RISK_REGISTER.md
+docs/DATA_PROCESSING.md
+docs/EXPORT_COMPLIANCE.md
+DEFAULT DECISION: Use an explicit proprietary/commercial-license placeholder until the owner selects the final license. Do not assume the application is open source.
+
+If external processors are introduced, document: provider, data processed, purpose, retention, geographic location, security controls, deletion behavior.
+
+Maintain export-compliance documentation identifying cryptographic libraries, encryption features, third-party services, and jurisdictional considerations. Do not make unsupported legal claims.
+
+48. ENGINEERING MEMORY & GOVERNANCE FILES
+48.1 brain.md (mandatory, repository root)
+Updated after every meaningful implementation unit. Must contain:
+
+text
+# Project Identity
+# Product Vision
+# Current Project Status
+# Current Phase
+# Current Task
+# Current Architecture
+# Technology Stack
+# Directory Structure
+# Implemented Features
+# Features In Progress
+# Features Not Implemented
+# Future Features
+# Unsupported Features
+# Capability Matrix Summary
+# Windows Integration Status
+# Desktop Shell Status
+# Window Manager Status
+# Taskbar Preview Status
+# Workspace Status
+# Application Registry Status
+# Widgets Status
+# Media (Groove) Status
+# Photo Studio Status
+# Wallpaper & Theme Status
+# Icon System Status
+# Lock Screen & Session Status
+# Authentication Architecture
+# Authorization Architecture
+# Database Architecture
+# Database Migration Status
+# API Architecture
+# Offline Architecture
+# Synchronization Architecture
+# Conflict Resolution
+# UI/UX Architecture
+# Design System
+# Theme System
+# Color System
+# Animation System
+# Sound System
+# Accessibility System
+# Internationalization
+# Security Decisions
+# Performance Decisions
+# Important Constraints
+# Things That Must NOT Be Changed
+# Known Bugs
+# Resolved Bugs
+# Failed Approaches
+# Decisions and Reasons
+# Assumptions
+# Technical Debt
+# Testing Status
+# Performance Findings
+# Security Findings
+# Git Development History Summary
+# Remaining Work
+# Last Completed Task
+# Last Git Commit
+# Next Recommended Task
+# Last Updated
+Do not put secrets in brain.md. Do not turn it into a copy of this prompt.
+
+48.2 docs/ASSUMPTIONS.md
+text
+ID / Date / Assumption / Reason / Impact / Risk / Validation Method / Status
+Example:
+
+text
+ASM-001
+Assumption: SQLite will be the local persistence layer.
+Reason: Offline-first desktop operation requires transactional local storage.
+Impact: Local data layer is designed around SQLite.
+Risk: Medium.
+Validation: Benchmark startup, query performance, migration behavior.
+Status: Accepted.
+
+ASM-002
+Assumption: DB_PORT=1433 in the provided .env indicates SQL Server, but the
+request specifies MySQL. Confirm the intended engine and port before connecting.
+Reason: 1433 is the SQL Server default; MySQL defaults to 3306.
+Impact: Connection configuration and DDL dialect.
+Risk: Medium.
+Validation: Confirm with the project owner in Phase 0; support both engines.
+Status: Proposed.
+48.3 docs/DECISIONS.md
+text
+Decision ID / Date / Decision / Context / Options / Chosen Option /
+Reason / Consequences / Reversible / Approval Required / Status
+48.4 docs/IMPLEMENTATION_STATUS.md
+Statuses: NOT_STARTED, PLANNED, IN_PROGRESS, IMPLEMENTED, TESTED, PARTIALLY_IMPLEMENTED, BLOCKED, UNSUPPORTED, FUTURE.
+
+Never mark something IMPLEMENTED merely because a UI exists.
+
+48.5 docs/CHANGELOG.md
+Keep-a-Changelog style: Added, Changed, Fixed, Security, Performance, Deprecated, Removed.
+
+48.6 docs/RISK_REGISTER.md
+Risk ID, Description, Likelihood, Impact, Severity, Mitigation, Owner, Status, Contingency, Review date.
+
+Prioritize: data loss, unauthorized system modification, privilege escalation, credential leakage, IPC abuse, command injection, dependency vulnerabilities, sync conflicts, untrusted plugin/widget execution, resource exhaustion, update compromise, media-decoder exploits, incorrect Windows-integration claims.
+
+Critical unresolved risks block release readiness.
+
+48.7 Required documentation set
+text
+docs/
+  ARCHITECTURE.md          CAPABILITY_MATRIX.md
+  SECURITY.md              THREAT_MODEL.md
+  PERFORMANCE.md           ACCESSIBILITY.md
+  INTERNATIONALIZATION.md  MOTION.md
+  SOUND.md                 THEMES.md
+  COLORS.md                WALLPAPERS.md
+  WIDGETS.md               MEDIA.md
+  PHOTO_STUDIO.md          ICONS.md
+  LOCK_SCREEN.md           TASKBAR_PREVIEWS.md
+  WINDOWS_INTEGRATION.md   API.md
+  DATABASE.md              TESTING.md
+  RELEASE.md               INSTALLATION.md
+  PRIVACY.md               THIRD_PARTY_LICENSES.md
+  ASSUMPTIONS.md           DECISIONS.md
+  IMPLEMENTATION_STATUS.md CHANGELOG.md
+  RISK_REGISTER.md         DATA_PROCESSING.md
+  EXPORT_COMPLIANCE.md
+49. RELEASE APPROVAL GATES & DANGEROUS OPERATION GATE
+Explicit approval required before:
+
+text
+production database migration
+production deployment
+installer publication
+auto-update activation
+system-level installer testing
+code-signing release
+telemetry activation
+remote release upload
+Windows system modification
+Any operation involving deletion, privilege escalation, Windows modification, service creation, Registry modification, firewall changes, scheduled tasks, startup persistence, database destruction, external upload, installation, or execution of unknown code must stop and request approval.
+
+50. DO NOT INVENT FUNCTIONALITY
+Never write "Windows Firewall successfully configured" if the app only displays a simulated interface.
+Never write "System Restore completed" unless it genuinely completed.
+Never write "Process terminated" unless the native operation succeeded.
+Never write "Windows locked" — the lock screen is application-simulated.
+Never present in-app window thumbnails as the Windows taskbar's own previews.
+Never present the widget layer as the Windows 11 widgets panel.
+Never present Antigravity Groove as the Windows Media Player or Spotify.
+
+Use honest statuses: SIMULATED, INFORMATIONAL, UNAVAILABLE, UNSUPPORTED, REQUIRES ADMINISTRATOR, REQUIRES USER AUTHORIZATION, FAILED, SUCCESS.
+
+50.1 No fake backend
+Do not create fake API success, fake authentication, fake database records, fake sync, or fake system state for production functionality. Mocks are permitted only inside controlled tests.
+
+50.2 No hardcoded secrets
+Never hardcode passwords, API keys, JWT secrets, database passwords, OAuth secrets, or signing keys. Use environment configuration and secure secret storage.
+
+51. FINAL OPERATING INSTRUCTIONS TO ANTIGRAVITY
+Before starting:
+
+Read this prompt completely.
+
+Inspect the existing repository, package files, source structure, configuration, Git status, documentation, database files, and tests.
+
+Identify working functionality, broken functionality, and architectural debt.
+
+Create or update brain.md, the Assumptions Register, the risk assessment, and IMPLEMENTATION_STATUS.md.
+
+Select the first coherent implementation unit and begin without unnecessary clarification questions.
+
+During development:
+
+Prefer working vertical slices.
+
+Keep the architecture maintainable.
+
+Keep UI/UX consistent across the product.
+
+Add sophisticated animation only through the centralized motion system.
+
+Add sound only through the centralized sound system.
+
+Route all imagery through the licensed wallpaper/photo pipeline.
+
+Keep effects configurable and performance-aware.
+
+Test state transitions, persistence, errors, and permissions.
+
+Do not leave misleading placeholders.
+
+Do not claim unsupported operating-system integration.
+
+Update documentation and brain.md.
+
+Create meaningful Git commits after every implementation unit.
+
+Preserve uncommitted user work.
+
+Stop before any operation requiring explicit authorization.
+
+When blocked: state the exact blocker, record what has been completed, identify what requires approval or unavailable tooling, and continue with independent safe work where possible.
+
+51.1 Final report requirements
+At the end of an authorized implementation session, provide:
+
+text
+Implementation Summary
+Completed Features
+Partially Completed Features
+Unsupported Features
+Known Limitations
+Security Review
+Accessibility Review
+Performance Review
+Test Results (written vs actually run)
+Files Created or Changed
+Git Commits Created
+Documentation Updated
+Database Status
+Windows Integration Status
+Current brain.md Status
+Remaining Work
+Required User Approvals
+Recommended Next Task
+Execution Status
+51.2 Final execution status (mandatory honesty block)
+text
+APPLICATION EXECUTED:            NO
+DEV SERVER STARTED:              NO
+DEPENDENCIES INSTALLED:          NO
+DATABASE MIGRATIONS EXECUTED:    NO
+DATABASE SERVER INSTALLED:       NO
+WINDOWS MODIFICATIONS PERFORMED: NO
+ELEVATION REQUESTED:             NO
+PRODUCTION DEPLOYMENT PERFORMED: NO
+If any operation was explicitly authorized and performed, report it accurately. Never claim otherwise.
+
+51.3 Final stop condition
+After completing all currently authorized work: save files, validate statically, update documentation, update brain.md, update implementation status, inspect the Git diff, check for secrets, create the required meaningful Git commit, report what was completed, and stop.
+
+Do not launch the application automatically. Do not start servers. Do not install dependencies. Do not execute migrations. Do not modify Windows. Wait for explicit authorization.
+
+52. MASTER PRODUCT VISION
+The final product should feel like a carefully engineered desktop environment combining Windows 11 familiarity, macOS polish and workspace ergonomics, and Ubuntu/Linux developer flexibility.
+
+It must be:
+
+text
+Production-oriented
+Secure
+Transparent
+Reversible
+Accessible
+Fast
+Beautiful
+Extensible
+Maintainable
+Offline-capable
+Windows-aware
+Developer-friendly
+But above all:
+
+DO NOT MAKE ANY MISTAKES, ANTIGRAVITY.
+
+Do not invent functionality. Do not silently execute dangerous operations. Do not pretend simulated functionality is native. Do not destroy existing working code. Do not expose secrets. Do not bypass security controls. Do not install or execute anything without authorization. Do not leave meaningful implementation work uncommitted.
+
+Use brain.md for engineering memory. Use the Decision Authority Matrix for safe decisions. Use the Assumptions Register to keep assumptions visible. Use the capability model to maintain technical honesty. Use Git after every meaningful implementation unit.
+
+Begin with Phase 0 — Discovery.
+
+Do not launch the application. Do not start a development server. Do not install dependencies. Do not execute migrations. Do not modify Windows. Do not ask what to build next unless the decision genuinely requires user authorization.
+
+Proceed with safe, documented, reversible repository work.
+
+APPENDIX A — WHAT CHANGED IN VERSION 7.0
+Login & Signup system (§15, §14, §12.3–12.4). Full signup/login/logout/refresh/verify-email/forgot-password/reset-password/MFA/session-management endpoints, flows, validation rules, password policy (Argon2id), JWT access + rotating refresh tokens with reuse detection, no user enumeration, rate limiting, lockout, offline authentication boundaries, RBAC, and complete auth UI/UX requirements.
+
+MySQL server setup (§10, §11). The provided .env is now the authoritative development configuration. MySQL 8.0+ is added as the primary engine with database creation, least-privilege app and migrator users, connection pooling defaults, operational requirements, and full MySQL DDL in §12. SQL Server remains supported with an explicit type-mapping note. Flagged: DB_PORT=1433 is SQL Server's default while MySQL uses 3306 — recorded as ASM-002 for confirmation.
+
+Wallpapers and colors (§30, §31). New full color token system with accent ramps, neutrals, and semantic tokens; contrast requirements; token-based theming mandate. New Rich High-Resolution Wallpapers & Visual Themes section addressing the missing real imagery: categories, resolution/format tiers up to 8K, licensing policy, procedural wallpaper generation, per-monitor and per-workspace assignment, slideshow, dynamic wallpaper, and performance rules.
+
+Desktop Widgets Layer (§33). New section covering the widget board, widget sizing/reordering/pinning, fourteen built-in widgets with honest classifications, a sandboxed widget platform with permissions, and strict performance rules.
+
+Antigravity Groove — Media Player & Soundscape Studio (§34). New first-party media app: library scanning of authorized folders, format support, playback, queue, playlists, EQ, crossfade, soundscape layer mixer with presets, focus/sleep timers, visualizer modes, a Web Audio engine with limiter and proper teardown, and licensing/privacy constraints.
+
+Photo & Wallpaper Studio (§35). New non-destructive editor: library, import, format support, EXIF read, full adjustment stack, filters, undo/redo, multi-monitor wallpaper composition, exact-resolution export, one-click apply with revert, slideshow builder, and safety/performance rules.
+
+Visual Identity Overhaul: 3D Squircle App Icon Badges (§36). New icon system: superellipse geometry, seven-layer 3D composition, hover/press/launch motion, sizing table with high-DPI variants, mandatory single-component consistency, deterministic fallbacks, and accessibility rules.
+
+Lock Screen & Session Security Simulation (§37). New lock screen composition, session state machine, lock triggers, unlock methods with honest classifications, security requirements (rate limiting, auditing, content obscuring, no shortcut bypass), and privacy controls. Explicitly classified APPLICATION-SIMULATED — it does not lock Windows.
+
+Taskbar Window Thumbnail Previews & Snap Animations (§38). New thumbnail preview system with hover delay, grouping, per-window actions, keyboard equivalents, throttled capture, caching, and privacy controls; plus snap layout flyout, snap assist, a full snap animation table, and acceptance criteria including interruptibility.
+
+"And any more things" (§26, §44). Added a broader utility app list (clipboard history, screenshot/recording, calendar, archive manager, image/PDF viewer, sticky notes, to-do, focus timer, color picker, hash checker, regex tester, JSON formatter, Base64, port checker, duplicate finder, disk usage analyzer), added Phase 5 (Taskbar interaction), Phase 15 (Visual identity), Phase 16 (Widgets), Phase 17 (Groove), and Phase 18 (Photo Studio) to the roadmap, and added matching commit-message examples in §43.
+
+Structural consolidation. The two previously duplicated halves of the document are merged into one master specification (Version 7.0) so there is a single source of truth. Every substantive requirement from both halves is preserved.
+
+Honesty reinforcement (§4, §50). Explicit prohibitions against presenting the lock screen, widget layer, taskbar previews, and media player as native Windows features.
+
+Engineering memory (§48). brain.md, ASSUMPTIONS.md, IMPLEMENTATION_STATUS.md, and the risk register now track the new subsystems (widgets, media, photo studio, wallpapers, icons, lock screen, taskbar previews).
+
+ANTIGRAVITY: BUILD A REAL, COHESIVE, SECURE, HIGH-QUALITY PRODUCT. DO NOT MAKE MISTAKES.
+
+Use Windows 11 for familiarity, macOS for refinement, and Ubuntu/Linux for workspace and developer productivity inspiration. Create an original identity — including original wallpaper, icon, and sound assets — rather than a superficial clone.
+
+Record decisions in brain.md. Review each meaningful change. Commit each meaningful implementation unit to Git.
+
+Begin with Phase 0, inspect the repository, establish the baseline, and proceed one verified implementation unit at a time.

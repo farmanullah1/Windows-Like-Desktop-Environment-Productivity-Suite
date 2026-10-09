@@ -1,16 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Folder,
-  Settings,
-  FileText,
-  Terminal,
-  Activity,
-  Monitor,
-  Calculator,
-  Clock,
-  Send,
-  Code,
-  AppWindow,
   Search,
   Wifi,
   Volume2,
@@ -24,20 +13,6 @@ import { useTheme } from '../design-system/ThemeProvider';
 import { getPinnedApps, getAllApps } from '../apps/registry';
 import { soundEngine } from '../design-system/soundEngine';
 import { AppIconBadge } from '../design-system/AppIconBadge';
-
-const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
-  Folder,
-  Settings,
-  FileText,
-  Terminal,
-  Activity,
-  Monitor,
-  Calculator,
-  Clock,
-  Send,
-  Code,
-  AppWindow,
-};
 
 export const Taskbar: React.FC = () => {
   const {
@@ -180,7 +155,6 @@ export const Taskbar: React.FC = () => {
         {/* Center Section: App Icons */}
         <div className="flex items-center gap-1.5 px-3">
           {allDisplayApps.map((app) => {
-            const Icon = ICON_MAP[app.icon] || AppWindow;
             const isRunning = runningAppIds.includes(app.id);
             const activeWin = windows.find(
               (w) => w.appId === app.id && w.workspaceId === activeWorkspaceId
