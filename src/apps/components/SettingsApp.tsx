@@ -12,6 +12,12 @@ import {
   Download,
   Plus,
   Trash2,
+  Database,
+  Server,
+  CheckCircle2,
+  AlertCircle,
+  Play,
+  Key,
 } from 'lucide-react';
 import { useTheme, ThemeType, EffectsModeType, ShellModeType } from '../../design-system/ThemeProvider';
 import { useDesktop } from '../../core/desktopStore';
@@ -22,6 +28,7 @@ type SettingsTab =
   | 'sound'
   | 'workspaces'
   | 'storage'
+  | 'database'
   | 'accessibility'
   | 'about';
 
@@ -63,9 +70,80 @@ export const SettingsApp: React.FC<{ windowId: string }> = () => {
     addNotification,
     currentWallpaper,
     setWallpaper,
+    metrics,
+    testDbConnection,
   } = useDesktop();
 
   const [newWsName, setNewWsName] = useState('');
+
+  // Database Connection Management State
+  const dbStatus = metrics.dbStatus || metrics.hostInfo?.database;
+  const [dbServer, setDbServer] = useState(dbStatus?.server || 'localhost');
+  const [dbPort, setDbPort] = useState(String(dbStatus?.port || 1433));
+  const [dbName, setDbName] = useState(dbStatus?.database || 'MyOS');
+  const [dbUser, setDbUser] = useState(dbStatus?.user || 'sa');
+  const [dbPassword, setDbPassword] = useState('');
+  const [dbEncrypt, setDbEncrypt] = useState(dbStatus?.encrypted ?? true);
+  const [dbTesting, setDbTesting] = useState(false);
+  const [dbTestResult, setDbTestResult] = useState<any>(null);
+  const [sqlQuery, setSqlQuery] = useState('SELECT @@VERSION AS Version, DB_NAME() AS CurrentDatabase');
+  const [queryRunning, setQueryRunning] = useState(false);
+  const [queryResult, setQueryResult] = useState<any>(null);
+
+  const handleTestDatabase = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    soundEngine.play('click');
+    setDbTesting(true);
+    setDbTestResult(null);
+    try {
+      const res = await testDbConnection({
+        server: dbServer,
+        port: Number(dbPort) || 1433,
+        database: dbName,
+        user: dbUser,
+        password: dbPassword,
+        options: { encrypt: dbEncrypt, trustServerCertificate: true },
+      });
+      setDbTestResult(res);
+      if (res.success) {
+        soundEngine.play('success');
+        addNotification('SQL Server Connected', `Connection verified (${res.latencyMs}ms)`, 'success', 'Database');
+      } else {
+        soundEngine.play('error');
+        addNotification('SQL Server Error', res.error || 'Failed to connect', 'warning', 'Database');
+      }
+    } catch (err: any) {
+      setDbTestResult({ success: false, error: err.message });
+      soundEngine.play('error');
+    } finally {
+      setDbTesting(false);
+    }
+  };
+
+  const handleRunQuery = async () => {
+    soundEngine.play('click');
+    setQueryRunning(true);
+    setQueryResult(null);
+    try {
+      const res = await fetch('/api/v1/db/query', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sql: sqlQuery }),
+      });
+      const data = await res.json();
+      setQueryResult(data);
+      if (data.success) {
+        soundEngine.play('success');
+      } else {
+        soundEngine.play('error');
+      }
+    } catch (err: any) {
+      setQueryResult({ success: false, error: { message: err.message } });
+      soundEngine.play('error');
+    } finally {
+      setQueryRunning(false);
+    }
+  };
 
   const themesList: { id: ThemeType; name: string; desc: string }[] = [
     { id: 'dark', name: 'Dark (Default)', desc: 'Fluent acrylic depth with obsidian blues' },
@@ -183,6 +261,18 @@ export const SettingsApp: React.FC<{ windowId: string }> = () => {
         >
           <Eye className="w-4 h-4" />
           <span>Accessibility</span>
+        </button>
+
+        <button
+          onClick={() => { setActiveTab('database'); soundEngine.play('click'); }}
+          className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-medium transition-all ${
+            activeTab === 'database'
+              ? 'bg-[var(--accent-subtle)] text-[var(--accent-primary)] font-semibold'
+              : 'hover:bg-[var(--surface-card)] text-[var(--text-secondary)]'
+          }`}
+        >
+          <Database className="w-4 h-4 text-blue-400" />
+          <span>MS SQL Server</span>
         </button>
 
         <button
@@ -572,6 +662,251 @@ export const SettingsApp: React.FC<{ windowId: string }> = () => {
           </div>
         )}
 
+        {/* TAB 5: DATABASE & SQL SERVER */}
+        {activeTab === 'database' && (
+          <div className="space-y-6 max-w-2xl">
+            <div>
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold flex items-center gap-2">
+                  <Database className="w-5 h-5 text-blue-400" />
+                  <span>Microsoft SQL Server Configuration</span>
+                </h3>
+                <span
+                  className={`text-xs font-mono px-2.5 py-1 rounded-full font-semibold border ${
+                    dbStatus?.state === 'CONNECTED'
+                      ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
+                      : 'bg-amber-500/10 border-amber-500/30 text-amber-400'
+                  }`}
+                >
+                  {dbStatus?.state === 'CONNECTED' ? '● Connected' : '○ Standby / Local Resilient'}
+                </span>
+              </div>
+              <p className="text-xs text-[var(--text-muted)] mt-1">
+                Configure relational synchronization with Microsoft SQL Server (database: {dbName} on {dbServer}).
+              </p>
+            </div>
+
+            {/* Connection Status Card */}
+            <div className="p-4 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] space-y-3">
+              <div className="flex items-center justify-between text-xs pb-2 border-b border-[var(--border-subtle)]">
+                <span className="font-semibold text-[var(--text-muted)] uppercase">Active Database Target</span>
+                <span className="font-mono text-xs text-blue-400">{dbServer}:{dbPort} / {dbName}</span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 text-xs">
+                <div>
+                  <span className="text-[var(--text-muted)] block text-[11px]">Database Engine</span>
+                  <strong className="text-[var(--text-primary)]">Microsoft SQL Server (mssql T-SQL)</strong>
+                </div>
+                <div>
+                  <span className="text-[var(--text-muted)] block text-[11px]">Database Name</span>
+                  <strong className="font-mono text-[var(--text-primary)]">{dbName}</strong>
+                </div>
+                <div>
+                  <span className="text-[var(--text-muted)] block text-[11px]">Security / TLS Encrypt</span>
+                  <span className="text-emerald-400 font-medium">
+                    {dbEncrypt ? 'TLS 1.2+ Encrypted' : 'Standard'}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-[var(--text-muted)] block text-[11px]">Certificate Trust</span>
+                  <span className="text-[var(--text-primary)]">TrustServerCertificate=true</span>
+                </div>
+              </div>
+
+              {dbStatus?.lastError && (
+                <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-300 text-xs flex items-start gap-2">
+                  <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5 text-amber-400" />
+                  <div>
+                    <span className="font-semibold">Notice:</span> {dbStatus.lastError}.
+                    <p className="text-[11px] text-amber-400/80 mt-0.5">
+                      The application is gracefully running on its resilient local cache and will automatically synchronize when SQL Server credentials are verified.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Connection Credentials Form */}
+            <form onSubmit={handleTestDatabase} className="p-4 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] space-y-4">
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
+                Test / Reconfigure Credentials (.env Target)
+              </h4>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <label className="text-[11px] text-[var(--text-muted)]">Server Host</label>
+                  <input
+                    type="text"
+                    value={dbServer}
+                    onChange={(e) => setDbServer(e.target.value)}
+                    className="w-full px-3 py-1.5 rounded-lg bg-[var(--surface-input)] border border-[var(--border-subtle)] text-xs font-mono text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent-primary)]"
+                    placeholder="localhost"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[11px] text-[var(--text-muted)]">Port</label>
+                  <input
+                    type="text"
+                    value={dbPort}
+                    onChange={(e) => setDbPort(e.target.value)}
+                    className="w-full px-3 py-1.5 rounded-lg bg-[var(--surface-input)] border border-[var(--border-subtle)] text-xs font-mono text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent-primary)]"
+                    placeholder="1433"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <label className="text-[11px] text-[var(--text-muted)]">Database Name</label>
+                  <input
+                    type="text"
+                    value={dbName}
+                    onChange={(e) => setDbName(e.target.value)}
+                    className="w-full px-3 py-1.5 rounded-lg bg-[var(--surface-input)] border border-[var(--border-subtle)] text-xs font-mono text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent-primary)]"
+                    placeholder="MyOS"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[11px] text-[var(--text-muted)]">Username</label>
+                  <input
+                    type="text"
+                    value={dbUser}
+                    onChange={(e) => setDbUser(e.target.value)}
+                    className="w-full px-3 py-1.5 rounded-lg bg-[var(--surface-input)] border border-[var(--border-subtle)] text-xs font-mono text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent-primary)]"
+                    placeholder="sa"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[11px] text-[var(--text-muted)]">Password</label>
+                <input
+                  type="password"
+                  value={dbPassword}
+                  onChange={(e) => setDbPassword(e.target.value)}
+                  className="w-full px-3 py-1.5 rounded-lg bg-[var(--surface-input)] border border-[var(--border-subtle)] text-xs font-mono text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent-primary)]"
+                  placeholder="Enter SQL Server password"
+                />
+              </div>
+
+              <div className="flex items-center justify-between pt-1">
+                <label className="flex items-center gap-2 text-xs text-[var(--text-secondary)] cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={dbEncrypt}
+                    onChange={(e) => setDbEncrypt(e.target.checked)}
+                    className="accent-[var(--accent-primary)]"
+                  />
+                  <span>Encrypt Connection (SSL/TLS)</span>
+                </label>
+
+                <button
+                  type="submit"
+                  disabled={dbTesting}
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[var(--accent-primary)] hover:opacity-90 disabled:opacity-50 text-white font-medium text-xs transition-all shadow-md"
+                >
+                  <Server className="w-3.5 h-3.5" />
+                  <span>{dbTesting ? 'Testing Connection...' : 'Test Connection'}</span>
+                </button>
+              </div>
+
+              {dbTestResult && (
+                <div
+                  className={`p-3 rounded-lg border text-xs animate-in fade-in duration-200 ${
+                    dbTestResult.success
+                      ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'
+                      : 'bg-rose-500/10 border-rose-500/30 text-rose-300'
+                  }`}
+                >
+                  {dbTestResult.success ? (
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2 font-semibold text-emerald-400">
+                        <CheckCircle2 className="w-4 h-4" />
+                        <span>Connected to Microsoft SQL Server! ({dbTestResult.latencyMs} ms)</span>
+                      </div>
+                      <p className="text-[11px] text-emerald-300/80">
+                        Active Database: <strong>{dbTestResult.database}</strong> • Target: {dbTestResult.server}:{dbTestResult.port}
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2 font-semibold text-rose-400">
+                        <AlertCircle className="w-4 h-4" />
+                        <span>Connection Failed ({dbTestResult.latencyMs} ms)</span>
+                      </div>
+                      <p className="text-[11px] font-mono text-rose-300/90">{dbTestResult.error}</p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </form>
+
+            {/* Interactive Query Runner */}
+            <div className="p-4 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] space-y-3">
+              <div className="flex items-center justify-between">
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
+                  SQL Query Playground (MyOS)
+                </h4>
+                <div className="flex gap-1.5">
+                  {[
+                    'SELECT @@VERSION AS Version, DB_NAME() AS CurrentDb',
+                    'SELECT Id, Name, SortOrder FROM dbo.Workspaces',
+                    'SELECT COUNT(*) AS NoteCount FROM dbo.Notes',
+                  ].map((q, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => setSqlQuery(q)}
+                      className="px-2 py-0.5 rounded bg-[var(--surface-input)] hover:bg-[var(--accent-subtle)] text-[10px] font-mono text-[var(--text-muted)] hover:text-[var(--accent-primary)] transition-colors"
+                    >
+                      Sample {idx + 1}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={sqlQuery}
+                  onChange={(e) => setSqlQuery(e.target.value)}
+                  className="flex-1 px-3 py-2 rounded-lg bg-[var(--surface-input)] border border-[var(--border-subtle)] text-xs font-mono text-[var(--text-primary)] focus:outline-none focus:border-[var(--accent-primary)]"
+                  placeholder="Enter T-SQL query..."
+                />
+                <button
+                  type="button"
+                  onClick={handleRunQuery}
+                  disabled={queryRunning}
+                  className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium text-xs flex items-center gap-1.5 disabled:opacity-50 transition-colors shadow-sm"
+                >
+                  <Play className="w-3.5 h-3.5 fill-current" />
+                  <span>Execute</span>
+                </button>
+              </div>
+
+              {queryResult && (
+                <div className="p-3 rounded-lg bg-black/40 border border-white/10 overflow-x-auto text-xs font-mono max-h-48">
+                  {queryResult.success ? (
+                    <div>
+                      <span className="text-emerald-400 text-[11px] block mb-1">
+                        Query executed successfully ({queryResult.data?.rowCount || 0} rows):
+                      </span>
+                      <pre className="text-[11px] text-white/90">
+                        {JSON.stringify(queryResult.data?.rows || queryResult.data, null, 2)}
+                      </pre>
+                    </div>
+                  ) : (
+                    <div className="text-rose-400 text-[11px]">
+                      Error: {queryResult.error?.message || 'Query failed'}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
         {/* TAB 6: ABOUT */}
         {activeTab === 'about' && (
           <div className="space-y-6 max-w-2xl">
@@ -580,10 +915,10 @@ export const SettingsApp: React.FC<{ windowId: string }> = () => {
                 <Monitor className="w-7 h-7" />
               </div>
               <div>
-                <h3 className="text-base font-bold">ADW-5 Desktop Environment</h3>
-                <p className="text-xs text-[var(--accent-primary)] font-medium">Version 5.0.0 (Master Product Specification)</p>
+                <h3 className="text-base font-bold">Windows-Like Desktop Environment & Productivity Suite</h3>
+                <p className="text-xs text-[var(--accent-primary)] font-medium">Version 6.1.0 (Production Release)</p>
                 <p className="text-[11px] text-[var(--text-muted)] mt-1">
-                  Hybrid Windows 11 + macOS + Ubuntu/Linux Desktop & Productivity Suite
+                  Hybrid Windows 11 + macOS + Ubuntu/Linux Desktop Workspace & Productivity Suite
                 </p>
               </div>
             </div>
@@ -591,7 +926,7 @@ export const SettingsApp: React.FC<{ windowId: string }> = () => {
             <div className="p-4 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] text-xs space-y-2 text-[var(--text-secondary)]">
               <h4 className="font-semibold text-[var(--text-primary)]">Architecture & Engineering Standard</h4>
               <p>
-                Built strictly to production standards with React 18/19, TypeScript, centralized CSS Design Tokens, and procedural Web Audio synthesis.
+                Built to strict enterprise production standards: React 18, TypeScript 5, Tailwind CSS, Centralized Design Tokens, MS SQL Server integration, and procedural Web Audio synthesis.
               </p>
               <p className="text-[11px] text-[var(--text-muted)]">
                 All functionality operates truthfully inside the desktop application platform with controlled Windows system integration boundaries.

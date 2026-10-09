@@ -33,15 +33,19 @@ export const QuickSettings: React.FC = () => {
     >
       {/* 2x3 Toggles Grid */}
       <div className="grid grid-cols-2 gap-2">
-        {/* Wi-Fi Toggle */}
+        {/* Network / Internet Status */}
         <button
           onClick={() => soundEngine.play('click')}
-          className="flex items-center gap-3 p-3 rounded-xl border border-[var(--accent-primary)] bg-[var(--accent-subtle)] text-[var(--accent-primary)] font-semibold text-xs transition-all"
+          className={`flex items-center gap-3 p-3 rounded-xl border text-xs font-semibold transition-all ${
+            metrics.isOnline
+              ? 'border-[var(--accent-primary)] bg-[var(--accent-subtle)] text-[var(--accent-primary)]'
+              : 'border-amber-500/30 bg-amber-500/10 text-amber-400'
+          }`}
         >
           <Wifi className="w-4 h-4" />
           <div className="text-left">
-            <span className="block leading-tight">Wi-Fi</span>
-            <span className="text-[10px] text-[var(--text-muted)] font-normal">Connected</span>
+            <span className="block leading-tight">Network</span>
+            <span className="text-[10px] font-normal">{metrics.isOnline ? 'Online (Active)' : 'Offline (Local)'}</span>
           </div>
         </button>
 
@@ -113,8 +117,14 @@ export const QuickSettings: React.FC = () => {
       <div className="flex items-center justify-between pt-1 border-t border-[var(--border-subtle)] text-xs text-[var(--text-muted)]">
         <div className="flex items-center gap-2">
           <Battery className="w-4 h-4 text-emerald-400" />
-          <span className="font-semibold text-[var(--text-primary)]">{metrics.batteryLevel}%</span>
-          <span>{metrics.isCharging ? 'Charging' : 'Remaining'}</span>
+          {metrics.hasBattery ? (
+            <>
+              <span className="font-semibold text-[var(--text-primary)]">{metrics.batteryLevel}%</span>
+              <span>{metrics.isCharging ? 'Charging' : 'Remaining'}</span>
+            </>
+          ) : (
+            <span className="font-semibold text-[var(--text-primary)]">AC Mains Connected</span>
+          )}
         </div>
 
         <button

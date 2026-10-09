@@ -202,7 +202,7 @@ export const Taskbar: React.FC = () => {
             }`}
             title="Quick Settings"
           >
-            <Wifi className="w-3.5 h-3.5 text-blue-400" />
+            <Wifi className={`w-3.5 h-3.5 ${metrics.isOnline ? 'text-blue-400' : 'text-slate-500 opacity-60'}`} />
             {soundEnabled ? (
               <Volume2 className="w-3.5 h-3.5 text-slate-300" />
             ) : (
@@ -210,7 +210,9 @@ export const Taskbar: React.FC = () => {
             )}
             <div className="flex items-center gap-1 text-[11px] font-medium">
               <Battery className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="hidden md:inline">{metrics.batteryLevel}%</span>
+              <span className="hidden md:inline">
+                {metrics.hasBattery ? `${metrics.batteryLevel}%` : 'AC'}
+              </span>
             </div>
           </button>
 
