@@ -8,32 +8,11 @@ import {
   Settings,
   FileText,
   Terminal,
-  Activity,
-  Monitor,
-  Calculator,
-  Clock,
-  Send,
-  Code,
-  AppWindow,
 } from 'lucide-react';
 import { useDesktop } from '../core/desktopStore';
 import { getAllApps } from '../apps/registry';
 import { soundEngine } from '../design-system/soundEngine';
 import { AppIconBadge } from '../design-system/AppIconBadge';
-
-const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
-  Folder,
-  Settings,
-  FileText,
-  Terminal,
-  Activity,
-  Monitor,
-  Calculator,
-  Clock,
-  Send,
-  Code,
-  AppWindow,
-};
 
 export const StartMenu: React.FC = () => {
   const { isStartMenuOpen, setStartMenuOpen, openApp, addNotification, setLocked } = useDesktop();
@@ -102,7 +81,6 @@ export const StartMenu: React.FC = () => {
         {/* Pinned Apps Grid */}
         <div className="grid grid-cols-4 gap-2">
           {filteredApps.map((app) => {
-            const Icon = ICON_MAP[app.icon] || AppWindow;
             return (
               <button
                 key={app.id}

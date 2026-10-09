@@ -8,10 +8,7 @@ import {
   VolumeX,
   Shuffle,
   Repeat,
-  Music,
-  Radio,
   Disc,
-  Sliders,
   Sparkles,
 } from 'lucide-react';
 import { soundEngine } from '../../design-system/soundEngine';

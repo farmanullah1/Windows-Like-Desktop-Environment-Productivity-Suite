@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Lock, Unlock, ArrowRight, ShieldCheck, User } from 'lucide-react';
+import { Unlock, ArrowRight, ShieldCheck, User } from 'lucide-react';
 import { useDesktop } from '../core/desktopStore';
 import { soundEngine } from '../design-system/soundEngine';
 

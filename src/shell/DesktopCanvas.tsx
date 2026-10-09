@@ -1,17 +1,13 @@
 import React, { useState } from 'react';
 import {
   Folder,
-  Settings,
-  FileText,
   Terminal,
-  Monitor,
   Plus,
   RefreshCw,
   Palette,
   Image as ImageIcon,
   Music,
   LayoutGrid,
-  Sparkles,
 } from 'lucide-react';
 import { useDesktop } from '../core/desktopStore';
 import { soundEngine } from '../design-system/soundEngine';

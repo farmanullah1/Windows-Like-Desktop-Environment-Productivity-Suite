@@ -4,12 +4,7 @@ import {
   Check,
   ZoomIn,
   ZoomOut,
-  Maximize2,
-  Sparkles,
-  Layers,
   Palette,
-  Play,
-  Share2,
 } from 'lucide-react';
 import { useDesktop } from '../../core/desktopStore';
 import { soundEngine } from '../../design-system/soundEngine';

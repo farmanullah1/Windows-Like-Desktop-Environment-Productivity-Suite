@@ -3,16 +3,10 @@ import {
   CloudSun,
   Sun,
   CloudRain,
-  Wind,
-  Droplets,
-  Cpu,
   Activity,
-  HardDrive,
-  Calendar as CalendarIcon,
   Plus,
   Trash2,
   Clock,
-  Sparkles,
   ChevronRight,
 } from 'lucide-react';
 import { useDesktop } from '../core/desktopStore';
