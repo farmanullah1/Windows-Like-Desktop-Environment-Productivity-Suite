@@ -19,6 +19,7 @@ import {
 import { useDesktop } from '../core/desktopStore';
 import { getAllApps } from '../apps/registry';
 import { soundEngine } from '../design-system/soundEngine';
+import { AppIconBadge } from '../design-system/AppIconBadge';
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   Folder,
@@ -35,7 +36,7 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
 };
 
 export const StartMenu: React.FC = () => {
-  const { isStartMenuOpen, setStartMenuOpen, openApp, addNotification } = useDesktop();
+  const { isStartMenuOpen, setStartMenuOpen, openApp, addNotification, setLocked } = useDesktop();
   const [searchQuery, setSearchQuery] = useState('');
   const [showPowerMenu, setShowPowerMenu] = useState(false);
   const apps = getAllApps();
@@ -60,6 +61,7 @@ export const StartMenu: React.FC = () => {
     setStartMenuOpen(false);
     if (action === 'lock') {
       addNotification('Session Locked', 'Desktop workspace session has been secured.', 'info', 'System');
+      setLocked(true);
     } else if (action === 'restart') {
       if (confirm('Restart desktop workspace session?')) {
         window.location.reload();

@@ -193,18 +193,18 @@ export const Taskbar: React.FC = () => {
                 onClick={() => handleAppClick(app.id, app.displayName, app.icon)}
                 className={`group relative flex flex-col items-center justify-center w-10 h-10 rounded-xl transition-all ${
                   isFocused
-                    ? 'bg-[var(--accent-subtle)] text-[var(--accent-primary)] shadow-sm'
-                    : 'hover:bg-[var(--border-medium)] text-[var(--text-secondary)] hover:text-white'
+                    ? 'bg-white/20 shadow-md ring-1 ring-white/30'
+                    : 'hover:bg-white/10'
                 }`}
                 title={app.displayName}
               >
-                <Icon className={`w-5 h-5 transition-transform group-hover:scale-110 group-active:scale-90`} />
+                <AppIconBadge appId={app.id} size="sm" showGlow={isFocused} />
 
                 {/* Running indicator dot */}
                 {isRunning && (
                   <span
-                    className={`absolute bottom-1 w-1 h-1 rounded-full transition-all ${
-                      isFocused ? 'w-2 bg-[var(--accent-primary)]' : 'bg-[var(--text-muted)]'
+                    className={`absolute bottom-0.5 rounded-full transition-all ${
+                      isFocused ? 'w-2.5 h-1 bg-white shadow-sm' : 'w-1 h-1 bg-white/60'
                     }`}
                   />
                 )}
