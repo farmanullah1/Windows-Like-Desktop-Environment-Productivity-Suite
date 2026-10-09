@@ -74,7 +74,9 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   });
 
   const [accentColor, setAccentColorState] = useState<string>(() => {
-    return localStorage.getItem('myos_accent_color') || '#38bdf8';
+    const saved = localStorage.getItem('myos_accent_color');
+    if (saved && saved !== '#38bdf8') return saved;
+    return '#E06C38';
   });
 
   const [motionProfile, setMotionProfileState] = useState<MotionProfile>(() => {
@@ -141,6 +143,14 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         '--accent-glow',
         `${accentColor}55`
       );
+      document.documentElement.style.setProperty(
+        '--accent-subtle',
+        `${accentColor}26`
+      );
+      if (accentColor.toLowerCase() === '#e06c38') {
+        document.documentElement.style.setProperty('--accent-hover', '#C85728');
+        document.documentElement.style.setProperty('--accent-active', '#F07D49');
+      }
       localStorage.setItem('myos_accent_color', accentColor);
     }
   }, [accentColor]);

@@ -41,7 +41,7 @@ export const LockScreen: React.FC = () => {
   return (
     <div
       style={{ zIndex: 9999 }}
-      className="fixed inset-0 z-[var(--z-lockscreen)] select-none overflow-hidden flex flex-col items-center justify-between p-8 text-white animate-fadeIn"
+      className="fixed inset-0 z-[var(--z-lockscreen)] select-none overflow-y-auto min-h-screen flex flex-col items-center justify-between p-6 sm:p-8 text-white"
     >
       {/* Blurred Wallpaper Background with Dark Tint */}
       <div
@@ -51,17 +51,17 @@ export const LockScreen: React.FC = () => {
       <div className="absolute inset-0 bg-black/60 backdrop-blur-2xl pointer-events-none" />
 
       {/* Top Header: Clock & Date */}
-      <div className="relative z-10 flex flex-col items-center text-center mt-10">
-        <h1 className="text-7xl font-extralight tracking-tight font-sans drop-shadow-md">
+      <div className="relative z-10 flex flex-col items-center text-center mt-6 sm:mt-10">
+        <h1 className="text-6xl sm:text-7xl font-extralight tracking-tight font-sans drop-shadow-md">
           {time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
         </h1>
-        <p className="text-lg font-medium text-white/80 mt-2 drop-shadow-sm">
+        <p className="text-base sm:text-lg font-medium text-white/80 mt-2 drop-shadow-sm">
           {time.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' })}
         </p>
       </div>
 
       {/* Center: User Profile & PIN Unlock */}
-      <div className="relative z-10 flex flex-col items-center w-full max-w-xs">
+      <div className="relative z-10 flex flex-col items-center w-full max-w-xs my-auto py-6">
         {/* User Avatar */}
         <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 p-1 shadow-2xl mb-3 flex items-center justify-center">
           <div className="w-full h-full rounded-full bg-slate-900 flex items-center justify-center">

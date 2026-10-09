@@ -87,15 +87,15 @@ export const DesktopWidgets: React.FC = () => {
           <div
             key={note.id}
             style={{ left: `${note.x}px`, top: `${note.y}px` }}
-            className={`absolute w-52 pointer-events-auto p-3 rounded-xl border shadow-xl backdrop-blur-md transition-shadow hover:shadow-2xl flex flex-col group ${colorClass}`}
+            className={`absolute w-56 pointer-events-auto p-3.5 rounded-2xl border shadow-xl backdrop-blur-md transition-shadow hover:shadow-2xl flex flex-col gap-2 group ${colorClass}`}
           >
-            <div className="flex items-center justify-between pb-1.5 border-b border-black/10 mb-2">
-              <div className="flex items-center gap-1">
+            <div className="flex items-center justify-between pb-1.5 border-b border-black/10">
+              <div className="flex items-center gap-1.5">
                 {(['yellow', 'teal', 'coral', 'violet'] as const).map((c) => (
                   <button
                     key={c}
                     onClick={() => updateStickyNote(note.id, note.text, c)}
-                    className={`w-3 h-3 rounded-full border border-black/20 ${
+                    className={`w-3.5 h-3.5 rounded-full border border-black/20 cursor-pointer ${
                       c === 'yellow'
                         ? 'bg-amber-300'
                         : c === 'teal'
@@ -109,16 +109,16 @@ export const DesktopWidgets: React.FC = () => {
               </div>
               <button
                 onClick={() => deleteStickyNote(note.id)}
-                className="opacity-0 group-hover:opacity-100 p-0.5 hover:bg-black/10 rounded transition-opacity"
+                className="opacity-0 group-hover:opacity-100 p-0.5 hover:bg-black/10 rounded transition-opacity cursor-pointer"
                 title="Delete note"
               >
-                <Trash2 className="w-3 h-3 opacity-70" />
+                <Trash2 className="w-3.5 h-3.5 opacity-70 hover:opacity-100" />
               </button>
             </div>
             <textarea
               value={note.text}
               onChange={(e) => updateStickyNote(note.id, e.target.value)}
-              className="w-full bg-transparent resize-none text-xs leading-relaxed focus:outline-none min-h-[80px]"
+              className="w-full bg-transparent resize-none text-xs leading-relaxed focus:outline-none min-h-[85px]"
               placeholder="Write a sticky note..."
             />
           </div>
@@ -126,16 +126,13 @@ export const DesktopWidgets: React.FC = () => {
       })}
 
       {/* Right-Hand Desktop Sidebar Widgets */}
-      <div
-        className="absolute right-5 top-14 w-72 flex flex-col gap-3 pointer-events-auto"
-        style={{ position: 'absolute', right: '1.25rem', top: '3.5rem', width: '18rem' }}
-      >
+      <div className="absolute right-5 top-16 w-72 flex flex-col gap-3.5 pointer-events-auto">
         {/* Weather Widget */}
-        <div className="p-3.5 rounded-2xl bg-[var(--surface-translucent)] border border-[var(--border-subtle)] backdrop-blur-xl shadow-xl text-[var(--text-primary)] hover:border-[var(--accent-primary)]/40 transition-all">
-          <div className="flex items-center justify-between mb-2">
+        <div className="p-4 rounded-2xl bg-[var(--surface-translucent)] border border-[var(--border-subtle)] backdrop-blur-2xl shadow-xl text-[var(--text-primary)] hover:border-[var(--accent-primary)]/40 transition-all flex flex-col gap-2">
+          <div className="flex items-center justify-between">
             <button
               onClick={cycleCity}
-              className="flex items-center gap-1 text-xs font-semibold hover:text-[var(--accent-primary)] transition-colors group"
+              className="flex items-center gap-1 text-xs font-semibold hover:text-[var(--accent-primary)] transition-colors group cursor-pointer"
             >
               <span>{currentCity.name}</span>
               <ChevronRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />

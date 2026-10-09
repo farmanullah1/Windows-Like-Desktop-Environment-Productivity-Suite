@@ -139,7 +139,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
     <div
       role="region"
       aria-label="Application Login Screen"
-      className="fixed inset-0 z-[99999] flex flex-col items-center justify-center select-none overflow-hidden text-white"
+      className="fixed inset-0 z-[99999] flex flex-col items-center justify-start md:justify-center select-none overflow-y-auto min-h-screen py-10 px-4 text-white"
       onKeyDown={handleKeyDown}
       onKeyUp={handleKeyUp}
     >
@@ -190,7 +190,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
       />
 
       {/* Center Interface Area with AnimatePresence */}
-      <div className="relative z-10 w-full px-4 flex flex-col items-center justify-center">
+      <div className="relative z-10 w-full max-w-[460px] my-auto py-4 flex flex-col items-center justify-center">
         <AnimatePresence mode="wait">
           {isSignup ? (
             <motion.div
@@ -199,7 +199,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.94, y: -20 }}
               transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="w-full max-w-[460px]"
+              className="w-full"
             >
               <SignupScreen
                 onSuccess={(user) => onLoginSuccess(user)}
@@ -265,14 +265,16 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
               )}
 
               {/* Login Form */}
-              <form onSubmit={handleLogin} className="space-y-4">
+              <form onSubmit={handleLogin} className="flex flex-col gap-4">
                 {/* Email Field */}
                 <div>
                   <label className="block text-[11px] font-medium text-zinc-300 mb-1.5">
                     Email or Workstation ID
                   </label>
-                  <div className="relative">
-                    <Mail className="w-4 h-4 absolute left-3.5 top-3.5 text-zinc-400 transition-colors pointer-events-none" />
+                  <div className="relative flex items-center">
+                    <div className="absolute left-3.5 flex items-center pointer-events-none text-zinc-400">
+                      <Mail className="w-4 h-4" />
+                    </div>
                     <input
                       type="email"
                       required
@@ -297,8 +299,10 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
                       </span>
                     )}
                   </div>
-                  <div className="relative">
-                    <Lock className="w-4 h-4 absolute left-3.5 top-3.5 text-zinc-400 transition-colors pointer-events-none" />
+                  <div className="relative flex items-center">
+                    <div className="absolute left-3.5 flex items-center pointer-events-none text-zinc-400">
+                      <Lock className="w-4 h-4" />
+                    </div>
                     <input
                       type={showPassword ? 'text' : 'password'}
                       required
@@ -312,7 +316,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3.5 top-3.5 text-zinc-400 hover:text-white p-0.5 rounded-lg transition-colors cursor-pointer"
+                      className="absolute right-3.5 flex items-center justify-center text-zinc-400 hover:text-white p-1 rounded-lg transition-colors cursor-pointer"
                       title={showPassword ? 'Hide password' : 'Show password'}
                     >
                       {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}

@@ -210,17 +210,17 @@ export const WindowFrame: React.FC<{ window: WindowState }> = ({ window: win }) 
         }`}
       >
         {/* App Title & Icon */}
-        <div className="flex items-center gap-2 truncate flex-1 mr-2">
+        <div className="flex items-center gap-2 truncate flex-1 min-w-0 mr-2">
           <IconComponent className="w-4 h-4 text-[var(--accent-primary)] flex-shrink-0" />
           <span className="text-xs font-semibold truncate">{win.title}</span>
         </div>
 
         {/* Window Control Buttons */}
-        <div className="flex items-center gap-1 -mr-1">
+        <div className="flex items-center gap-1 -mr-1 flex-shrink-0">
           {/* Minimize Button */}
           <button
             onClick={() => minimizeWindow(win.id)}
-            className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-[var(--border-medium)] text-[var(--text-secondary)] hover:text-white transition-colors"
+            className="w-8 h-7 flex items-center justify-center rounded-lg hover:bg-[var(--border-medium)] text-[var(--text-secondary)] hover:text-white transition-all cursor-pointer"
             title="Minimize"
           >
             <Minus className="w-3.5 h-3.5" />
@@ -242,7 +242,7 @@ export const WindowFrame: React.FC<{ window: WindowState }> = ({ window: win }) 
                 if (win.isMaximized || win.snapState !== 'none') restoreWindow(win.id);
                 else maximizeWindow(win.id);
               }}
-              className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-[var(--border-medium)] text-[var(--text-secondary)] hover:text-white transition-colors"
+              className="w-8 h-7 flex items-center justify-center rounded-lg hover:bg-[var(--border-medium)] text-[var(--text-secondary)] hover:text-white transition-all cursor-pointer"
               title={win.isMaximized ? 'Restore' : 'Maximize'}
             >
               {win.isMaximized ? <Copy className="w-3 h-3" /> : <Square className="w-3.5 h-3.5" />}
@@ -303,7 +303,7 @@ export const WindowFrame: React.FC<{ window: WindowState }> = ({ window: win }) 
           {/* Close Button */}
           <button
             onClick={() => closeWindow(win.id)}
-            className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-red-500 text-[var(--text-secondary)] hover:text-white transition-colors"
+            className="w-8 h-7 flex items-center justify-center rounded-lg hover:bg-rose-600 active:bg-rose-700 text-[var(--text-secondary)] hover:text-white transition-all cursor-pointer"
             title="Close"
           >
             <X className="w-3.5 h-3.5" />

@@ -17,38 +17,38 @@
   --gradient-selection: linear-gradient(90deg, rgba(66, 103, 213, 0.3) 0%, rgba(139, 92, 246, 0.3) 100%);
 }
 
-/* 1. Midnight Aurora (DEFAULT) / Dark */
+/* 1. Midnight Aurora (DEFAULT) / Dark - Terracotta & Charcoal Palette */
 [data-theme="midnight-aurora"],
 [data-theme="dark"],
 [data-theme="aurora"] {
-  --bg-desktop: #07090e;
-  --surface-base: rgba(13, 17, 26, 0.88);
-  --surface-card: rgba(18, 24, 38, 0.94);
-  --surface-elevated: #161e30;
-  --surface-translucent: rgba(11, 15, 24, 0.8);
-  --surface-acrylic: rgba(14, 20, 32, 0.85);
-  --surface-taskbar: rgba(9, 13, 22, 0.92);
-  --surface-dock: rgba(14, 20, 32, 0.85);
-  --surface-menu: rgba(16, 22, 36, 0.98);
-  --surface-input: #0b0f19;
+  --bg-desktop: #14171D;
+  --surface-base: #14171D;
+  --surface-card: #1E222A;
+  --surface-elevated: #1E222A;
+  --surface-translucent: rgba(30, 34, 42, 0.88);
+  --surface-acrylic: rgba(30, 34, 42, 0.92);
+  --surface-taskbar: rgba(20, 23, 29, 0.94);
+  --surface-dock: rgba(20, 23, 29, 0.92);
+  --surface-menu: #1E222A;
+  --surface-input: #14171D;
 
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-medium: rgba(255, 255, 255, 0.15);
-  --border-strong: rgba(255, 255, 255, 0.25);
-  --border-focus: #38bdf8;
+  --border-subtle: #2D333F;
+  --border-medium: #2D333F;
+  --border-strong: #3D4554;
+  --border-focus: #E06C38;
 
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --text-disabled: #475569;
-  --text-inverse: #020617;
+  --text-primary: #ECEFF4;
+  --text-secondary: #8F96A3;
+  --text-muted: #687182;
+  --text-disabled: #4C566A;
+  --text-inverse: #14171D;
 
-  --accent-primary: #38bdf8;
-  --accent-secondary: #818cf8;
-  --accent-hover: #0284c7;
-  --accent-active: #0369a1;
-  --accent-glow: rgba(56, 189, 248, 0.45);
-  --accent-subtle: rgba(56, 189, 248, 0.12);
+  --accent-primary: #E06C38;
+  --accent-secondary: #F07D49;
+  --accent-hover: #C85728;
+  --accent-active: #F07D49;
+  --accent-glow: rgba(224, 108, 56, 0.35);
+  --accent-subtle: rgba(224, 108, 56, 0.15);
 }
 
 /* 2. Ocean Glass / Ocean */

@@ -96,9 +96,9 @@ export const QuickSettings: React.FC = () => {
       </div>
 
       {/* Sliders Area */}
-      <div className="space-y-3 p-3 rounded-xl bg-[var(--surface-card)] border border-[var(--border-subtle)]">
+      <div className="flex flex-col gap-3 p-3.5 rounded-2xl bg-[var(--surface-card)] border border-[var(--border-subtle)]">
         {/* Volume Slider */}
-        <div className="space-y-1">
+        <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between text-xs">
             <span className="flex items-center gap-1.5 font-medium">
               <Volume2 className="w-3.5 h-3.5 text-[var(--text-muted)]" />

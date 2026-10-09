@@ -4,35 +4,42 @@
    ============================================================================== */
 
 :root {
-  /* Surface Hierarchies */
-  --bg-desktop: #0c1017;
-  --surface-base: rgba(18, 24, 38, 0.78);
-  --surface-card: rgba(26, 35, 54, 0.86);
-  --surface-elevated: rgba(33, 45, 70, 0.94);
-  --surface-translucent: rgba(20, 28, 45, 0.68);
-  --surface-acrylic: rgba(15, 22, 36, 0.75);
-  --surface-taskbar: rgba(13, 17, 23, 0.82);
-  --surface-dock: rgba(18, 24, 38, 0.72);
-  --surface-menu: rgba(22, 30, 48, 0.92);
-  --surface-tooltip: rgba(10, 14, 22, 0.95);
-  --surface-input: rgba(12, 16, 26, 0.7);
+  /* Surface Hierarchies - Grounded Executive Charcoal Slate (#14171D) & Off-Black Slate (#1E222A) */
+  --bg-desktop: #14171D;
+  --surface-base: #14171D;
+  --surface-card: #1E222A;
+  --surface-elevated: #1E222A;
+  --surface-translucent: rgba(30, 34, 42, 0.88);
+  --surface-acrylic: rgba(30, 34, 42, 0.92);
+  --surface-taskbar: rgba(20, 23, 29, 0.94);
+  --surface-dock: rgba(20, 23, 29, 0.92);
+  --surface-menu: #1E222A;
+  --surface-tooltip: #1E222A;
+  --surface-input: #14171D;
 
-  /* Borders & Hairlines */
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-medium: rgba(255, 255, 255, 0.14);
-  --border-strong: rgba(255, 255, 255, 0.22);
-  --border-focus: #0078d4;
-  --border-glass-highlight: rgba(255, 255, 255, 0.18);
+  /* Surface Compatibility Aliases for App Components */
+  --bg-surface: var(--surface-base);
+  --bg-surface-elevated: var(--surface-elevated);
+  --color-accent: var(--accent-primary);
+  --bg-hover: rgba(45, 51, 63, 0.6);
+  --bg-active: var(--accent-subtle);
 
-  /* Typography */
+  /* Borders & Dividers - Subtle Steel (#2D333F) crisp 1px solid lines */
+  --border-subtle: #2D333F;
+  --border-medium: #2D333F;
+  --border-strong: #3D4554;
+  --border-focus: #E06C38;
+  --border-glass-highlight: rgba(255, 255, 255, 0.08);
+
+  /* Typography - Cool White (#ECEFF4) & Muted Slate (#8F96A3) */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Ubuntu", "Helvetica Neue", sans-serif;
   --font-mono: 'JetBrains Mono', "Cascadia Code", "Fira Code", Consolas, monospace;
   
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --text-disabled: #475569;
-  --text-inverse: #0f172a;
+  --text-primary: #ECEFF4;
+  --text-secondary: #8F96A3;
+  --text-muted: #687182;
+  --text-disabled: #4C566A;
+  --text-inverse: #14171D;
 
   /* Font Sizing */
   --text-xs: 0.75rem;    /* 12px */
@@ -51,23 +58,23 @@
   --font-semibold: 600;
   --font-bold: 700;
 
-  /* Brand, Accents & Glows */
-  --accent-primary: #0078d4;
-  --accent-secondary: #3b82f6;
-  --accent-hover: #1d8cf8;
-  --accent-active: #0066b3;
-  --accent-glow: rgba(0, 120, 212, 0.35);
-  --accent-subtle: rgba(0, 120, 212, 0.15);
+  /* Brand, Accents & Glows - Deep Terracotta (#E06C38), Hover (#C85728), Active (#F07D49) */
+  --accent-primary: #E06C38;
+  --accent-secondary: #F07D49;
+  --accent-hover: #C85728;
+  --accent-active: #F07D49;
+  --accent-glow: rgba(224, 108, 56, 0.35);
+  --accent-subtle: rgba(224, 108, 56, 0.15);
 
-  /* Status Tokens */
-  --status-success: #10b981;
-  --status-success-bg: rgba(16, 185, 129, 0.15);
-  --status-warning: #f59e0b;
-  --status-warning-bg: rgba(245, 158, 11, 0.15);
-  --status-error: #ef4444;
-  --status-error-bg: rgba(239, 68, 68, 0.15);
-  --status-info: #06b6d4;
-  --status-info-bg: rgba(6, 182, 212, 0.15);
+  /* Semantic State Tokens - Forest Mint (#2D9C5E), Amber (#D9822B), Crimson (#E05252) */
+  --status-success: #2D9C5E;
+  --status-success-bg: rgba(45, 156, 94, 0.15);
+  --status-warning: #D9822B;
+  --status-warning-bg: rgba(217, 130, 43, 0.15);
+  --status-error: #E05252;
+  --status-error-bg: rgba(224, 82, 82, 0.15);
+  --status-info: #E06C38;
+  --status-info-bg: rgba(224, 108, 56, 0.15);
 
   /* Geometry & Radii */
   --radius-xs: 4px;

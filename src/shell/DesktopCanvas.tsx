@@ -125,7 +125,7 @@ export const DesktopCanvas: React.FC = () => {
       </div>
 
       {/* Desktop Icons Column with 3D Squircles */}
-      <div className="p-4 pt-14 flex flex-col gap-3 w-28">
+      <div className="p-4 pt-16 flex flex-col gap-3.5 w-28">
         {desktopIcons.map((item) => {
           return (
             <motion.div
@@ -140,7 +140,7 @@ export const DesktopCanvas: React.FC = () => {
               }}
               className="flex flex-col items-center p-2 rounded-2xl hover:bg-white/15 hover:backdrop-blur-md cursor-pointer group transition-colors text-center"
             >
-              <AppIconBadge appId={item.appId} size="lg" className="mb-1" />
+              <AppIconBadge appId={item.appId} size="lg" className="mb-1.5" />
               <span className="text-[11px] font-medium text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)] line-clamp-2 px-1 rounded">
                 {item.title}
               </span>
@@ -162,7 +162,7 @@ export const DesktopCanvas: React.FC = () => {
             transition={{ duration: 0.15, ease: 'easeOut' }}
             onClick={(e) => e.stopPropagation()}
             style={{ top: contextMenu.y, left: contextMenu.x }}
-            className="fixed w-56 p-1.5 rounded-2xl bg-slate-900/90 border border-white/20 shadow-2xl backdrop-blur-2xl z-[var(--z-context-menu)] text-xs divide-y divide-white/10 text-white"
+            className="fixed w-56 p-2 rounded-2xl bg-slate-900/95 border border-white/20 shadow-2xl backdrop-blur-3xl z-[var(--z-context-menu)] text-xs divide-y divide-white/10 text-white flex flex-col gap-1"
           >
             <div className="py-1">
               <button

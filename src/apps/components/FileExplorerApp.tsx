@@ -256,14 +256,14 @@ export const FileExplorerApp: React.FC<{ windowId: string }> = () => {
         </button>
 
         {/* Breadcrumb address bar */}
-        <div className="flex-1 flex items-center gap-1 px-3 py-1 bg-[var(--surface-input)] border border-[var(--border-subtle)] rounded-lg text-xs overflow-x-auto">
+        <div className="flex-1 flex items-center gap-1 px-3 py-1 bg-[var(--surface-input)] border border-[var(--border-subtle)] rounded-lg text-xs overflow-x-auto min-w-0 no-scrollbar">
           <HardDrive className="w-3.5 h-3.5 text-blue-400 flex-shrink-0" />
           {getBreadcrumbs().map((crumb, idx) => (
             <React.Fragment key={crumb.name + idx}>
               {idx > 0 && <ChevronRight className="w-3 h-3 text-[var(--text-muted)] flex-shrink-0" />}
               <button
                 onClick={() => navigateTo(crumb.id)}
-                className="hover:text-[var(--accent-primary)] font-medium truncate"
+                className="hover:text-[var(--accent-primary)] font-medium truncate cursor-pointer"
               >
                 {crumb.name}
               </button>
@@ -272,7 +272,7 @@ export const FileExplorerApp: React.FC<{ windowId: string }> = () => {
         </div>
 
         {/* Search */}
-        <div className="relative w-48">
+        <div className="relative w-40 sm:w-48 flex-shrink-0">
           <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
           <input
             type="text"
@@ -286,7 +286,7 @@ export const FileExplorerApp: React.FC<{ windowId: string }> = () => {
         {/* Actions */}
         <button
           onClick={handleCreateFolder}
-          className="flex items-center gap-1 px-2.5 py-1 bg-[var(--surface-card)] hover:bg-[var(--border-medium)] border border-[var(--border-subtle)] rounded-lg text-xs font-medium transition-colors"
+          className="flex items-center gap-1 px-2.5 py-1 bg-[var(--surface-card)] hover:bg-[var(--border-medium)] border border-[var(--border-subtle)] rounded-lg text-xs font-medium transition-colors flex-shrink-0 cursor-pointer"
           title="New Folder"
         >
           <Plus className="w-3.5 h-3.5 text-amber-400" />
@@ -294,7 +294,7 @@ export const FileExplorerApp: React.FC<{ windowId: string }> = () => {
         </button>
         <button
           onClick={handleCreateFile}
-          className="flex items-center gap-1 px-2.5 py-1 bg-[var(--surface-card)] hover:bg-[var(--border-medium)] border border-[var(--border-subtle)] rounded-lg text-xs font-medium transition-colors"
+          className="flex items-center gap-1 px-2.5 py-1 bg-[var(--surface-card)] hover:bg-[var(--border-medium)] border border-[var(--border-subtle)] rounded-lg text-xs font-medium transition-colors flex-shrink-0 cursor-pointer"
           title="New File"
         >
           <Plus className="w-3.5 h-3.5 text-blue-400" />

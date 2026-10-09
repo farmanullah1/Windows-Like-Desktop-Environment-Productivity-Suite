@@ -93,26 +93,26 @@ export const Taskbar: React.FC = () => {
     <div
       className={`fixed bottom-0 left-0 right-0 z-[var(--z-taskbar)] flex items-center justify-between select-none ${
         isHybrid
-          ? 'pb-2 px-3'
+          ? 'pb-2.5 px-3'
           : isMac
           ? 'pb-3 px-4 justify-center'
           : isDev
-          ? 'h-[40px] bg-[var(--surface-taskbar)] border-t border-[var(--border-subtle)] px-2 backdrop-blur-2xl'
-          : 'h-[48px] bg-[var(--surface-taskbar)] border-t border-[var(--border-subtle)] px-3 backdrop-blur-2xl'
+          ? 'h-[44px] bg-[var(--surface-taskbar)] border-t border-[var(--border-subtle)] px-2 backdrop-blur-2xl'
+          : 'h-[54px] bg-[var(--surface-taskbar)] border-t border-[var(--border-subtle)] px-3 backdrop-blur-2xl'
       }`}
     >
       {/* Floating Island Container (for Hybrid / Mac) */}
       <div
         className={`flex items-center justify-between w-full transition-all ${
           isHybrid
-            ? 'h-[50px] px-3 rounded-2xl bg-[var(--surface-taskbar)] border border-[var(--border-medium)] shadow-2xl backdrop-blur-3xl'
+            ? 'h-[52px] px-3 rounded-2xl bg-[var(--surface-taskbar)] border border-[var(--border-medium)] shadow-2xl backdrop-blur-3xl'
             : isMac
-            ? 'h-[56px] px-4 rounded-3xl bg-[var(--surface-dock)] border border-[var(--border-medium)] shadow-2xl backdrop-blur-3xl max-w-fit mx-auto'
+            ? 'h-[58px] px-4 rounded-3xl bg-[var(--surface-dock)] border border-[var(--border-medium)] shadow-2xl backdrop-blur-3xl max-w-fit mx-auto'
             : 'h-full'
         }`}
       >
         {/* Left Section: Start & Search & Workspaces */}
-        <div className="flex items-center gap-1.5 flex-shrink-0">
+        <div className="flex items-center gap-2 flex-shrink-0">
           {/* Start Launcher Button (Hybrid / Windows / Linux) */}
           <motion.button
             whileHover={{ scale: 1.08, y: -1 }}
@@ -122,14 +122,14 @@ export const Taskbar: React.FC = () => {
               soundEngine.play('click');
               setStartMenuOpen(!isStartMenuOpen);
             }}
-            className={`w-9 h-9 rounded-xl flex items-center justify-center p-1.5 transition-colors cursor-pointer ${
+            className={`w-10 h-10 rounded-xl flex items-center justify-center p-1.5 transition-colors cursor-pointer ${
               isStartMenuOpen
-                ? 'bg-blue-600/30 text-white shadow-md ring-2 ring-blue-500'
+                ? 'bg-[var(--accent-primary)]/25 text-white shadow-md ring-1 ring-[var(--accent-primary)]'
                 : 'hover:bg-white/10'
             }`}
-            title="MyOS Start Menu"
+            title="Antigravity OS Start Menu"
           >
-            <img src="/assets/branding/logo.svg" alt="MyOS Start" className="w-5 h-5 object-contain drop-shadow-[0_0_8px_rgba(66,103,213,0.8)]" />
+            <img src="/assets/branding/logo.svg" alt="Start Menu" className="w-6 h-6 object-contain" />
           </motion.button>
 
           {/* Universal Search / Command Palette */}
@@ -138,11 +138,11 @@ export const Taskbar: React.FC = () => {
               soundEngine.play('click');
               setCommandPaletteOpen(true);
             }}
-            className="flex items-center gap-2 px-2.5 py-1.5 rounded-xl hover:bg-[var(--border-medium)] text-[var(--text-secondary)] hover:text-white transition-all text-xs"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-xl hover:bg-[var(--border-medium)] text-[var(--text-secondary)] hover:text-[#ECEFF4] transition-all text-xs cursor-pointer"
             title="Universal Search & Commands (Ctrl+Space)"
           >
-            <Search className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline text-[11px] text-[var(--text-muted)]">Search...</span>
+            <Search className="w-4 h-4 text-[var(--accent-primary)]" />
+            <span className="hidden sm:inline text-[11px] text-[var(--text-secondary)] font-medium">Search...</span>
           </button>
 
           {/* Virtual Workspaces Switcher Pills */}
@@ -165,7 +165,7 @@ export const Taskbar: React.FC = () => {
         </div>
 
         {/* Center Section: App Icons */}
-        <div className="flex items-center gap-1.5 px-3">
+        <div className="flex items-center gap-1.5 px-3 min-w-0 flex-1 justify-center overflow-x-auto no-scrollbar">
           {allDisplayApps.map((app) => {
             const isRunning = runningAppIds.includes(app.id);
             const activeWin = windows.find(
@@ -176,7 +176,7 @@ export const Taskbar: React.FC = () => {
             return (
               <div
                 key={app.id}
-                className="relative"
+                className="relative flex-shrink-0"
                 onMouseEnter={() => setHoveredAppId(app.id)}
                 onMouseLeave={() => setHoveredAppId(null)}
               >
@@ -185,9 +185,9 @@ export const Taskbar: React.FC = () => {
                   whileTap={{ scale: 0.92 }}
                   transition={{ type: 'spring', stiffness: 400, damping: 20 }}
                   onClick={() => handleAppClick(app.id, app.displayName, app.icon)}
-                  className={`group relative flex flex-col items-center justify-center w-10 h-10 rounded-xl transition-colors cursor-pointer ${
+                  className={`group relative flex flex-col items-center justify-center w-12 h-12 rounded-xl transition-colors cursor-pointer ${
                     isFocused
-                      ? 'bg-white/20 shadow-md ring-1 ring-white/30'
+                      ? 'bg-white/15 shadow-md ring-1 ring-[var(--accent-primary)]/70'
                       : 'hover:bg-white/10'
                   }`}
                   title={app.displayName}
@@ -198,7 +198,7 @@ export const Taskbar: React.FC = () => {
                   {isRunning && (
                     <span
                       className={`absolute bottom-0.5 rounded-full transition-all ${
-                        isFocused ? 'w-2.5 h-1 bg-white shadow-sm' : 'w-1 h-1 bg-white/60'
+                        isFocused ? 'w-3 h-1 bg-[var(--accent-primary)] shadow-sm' : 'w-1.5 h-1.5 bg-[#8F96A3]'
                       }`}
                     />
                   )}
@@ -207,15 +207,15 @@ export const Taskbar: React.FC = () => {
                 {/* Window Thumbnail Preview Hover Card */}
                 {hoveredAppId === app.id && activeWin && (
                   <div
-                    className="absolute bottom-12 left-1/2 -translate-x-1/2 w-48 p-2 rounded-xl bg-[var(--surface-taskbar)] border border-[var(--border-medium)] shadow-2xl backdrop-blur-3xl z-50 pointer-events-auto animate-in fade-in zoom-in-95 duration-150"
+                    className="absolute bottom-16 left-1/2 -translate-x-1/2 w-56 p-3 rounded-2xl bg-[var(--surface-card)] border border-[var(--border-medium)] shadow-2xl backdrop-blur-3xl z-50 pointer-events-auto animate-in fade-in zoom-in-95 duration-150 flex flex-col gap-2.5"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleAppClick(app.id, app.displayName, app.icon);
                     }}
                   >
                     {/* Preview Header */}
-                    <div className="flex items-center justify-between pb-1.5 mb-1.5 border-b border-[var(--border-subtle)] text-[11px]">
-                      <div className="flex items-center gap-1.5 truncate pr-1">
+                    <div className="flex items-center justify-between pb-1.5 mb-0.5 border-b border-[var(--border-subtle)] text-[11px]">
+                      <div className="flex items-center gap-2 truncate pr-1">
                         <AppIconBadge appId={app.id} size="sm" />
                         <span className="font-semibold truncate text-[var(--text-primary)]">
                           {activeWin.title}
@@ -228,26 +228,26 @@ export const Taskbar: React.FC = () => {
                           closeWindow(activeWin.id);
                           setHoveredAppId(null);
                         }}
-                        className="w-4 h-4 rounded flex items-center justify-center text-[var(--text-muted)] hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                        className="w-5 h-5 rounded flex items-center justify-center text-[var(--text-secondary)] hover:text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer"
                         title="Close Window"
                       >
-                        <X className="w-3 h-3" />
+                        <X className="w-3.5 h-3.5" />
                       </button>
                     </div>
 
                     {/* Thumbnail Body Simulation */}
-                    <div className="h-20 rounded-lg bg-[var(--surface-card)] border border-[var(--border-subtle)] p-2 flex flex-col justify-between overflow-hidden relative group/thumb hover:border-[var(--accent-primary)]/50 transition-colors">
-                      <div className="flex items-center gap-1 opacity-60">
-                        <span className="w-1.5 h-1.5 rounded-full bg-red-400/80" />
-                        <span className="w-1.5 h-1.5 rounded-full bg-yellow-400/80" />
-                        <span className="w-1.5 h-1.5 rounded-full bg-green-400/80" />
+                    <div className="h-20 rounded-lg bg-[var(--surface-input)] border border-[var(--border-subtle)] p-2 flex flex-col justify-between overflow-hidden relative group/thumb hover:border-[var(--accent-primary)]/50 transition-colors">
+                      <div className="flex items-center gap-1.5 opacity-70">
+                        <span className="w-2 h-2 rounded-full bg-red-400/80" />
+                        <span className="w-2 h-2 rounded-full bg-yellow-400/80" />
+                        <span className="w-2 h-2 rounded-full bg-emerald-400/80" />
                       </div>
                       <div className="flex-1 flex items-center justify-center">
-                        <span className="text-[10px] text-[var(--text-muted)] font-mono text-center">
+                        <span className="text-[10px] text-[var(--text-secondary)] font-mono text-center">
                           {activeWin.width} × {activeWin.height}
                         </span>
                       </div>
-                      <div className="flex items-center justify-between text-[9px] text-[var(--text-muted)] pt-1 border-t border-white/5 font-mono">
+                      <div className="flex items-center justify-between text-[9px] text-[var(--text-secondary)] pt-1 border-t border-white/5 font-mono">
                         <span>{activeWin.isMinimized ? 'Minimized' : 'Active'}</span>
                         <span className="text-[var(--accent-primary)] font-semibold">Click to Switch</span>
                       </div>
@@ -260,29 +260,29 @@ export const Taskbar: React.FC = () => {
         </div>
 
         {/* Right Section: System Tray */}
-        <div className="flex items-center gap-1.5 flex-shrink-0">
+        <div className="flex items-center gap-2 flex-shrink-0">
           {/* Quick Settings trigger with Wi-Fi, Volume, Battery */}
           <button
             onClick={() => {
               soundEngine.play('click');
               setQuickSettingsOpen(!isQuickSettingsOpen);
             }}
-            className={`flex items-center gap-2 px-2.5 py-1.5 rounded-xl transition-all ${
+            className={`flex items-center gap-2.5 px-3 py-1.5 rounded-xl transition-all cursor-pointer ${
               isQuickSettingsOpen
-                ? 'bg-[var(--surface-card)] ring-1 ring-[var(--accent-primary)]'
-                : 'hover:bg-[var(--border-medium)] text-[var(--text-secondary)] hover:text-white'
+                ? 'bg-[var(--surface-card)] ring-1 ring-[var(--accent-primary)] text-[#ECEFF4]'
+                : 'hover:bg-[var(--border-medium)] text-[var(--text-secondary)] hover:text-[#ECEFF4]'
             }`}
             title="Quick Settings"
           >
-            <Wifi className={`w-3.5 h-3.5 ${metrics.isOnline ? 'text-blue-400' : 'text-slate-500 opacity-60'}`} />
+            <Wifi className={`w-4 h-4 ${metrics.isOnline ? 'text-[var(--accent-primary)]' : 'text-[#8F96A3] opacity-60'}`} />
             {soundEnabled ? (
-              <Volume2 className="w-3.5 h-3.5 text-slate-300" />
+              <Volume2 className="w-4 h-4 text-[#ECEFF4]" />
             ) : (
-              <VolumeX className="w-3.5 h-3.5 text-red-400" />
+              <VolumeX className="w-4 h-4 text-red-400" />
             )}
             <div className="flex items-center gap-1 text-[11px] font-medium">
-              <Battery className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="hidden md:inline">
+              <Battery className="w-4 h-4 text-emerald-400" />
+              <span className="hidden md:inline font-mono">
                 {metrics.hasBattery ? `${metrics.batteryLevel}%` : 'AC'}
               </span>
             </div>
@@ -299,30 +299,30 @@ export const Taskbar: React.FC = () => {
               }}
               onMouseEnter={() => setShowClockCard(true)}
               onMouseLeave={() => setShowClockCard(false)}
-              className="text-right px-2.5 py-1 rounded-xl text-xs leading-tight font-medium hidden sm:block hover:bg-[var(--border-medium)] transition-colors cursor-pointer select-none"
+              className="text-right px-3 py-1 rounded-xl text-xs leading-tight font-medium hidden sm:block hover:bg-[var(--border-medium)] transition-colors cursor-pointer select-none"
               title="Click to launch Calendar & Events"
             >
-              <span className="block font-semibold">{timeStr}</span>
-              <span className="text-[10px] text-[var(--text-muted)]">{dateStr}</span>
+              <span className="block font-semibold text-[#ECEFF4]">{timeStr}</span>
+              <span className="text-[10px] text-[var(--text-secondary)]">{dateStr}</span>
             </button>
 
             {/* Hover Tooltip Card */}
             {showClockCard && (
-              <div className="absolute bottom-12 right-0 w-64 p-3 rounded-2xl bg-[var(--surface-taskbar)] border border-[var(--border-medium)] shadow-2xl backdrop-blur-3xl z-50 animate-in fade-in zoom-in-95 duration-150 pointer-events-none">
+              <div className="absolute bottom-16 right-0 w-64 p-3 rounded-2xl bg-[var(--surface-card)] border border-[var(--border-medium)] shadow-2xl backdrop-blur-3xl z-50 animate-in fade-in zoom-in-95 duration-150 pointer-events-none">
                 <div className="flex items-center justify-between pb-2 mb-2 border-b border-[var(--border-subtle)]">
                   <div>
                     <span className="text-xs font-bold text-[var(--text-primary)] block">
                       {fullTimeStr}
                     </span>
-                    <span className="text-[10px] text-[var(--text-muted)] block">
+                    <span className="text-[10px] text-[var(--text-secondary)] block">
                       {fullDateStr}
                     </span>
                   </div>
-                  <div className="w-7 h-7 rounded-lg bg-[var(--accent-primary)]/20 text-[var(--accent-primary)] flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-lg bg-[var(--accent-primary)]/20 text-[var(--accent-primary)] flex items-center justify-center">
                     <Clock className="w-4 h-4" />
                   </div>
                 </div>
-                <div className="flex items-center justify-between text-[10px] text-[var(--text-muted)] font-mono">
+                <div className="flex items-center justify-between text-[10px] text-[var(--text-secondary)] font-mono">
                   <span>Session Active</span>
                   <span className="text-[var(--accent-primary)] font-semibold">Click for Calendar</span>
                 </div>
@@ -336,16 +336,16 @@ export const Taskbar: React.FC = () => {
               soundEngine.play('click');
               setNotificationCenterOpen(!isNotificationCenterOpen);
             }}
-            className={`relative p-2 rounded-xl transition-all ${
+            className={`relative p-2.5 rounded-xl transition-all cursor-pointer ${
               isNotificationCenterOpen
                 ? 'bg-[var(--accent-primary)] text-white'
-                : 'hover:bg-[var(--border-medium)] text-[var(--text-secondary)] hover:text-white'
+                : 'hover:bg-[var(--border-medium)] text-[var(--text-secondary)] hover:text-[#ECEFF4]'
             }`}
             title="Notification Center"
           >
-            <Bell className="w-3.5 h-3.5" />
+            <Bell className="w-4 h-4" />
             {notifications.length > 0 && (
-              <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[var(--accent-primary)] animate-pulse" />
             )}
           </button>
 

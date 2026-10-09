@@ -272,7 +272,7 @@ export const SettingsApp: React.FC<{ windowId: string }> = () => {
             {/* Desktop Shell Mode */}
             <div className="space-y-2 pt-4 border-t border-[var(--border-subtle)]">
               <label className="text-xs font-semibold uppercase text-[var(--text-muted)]">Desktop Shell Layout</label>
-              <div className="grid grid-cols-4 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                 {(['hybrid', 'windows', 'macos', 'developer'] as ShellModeType[]).map((mode) => (
                   <button
                     key={mode}

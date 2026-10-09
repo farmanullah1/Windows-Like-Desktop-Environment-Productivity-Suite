@@ -13,7 +13,7 @@ export const CreateAccountLink: React.FC<CreateAccountLinkProps> = ({
   onToggle,
 }) => {
   return (
-    <div className="absolute top-6 right-8 z-50">
+    <div className="fixed top-4 right-4 sm:top-6 sm:right-8 z-50">
       <motion.button
         whileHover={{ scale: 1.05, y: -1 }}
         whileTap={{ scale: 0.96 }}

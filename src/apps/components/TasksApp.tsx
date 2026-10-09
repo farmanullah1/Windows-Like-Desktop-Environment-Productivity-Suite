@@ -187,19 +187,19 @@ export const TasksApp: React.FC<{ windowId: string }> = () => {
         </div>
 
         {/* Quick Task Input Form */}
-        <form onSubmit={handleAddTask} className="flex items-center gap-2">
+        <form onSubmit={handleAddTask} className="flex flex-wrap sm:flex-nowrap items-center gap-2">
           <input
             type="text"
             placeholder="Add task title (e.g. 'Audit SQL Server indices')..."
             value={newTaskTitle}
             onChange={(e) => setNewTaskTitle(e.target.value)}
-            className="flex-1 px-3 py-1.5 rounded-lg bg-[var(--surface-input)] border border-[var(--border-subtle)] text-xs focus:outline-none focus:border-[var(--accent-primary)]"
+            className="flex-1 min-w-[180px] px-3 py-1.5 rounded-lg bg-[var(--surface-input)] border border-[var(--border-subtle)] text-xs focus:outline-none focus:border-[var(--accent-primary)]"
           />
 
           <select
             value={newTaskPriority}
             onChange={(e) => setNewTaskPriority(e.target.value as TaskPriority)}
-            className="px-2 py-1.5 rounded-lg bg-[var(--surface-input)] border border-[var(--border-subtle)] text-xs focus:outline-none"
+            className="px-2 py-1.5 rounded-lg bg-[var(--surface-input)] border border-[var(--border-subtle)] text-xs focus:outline-none cursor-pointer flex-shrink-0"
           >
             <option value="low">Low</option>
             <option value="medium">Medium</option>
@@ -210,7 +210,7 @@ export const TasksApp: React.FC<{ windowId: string }> = () => {
           <select
             value={newTaskProject}
             onChange={(e) => setNewTaskProject(e.target.value)}
-            className="px-2 py-1.5 rounded-lg bg-[var(--surface-input)] border border-[var(--border-subtle)] text-xs focus:outline-none"
+            className="px-2 py-1.5 rounded-lg bg-[var(--surface-input)] border border-[var(--border-subtle)] text-xs focus:outline-none cursor-pointer flex-shrink-0"
           >
             <option value="Core Platform">Core Platform</option>
             <option value="Database">Database</option>
@@ -220,7 +220,7 @@ export const TasksApp: React.FC<{ windowId: string }> = () => {
 
           <button
             type="submit"
-            className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[var(--accent-primary)] text-white font-semibold hover:bg-[var(--accent-hover)] transition-colors"
+            className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[var(--accent-primary)] text-white font-semibold hover:bg-[var(--accent-hover)] transition-colors flex-shrink-0 cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>Add</span>

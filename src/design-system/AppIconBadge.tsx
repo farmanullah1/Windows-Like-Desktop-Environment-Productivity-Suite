@@ -190,20 +190,20 @@ const APP_STYLE_MAP: Record<
 
 const SIZE_CLASSES = {
   sm: {
-    container: 'w-7 h-7 rounded-lg',
-    icon: 'w-3.5 h-3.5',
-  },
-  md: {
-    container: 'w-10 h-10 rounded-xl',
+    container: 'w-9 h-9 rounded-xl',
     icon: 'w-5 h-5',
   },
-  lg: {
+  md: {
     container: 'w-12 h-12 rounded-2xl',
     icon: 'w-6 h-6',
   },
-  xl: {
-    container: 'w-16 h-16 rounded-3xl',
+  lg: {
+    container: 'w-16 h-16 rounded-2xl',
     icon: 'w-8 h-8',
+  },
+  xl: {
+    container: 'w-20 h-20 rounded-3xl',
+    icon: 'w-10 h-10',
   },
 };
 
@@ -215,8 +215,8 @@ export const AppIconBadge: React.FC<AppIconBadgeProps> = ({
 }) => {
   const config = APP_STYLE_MAP[appId] || {
     icon: Sparkles,
-    gradient: 'from-blue-500 to-indigo-600',
-    glow: 'rgba(59, 130, 246, 0.3)',
+    gradient: 'from-amber-600 via-orange-600 to-amber-700',
+    glow: 'rgba(224, 108, 56, 0.25)',
     label: appId,
   };
 
@@ -228,23 +228,23 @@ export const AppIconBadge: React.FC<AppIconBadgeProps> = ({
       className={`relative inline-flex items-center justify-center flex-shrink-0 select-none transition-transform duration-200 group-hover:scale-105 ${sizeConfig.container} ${className}`}
       style={{
         boxShadow: showGlow
-          ? `0 4px 14px ${config.glow}, inset 0 1px 1px rgba(255, 255, 255, 0.35)`
-          : 'inset 0 1px 1px rgba(255, 255, 255, 0.25)',
+          ? '0 6px 16px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.18)'
+          : '0 2px 8px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.12)',
       }}
     >
-      {/* Background Gradient */}
+      {/* Background Gradient with Subtle Steel / Terracotta Frame */}
       <div
-        className={`absolute inset-0 bg-gradient-to-br ${config.gradient} ${sizeConfig.container} border border-white/20`}
+        className={`absolute inset-0 bg-gradient-to-br ${config.gradient} ${sizeConfig.container} border border-[#2D333F]/80`}
       />
 
-      {/* Glossy top specular reflection */}
+      {/* Subtle two-tier flat-vector specular highlight layer */}
       <div
-        className={`absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/30 to-transparent pointer-events-none rounded-t-[inherit]`}
+        className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/20 to-transparent pointer-events-none rounded-t-[inherit]"
       />
 
-      {/* Centered Icon with subtle shadow */}
+      {/* Centered Icon in Cool White (#ECEFF4) with crisp contrast */}
       <IconComponent
-        className={`relative z-10 text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)] ${sizeConfig.icon}`}
+        className={`relative z-10 text-[#ECEFF4] drop-shadow-[0_1px_2px_rgba(0,0,0,0.6)] ${sizeConfig.icon}`}
       />
     </div>
   );

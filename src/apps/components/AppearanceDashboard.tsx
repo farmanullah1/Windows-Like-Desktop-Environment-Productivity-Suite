@@ -378,7 +378,7 @@ export const AppearanceDashboard: React.FC = () => {
             <h3 className="text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-2.5">
               Curated Accent Harmonies
             </h3>
-            <div className="grid grid-cols-5 gap-2.5">
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-2.5">
               {CURATED_ACCENTS.map((item) => {
                 const isActive = accentColor.toLowerCase() === item.hex.toLowerCase();
                 return (

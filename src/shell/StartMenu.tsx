@@ -72,21 +72,24 @@ export const StartMenu: React.FC = () => {
       exit={{ opacity: 0, y: 16, scale: 0.96 }}
       transition={{ type: 'spring', damping: 25, stiffness: 350 }}
       onClick={(e) => e.stopPropagation()}
-      className="absolute bottom-16 left-1/2 -translate-x-1/2 w-[560px] max-h-[640px] rounded-3xl bg-[var(--surface-menu)] border border-[var(--border-strong)] shadow-[0_25px_60px_rgba(0,0,0,0.5)] backdrop-blur-3xl z-[var(--z-flyout-menu)] flex flex-col overflow-hidden select-none"
+      className="absolute bottom-16 left-1/2 -translate-x-1/2 w-[560px] max-w-[95vw] max-h-[640px] rounded-3xl bg-[var(--surface-menu)] border border-[var(--border-strong)] shadow-[0_25px_60px_rgba(0,0,0,0.5)] backdrop-blur-3xl z-[var(--z-flyout-menu)] flex flex-col overflow-hidden select-none"
     >
       {/* Top Search Input & Keyboard Hints */}
-      <div className="p-4 border-b border-[var(--border-subtle)] space-y-3">
-        <div className="relative">
-          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
+      <div className="p-4 border-b border-[var(--border-subtle)] flex flex-col gap-3">
+        <div className="relative flex items-center">
+          <div className="absolute left-3.5 flex items-center pointer-events-none text-[var(--text-muted)]">
+            <Search className="w-4 h-4" />
+          </div>
           <input
             type="text"
             placeholder="Type to search apps, files, settings..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             autoFocus
-            className="w-full pl-10 pr-20 py-2.5 bg-[var(--surface-input)] border border-[var(--border-subtle)] rounded-xl text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--border-focus)] focus:ring-1 focus:ring-[var(--border-focus)] shadow-inner transition-all"
+            style={{ paddingLeft: '2.75rem', paddingRight: '3.5rem' }}
+            className="w-full pl-11 pr-16 py-2.5 bg-[var(--surface-input)] border border-[var(--border-subtle)] rounded-xl text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--border-focus)] focus:ring-1 focus:ring-[var(--border-focus)] shadow-inner transition-all"
           />
-          <div className="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1">
+          <div className="absolute right-3 flex items-center">
             <kbd className="px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-[9px] font-mono text-[var(--text-muted)]">
               Esc
             </kbd>
@@ -182,23 +185,23 @@ export const StartMenu: React.FC = () => {
       </div>
 
       {/* User Footer & Power Bar */}
-      <div className="p-3 border-t border-[var(--border-subtle)] bg-[var(--surface-acrylic)] flex items-center justify-between relative">
-        <div className="flex items-center gap-2.5 px-2 py-1 rounded-xl hover:bg-[var(--surface-card)] cursor-pointer transition-colors">
-          <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-500 flex items-center justify-center text-white text-xs font-bold shadow-sm">
+      <div className="p-3 border-t border-[var(--border-subtle)] bg-[var(--surface-acrylic)] flex items-center justify-between relative gap-2">
+        <div className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-xl hover:bg-[var(--surface-card)] cursor-pointer transition-colors min-w-0 flex-1">
+          <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-500 flex items-center justify-center text-white text-xs font-bold shadow-sm flex-shrink-0">
             {userProfile?.displayName ? userProfile.displayName.charAt(0).toUpperCase() : 'A'}
           </div>
-          <div className="text-left">
-            <span className="text-xs font-semibold block leading-tight">
+          <div className="text-left min-w-0 flex-1 truncate">
+            <span className="text-xs font-semibold block leading-tight truncate">
               {userProfile?.displayName || 'MyOS Administrator'}
             </span>
-            <span className="text-[10px] text-[var(--text-muted)]">
+            <span className="text-[10px] text-[var(--text-muted)] truncate block">
               {userProfile?.email || 'Verified Workstation Profile'}
             </span>
           </div>
         </div>
 
         {/* Power Menu Trigger */}
-        <div className="relative">
+        <div className="relative flex-shrink-0">
           <button
             onClick={() => setShowPowerMenu(!showPowerMenu)}
             className="p-2 rounded-xl hover:bg-[var(--surface-card)] text-[var(--text-secondary)] hover:text-red-400 transition-colors cursor-pointer"

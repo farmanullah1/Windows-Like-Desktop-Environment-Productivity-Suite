@@ -1,32 +1,37 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100" width="100%" height="100%">
-  <defs>
-    <linearGradient id="wordmark-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#60a5fa" />
-      <stop offset="50%" stop-color="#818cf8" />
-      <stop offset="100%" stop-color="#c084fc" />
-    </linearGradient>
-    <filter id="wordmark-glow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="6" result="blur" />
-      <feComposite in="SourceGraphic" in2="blur" operator="over" />
-    </filter>
-  </defs>
-
-  <!-- Stylized Icon Mark on Left -->
-  <g transform="translate(15, 15) scale(0.14)">
-    <rect x="0" y="0" width="500" height="500" rx="120" fill="#0f172a" stroke="rgba(255,255,255,0.15)" stroke-width="8" />
-    <ellipse cx="250" cy="250" rx="200" ry="85" transform="rotate(-28 250 250)" fill="none" stroke="#38bdf8" stroke-width="20" stroke-dasharray="180 40 80 40" />
-    <path d="M120 370 L120 160 L250 250 L250 370 Z" fill="#3b82f6" />
-    <path d="M380 370 L380 160 L250 250 L250 370 Z" fill="#8b5cf6" />
-    <circle cx="250" cy="250" r="22" fill="#38bdf8" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 120" width="100%" height="100%">
+  <!-- Antigravity OS Executive Wordmark -->
+  <!-- Left: Window Frame Icon Tile -->
+  <g transform="translate(16, 16) scale(0.17)">
+    <rect x="32" y="32" width="448" height="448" rx="56" fill="#14171D" stroke="#2D333F" stroke-width="4" />
+    <rect x="56" y="56" width="400" height="400" rx="44" fill="#1E222A" stroke="#E06C38" stroke-width="12" />
+    <line x1="56" y1="120" x2="456" y2="120" stroke="#2D333F" stroke-width="4" />
+    <circle cx="96" cy="88" r="9" fill="#E06C38" />
+    <circle cx="128" cy="88" r="9" fill="#2D333F" />
+    <circle cx="160" cy="88" r="9" fill="#2D333F" />
+    <!-- L-Shapes -->
+    <path d="M 232 208 L 368 208 L 368 400 L 288 400 L 288 288 L 232 288 Z" fill="#2D333F" />
+    <rect x="200" y="304" width="136" height="48" rx="8" fill="#E06C38" />
+    <path d="M 144 400 L 144 208 L 256 152 L 256 224 L 216 244 L 216 400 Z" fill="#ECEFF4" />
+    <polygon points="256,220 224,284 288,284" fill="#1E222A" />
   </g>
 
-  <!-- Typography "MyOS" -->
-  <text x="110" y="68" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Inter, sans-serif" font-size="54" font-weight="800" letter-spacing="-1.5" fill="#f8fafc">
-    My<tspan fill="url(#wordmark-grad)" filter="url(#wordmark-glow)">OS</tspan>
+  <!-- Typography: ANTIGRAVITY OS -->
+  <text x="124" y="66"
+        font-family="'Inter', 'JetBrains Mono', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+        font-size="32"
+        font-weight="600"
+        letter-spacing="0.16em"
+        fill="#ECEFF4">
+    ANTIGRAVITY<tspan fill="#E06C38"> OS</tspan>
   </text>
-  
-  <!-- Subtitle Tag -->
-  <text x="236" y="44" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Inter, sans-serif" font-size="11" font-weight="700" letter-spacing="1.5" fill="#38bdf8" opacity="0.9">
-    PLATFORM
+
+  <!-- Subtitle Tagline: EXECUTIVE DESKTOP SUITE -->
+  <text x="126" y="92"
+        font-family="'JetBrains Mono', 'Inter', monospace"
+        font-size="11"
+        font-weight="500"
+        letter-spacing="0.28em"
+        fill="#8F96A3">
+    EXECUTIVE WORKFRAME &amp; SUITE
   </text>
 </svg>

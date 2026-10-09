@@ -60,7 +60,7 @@ export const NotificationCenter: React.FC = () => {
       </div>
 
       {/* Notifications List */}
-      <div className="flex-1 overflow-y-auto p-3 space-y-2">
+      <div className="flex-1 overflow-y-auto p-3 flex flex-col gap-2.5">
         {notifications.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-[var(--text-muted)] gap-2">
             <Bell className="w-8 h-8 opacity-30 stroke-[1.2]" />
@@ -75,7 +75,7 @@ export const NotificationCenter: React.FC = () => {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.9, height: 0, marginBottom: 0 }}
                 transition={{ duration: 0.18 }}
-                className="p-3 rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] hover:border-[var(--border-medium)] transition-all space-y-1 relative group"
+                className="p-3.5 rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] hover:border-[var(--border-medium)] transition-all flex flex-col gap-1.5 relative group"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
