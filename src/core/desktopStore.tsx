@@ -516,6 +516,104 @@ export const DesktopProvider: React.FC<{ children: React.ReactNode }> = ({ child
     soundEngine.play('click');
   }, []);
 
+  // Personalization & Wallpaper
+  const [currentWallpaper, setCurrentWallpaper] = useState<string>(() => {
+    try {
+      return localStorage.getItem('adw_current_wallpaper') || '/wallpapers/aurora.jpg';
+    } catch {
+      return '/wallpapers/aurora.jpg';
+    }
+  });
+
+  const setWallpaper = useCallback((url: string) => {
+    setCurrentWallpaper(url);
+    try {
+      localStorage.setItem('adw_current_wallpaper', url);
+    } catch {
+      // safe fallback
+    }
+  }, []);
+
+  // Session & Security
+  const [isLocked, setLocked] = useState<boolean>(false);
+
+  // Desktop Widgets
+  const [widgetsVisible, setWidgetsVisible] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem('adw_widgets_visible') !== 'false';
+    } catch {
+      return true;
+    }
+  });
+
+  const toggleWidgets = useCallback(() => {
+    setWidgetsVisible((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem('adw_widgets_visible', String(next));
+      } catch {
+        // ignore
+      }
+      return next;
+    });
+  }, []);
+
+  // Sticky Notes
+  const [stickyNotes, setStickyNotes] = useState<StickyNote[]>(() => {
+    try {
+      const saved = localStorage.getItem('adw_sticky_notes');
+      return saved
+        ? JSON.parse(saved)
+        : [
+            {
+              id: 'sn-1',
+              text: '✨ Welcome to Antigravity OS!\n- Press Ctrl+Space for Command Palette\n- Try the new Media Player & Photo Studio\n- Toggle desktop widgets anytime',
+              color: 'yellow',
+              x: 180,
+              y: 80,
+              createdAt: new Date().toISOString(),
+            },
+          ];
+    } catch {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('adw_sticky_notes', JSON.stringify(stickyNotes));
+    } catch {
+      // ignore
+    }
+  }, [stickyNotes]);
+
+  const addStickyNote = useCallback(
+    (note: { text: string; color: StickyNote['color']; x?: number; y?: number }) => {
+      const newNote: StickyNote = {
+        id: `sn-${Date.now()}`,
+        text: note.text,
+        color: note.color,
+        x: note.x ?? Math.floor(Math.random() * 200 + 160),
+        y: note.y ?? Math.floor(Math.random() * 150 + 100),
+        createdAt: new Date().toISOString(),
+      };
+      setStickyNotes((prev) => [...prev, newNote]);
+      soundEngine.play('click');
+    },
+    []
+  );
+
+  const updateStickyNote = useCallback((id: string, text: string, color?: StickyNote['color']) => {
+    setStickyNotes((prev) =>
+      prev.map((n) => (n.id === id ? { ...n, text, ...(color ? { color } : {}) } : n))
+    );
+  }, []);
+
+  const deleteStickyNote = useCallback((id: string) => {
+    setStickyNotes((prev) => prev.filter((n) => n.id !== id));
+    soundEngine.play('click');
+  }, []);
+
   const value = useMemo(
     () => ({
       workspaces,
