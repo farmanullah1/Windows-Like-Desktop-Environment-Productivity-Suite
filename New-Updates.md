@@ -3407,3 +3407,1215 @@ Begin with Phase B0 — Boot state mechanism. Do not launch the application. Do 
 Proceed with safe, documented, reversible repository work.
 
 DO NOT MAKE MISTAKES, ANTIGRAVITY.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+MASTER GOOGLE ANTIGRAVITY DEVELOPMENT PROMPT
+One-Click Bootstrap, Setup & Launch — Version 1.0
+"MyOS" Automated Install → Run → Browser Launch
+Status: Subsystem Specification (companion to v7.0 Core, v8.0 Expansion, Boot Experience v1.0)
+Product Name: MyOS
+Scope: Automated environment verification, dependency installation, environment setup, application launch, and browser auto-open in a single command
+Target Platform: Windows 10/11 (primary), macOS, Linux (secondary)
+Development Environment: Google Antigravity
+Execution Mode: USER-INITIATED — the scripts in this document ARE the authorization to install and run, but they must be transparent about what they do before doing it
+Capability Honesty: Mandatory — the script must state exactly what it will install and run
+
+0. ABSOLUTE DIRECTIVE
+DO NOT MAKE ANY MISTAKES, ANTIGRAVITY.
+This document defines a one-click bootstrap experience for the MyOS desktop/web application.
+
+The goal: a developer (or end user) clones the repository, runs one command, and gets:
+
+Environment verification (Node.js, npm, git).
+
+Dependency installation.
+
+Environment file setup (.env from .env.example if missing).
+
+Database readiness check (SQLite auto-creates; MySQL/SQL Server only if configured).
+
+Dev server started.
+
+Health check passed.
+
+Browser tab opened automatically to the running app.
+
+Clear, honest output at every step.
+
+The application is branded MyOS with an original logo, favicon, and browser tab title.
+
+Critical rules:
+
+The script must tell the user what it is about to do before doing it.
+
+The script must never install global system packages silently.
+
+The script must never modify Windows registry, services, firewall, or system settings.
+
+The script must never require administrator/elevation unless absolutely necessary — and if it does, it must say so and stop.
+
+The script must never delete user files.
+
+The script must never install database servers. It only detects and connects.
+
+The script must never run migrations against a real database without confirmation.
+
+The script must never claim success until the server actually responds.
+
+This is a developer-friendly bootstrap, not a silent system mutator.
+
+1. PRODUCT IDENTITY — "MyOS"
+1.1 Required branding
+Element	Value
+Product name	MyOS
+Browser tab title	MyOS (or MyOS — <current view>)
+Favicon	/assets/branding/favicon.ico + .svg + apple-touch-icon.png
+Boot logo	/assets/branding/logo.svg
+Boot wordmark	/assets/branding/wordmark.svg
+Splash color	Accent from theme tokens
+Meta description	"MyOS — a hybrid desktop environment, productivity suite, and developer workspace."
+document.title on boot	MyOS
+document.title after login	MyOS
+document.title per app	MyOS — Notes, MyOS — Files, etc.
+applicationName in package.json	MyOS
+Electron productName	MyOS
+Electron appId	com.myos.desktop
+1.2 Favicon set (must ship)
+text
+assets/branding/
+├── favicon.ico            (16, 32, 48 multi-res)
+├── favicon-16.png
+├── favicon-32.png
+├── favicon-48.png
+├── favicon-192.png
+├── favicon-512.png
+├── apple-touch-icon.png   (180×180)
+├── mask-icon.svg          (monochrome)
+├── logo.svg               (full color)
+├── logo-mono.svg          (high contrast)
+├── wordmark.svg
+└── splash.svg
+All must be original artwork. No Microsoft, Apple, Ubuntu, or third-party OS assets.
+
+1.3 HTML head (renderer)
+html
+<!-- apps/desktop/renderer/index.html -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#4267d5" />
+    <meta name="description" content="MyOS — a hybrid desktop environment, productivity suite, and developer workspace." />
+
+    <title>MyOS</title>
+
+    <link rel="icon" href="/assets/branding/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/svg+xml" href="/assets/branding/logo.svg" />
+    <link rel="apple-touch-icon" href="/assets/branding/apple-touch-icon.png" />
+    <link rel="mask-icon" href="/assets/branding/mask-icon.svg" color="#4267d5" />
+
+    <meta property="og:title" content="MyOS" />
+    <meta property="og:description" content="A hybrid desktop environment, productivity suite, and developer workspace." />
+    <meta property="og:image" content="/assets/branding/favicon-512.png" />
+    <meta property="og:type" content="website" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+2. THE ONE COMMAND
+The user runs one of the following, depending on platform:
+
+Platform	Command
+Windows (double-click)	setup-and-run.bat
+Windows (terminal)	npm run setup or .\setup-and-run.ps1
+macOS / Linux	./setup-and-run.sh or npm run setup
+Any platform (Node)	node scripts/setup-and-run.mjs
+All of these ultimately invoke the same cross-platform Node.js bootstrap: scripts/setup-and-run.mjs.
+
+The batch/PowerShell/shell wrappers exist only to provide a friendly double-click experience and to bootstrap Node if it is missing.
+
+3. THE BOOTSTRAP SCRIPT — scripts/setup-and-run.mjs
+This is the source of truth. It must be:
+
+Cross-platform (Windows, macOS, Linux).
+
+Written in plain Node.js (no dependencies — runs before npm install).
+
+Idempotent (safe to run repeatedly).
+
+Transparent (prints every action before performing it).
+
+Reversible (does not modify the system; only the repo and node_modules).
+
+Fail-fast (clear error + exit code on failure).
+
+Never elevating.
+
+3.1 Responsibilities
+Step	Action	Fails how
+1	Detect platform + shell	Fatal
+2	Verify Node.js ≥ 20	Fatal with install instructions
+3	Verify npm ≥ 10	Fatal with install instructions
+4	Verify git (optional, warn only)	Warning
+5	Verify package.json exists	Fatal
+6	Print banner "MyOS — Setup & Run"	—
+7	Detect if node_modules exists and is stale	—
+8	Run npm install (or npm ci if lockfile + CI)	Fatal on non-zero
+9	Copy .env.example → .env if missing	Warning on failure
+10	Print configured database engine (detect only)	—
+11	Detect free port (default 5173, fallback 5174+)	Fatal if none
+12	Start dev server as child process	Fatal on immediate exit
+13	Poll health check URL until 200 OK (timeout 60s)	Fatal on timeout
+14	Open browser to the URL	Warning on failure
+15	Stream server output to console	—
+16	Handle Ctrl+C → graceful shutdown	—
+3.2 The full script
+javascript
+#!/usr/bin/env node
+/**
+ * MyOS — One-Click Setup & Run
+ *
+ * This script:
+ *   1. Verifies Node.js and npm are installed and recent enough.
+ *   2. Installs project dependencies (npm install).
+ *   3. Creates .env from .env.example if missing.
+ *   4. Starts the MyOS dev server.
+ *   5. Waits for the server to be ready.
+ *   6. Opens the app in your default browser.
+ *
+ * It does NOT:
+ *   - Modify Windows registry, services, firewall, or system settings.
+ *   - Install system packages.
+ *   - Require administrator privileges.
+ *   - Delete user files.
+ *   - Connect to any database without your configuration.
+ *
+ * Safe to run repeatedly. Press Ctrl+C to stop.
+ */
+
+import { spawn, spawnSync } from 'node:child_process';
+import { existsSync, copyFileSync, readFileSync, writeFileSync } from 'node:fs';
+import { createServer } from 'node:net';
+import { platform, release } from 'node:os';
+import { join, resolve } from 'node:path';
+import { setTimeout as sleep } from 'node:timers/promises';
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Paths & constants
+// ─────────────────────────────────────────────────────────────────────────────
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const ROOT = resolve(__dirname, '..');
+
+const PKG_PATH = join(ROOT, 'package.json');
+const ENV_PATH = join(ROOT, '.env');
+const ENV_EXAMPLE_PATH = join(ROOT, '.env.example');
+const NODE_MODULES = join(ROOT, 'node_modules');
+
+const DEFAULT_PORT = 5173;
+const PORT_SCAN_RANGE = 20;
+const HEALTH_PATH = '/';
+const HEALTH_TIMEOUT_MS = 60_000;
+const HEALTH_POLL_MS = 500;
+
+const MIN_NODE_MAJOR = 20;
+const MIN_NPM_MAJOR = 10;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Pretty output (no external deps)
+// ─────────────────────────────────────────────────────────────────────────────
+
+const C = {
+  reset: '\x1b[0m',
+  bold: '\x1b[1m',
+  dim: '\x1b[2m',
+  red: '\x1b[31m',
+  green: '\x1b[32m',
+  yellow: '\x1b[33m',
+  blue: '\x1b[34m',
+  magenta: '\x1b[35m',
+  cyan: '\x1b[36m',
+};
+
+const supportsColor =
+  process.stdout.isTTY && process.env.NO_COLOR !== '1' && process.env.TERM !== 'dumb';
+
+const color = (c, s) => (supportsColor ? `${C[c]}${s}${C.reset}` : s);
+const bold = (s) => color('bold', s);
+const dim = (s) => color('dim', s);
+
+const log = {
+  info: (m) => console.log(`${color('cyan', 'ℹ')}  ${m}`),
+  ok: (m) => console.log(`${color('green', '✔')}  ${m}`),
+  warn: (m) => console.log(`${color('yellow', '⚠')}  ${m}`),
+  err: (m) => console.error(`${color('red', '✖')}  ${m}`),
+  step: (n, m) => console.log(`\n${color('magenta', `[${n}]`)} ${bold(m)}`),
+  raw: (m) => console.log(m),
+};
+
+function banner() {
+  const art = `
+  ███╗   ███╗██╗   ██╗ ██████╗ ███████╗
+  ████╗ ████║╚██╗ ██╔╝██╔═══██╗██╔════╝
+  ██╔████╔██║ ╚████╔╝ ██║   ██║███████╗
+  ██║╚██╔╝██║  ╚██╔╝  ██║   ██║╚════██║
+  ██║ ╚═╝ ██║   ██║   ╚██████╔╝███████║
+  ╚═╝     ╚═╝   ╚═╝    ╚═════╝ ╚══════╝
+  `;
+  console.log(color('cyan', art));
+  console.log(`  ${bold('MyOS')} ${dim('— Setup & Run')}`);
+  console.log(`  ${dim('A hybrid desktop environment, productivity suite, and developer workspace.')}\n`);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Step 1 — Environment checks
+// ─────────────────────────────────────────────────────────────────────────────
+
+function fail(msg, hint) {
+  log.err(msg);
+  if (hint) log.raw(`\n${dim('Hint:')} ${hint}\n`);
+  process.exit(1);
+}
+
+function getCmdVersion(cmd, args) {
+  const r = spawnSync(cmd, args, { encoding: 'utf8', shell: false });
+  if (r.error || r.status !== 0) return null;
+  return (r.stdout || '').trim();
+}
+
+function verifyNode() {
+  log.step(1, 'Checking environment');
+
+  const nodeVersion = process.versions.node;
+  const major = Number(nodeVersion.split('.')[0]);
+
+  if (major < MIN_NODE_MAJOR) {
+    fail(
+      `Node.js ${MIN_NODE_MAJOR}+ is required. Found v${nodeVersion}.`,
+      'Install the latest LTS from https://nodejs.org/ and re-run.'
+    );
+  }
+  log.ok(`Node.js v${nodeVersion}`);
+
+  const npmVersion = getCmdVersion('npm', ['--version']);
+  if (!npmVersion) {
+    fail(
+      'npm was not found on your PATH.',
+      'npm ships with Node.js. Reinstall Node from https://nodejs.org/ and ensure "Add to PATH" is enabled.'
+    );
+  }
+  const npmMajor = Number(npmVersion.split('.')[0]);
+  if (npmMajor < MIN_NPM_MAJOR) {
+    fail(
+      `npm ${MIN_NPM_MAJOR}+ is required. Found v${npmVersion}.`,
+      'Run: npm install -g npm@latest'
+    );
+  }
+  log.ok(`npm v${npmVersion}`);
+
+  const gitVersion = getCmdVersion('git', ['--version']);
+  if (gitVersion) {
+    log.ok(gitVersion);
+  } else {
+    log.warn('git was not found on your PATH. Some developer features will be unavailable.');
+  }
+
+  log.info(`Platform: ${platform()} ${release()}`);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Step 2 — Verify project
+// ─────────────────────────────────────────────────────────────────────────────
+
+function verifyProject() {
+  log.step(2, 'Verifying project');
+
+  if (!existsSync(PKG_PATH)) {
+    fail(
+      `package.json not found at ${PKG_PATH}.`,
+      'Run this script from the MyOS project root, or ensure the repository is complete.'
+    );
+  }
+
+  const pkg = JSON.parse(readFileSync(PKG_PATH, 'utf8'));
+  log.ok(`Project: ${pkg.name || 'MyOS'} v${pkg.version || '0.0.0'}`);
+
+  const runner = existsSync(join(ROOT, 'package-lock.json')) ? 'npm ci' : 'npm install';
+  log.info(`Will run: ${bold(runner)}`);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Step 3 — Install dependencies
+// ─────────────────────────────────────────────────────────────────────────────
+
+async function installDependencies() {
+  log.step(3, 'Installing dependencies');
+  log.info('This may take a few minutes on first run.');
+
+  const useCi = existsSync(join(ROOT, 'package-lock.json')) && process.env.CI === 'true';
+  const args = useCi ? ['ci', '--no-audit', '--no-fund'] : ['install', '--no-audit', '--no-fund'];
+
+  const code = await runForeground('npm', args, { cwd: ROOT });
+  if (code !== 0) {
+    fail(
+      'Dependency installation failed.',
+      'Check the output above. Common causes: no internet, proxy required, or a registry issue.'
+    );
+  }
+  log.ok('Dependencies installed.');
+}
+
+function runForeground(cmd, args, opts = {}) {
+  return new Promise((resolvePromise) => {
+    const isWin = platform() === 'win32';
+    const child = spawn(cmd, args, {
+      stdio: 'inherit',
+      shell: isWin, // npm is a .cmd on Windows
+      ...opts,
+    });
+    child.on('close', (code) => resolvePromise(code ?? 1));
+    child.on('error', () => resolvePromise(1));
+  });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Step 4 — Environment file
+// ─────────────────────────────────────────────────────────────────────────────
+
+function ensureEnvFile() {
+  log.step(4, 'Preparing environment file');
+
+  if (existsSync(ENV_PATH)) {
+    log.ok('.env already exists. Leaving it untouched.');
+    return;
+  }
+  if (!existsSync(ENV_EXAMPLE_PATH)) {
+    log.warn('.env.example not found. Skipping .env creation.');
+    return;
+  }
+  try {
+    copyFileSync(ENV_EXAMPLE_PATH, ENV_PATH);
+    log.ok('Created .env from .env.example');
+    log.info(dim('Edit .env to configure database and auth before production use.'));
+  } catch (e) {
+    log.warn(`Could not create .env: ${e.message}`);
+  }
+
+  // Detect configured DB engine (informational only — never connects)
+  try {
+    const env = readFileSync(ENV_PATH, 'utf8');
+    const engine = /^DB_ENGINE\s*=\s*(\S+)/m.exec(env)?.[1];
+    if (engine) log.info(`Configured database engine: ${bold(engine)}`);
+  } catch {
+    /* ignore */
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Step 5 — Find a free port
+// ─────────────────────────────────────────────────────────────────────────────
+
+function isPortFree(port) {
+  return new Promise((resolvePromise) => {
+    const server = createServer();
+    server.once('error', () => resolvePromise(false));
+    server.once('listening', () => server.close(() => resolvePromise(true)));
+    server.listen(port, '127.0.0.1');
+  });
+}
+
+async function findFreePort(start) {
+  for (let p = start; p < start + PORT_SCAN_RANGE; p++) {
+    // eslint-disable-next-line no-await-in-loop
+    if (await isPortFree(p)) return p;
+  }
+  fail(
+    `No free port found in range ${start}-${start + PORT_SCAN_RANGE - 1}.`,
+    'Close other applications using these ports, or set PORT in .env.'
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Step 6 — Start dev server
+// ─────────────────────────────────────────────────────────────────────────────
+
+function startDevServer(port) {
+  log.step(5, 'Starting MyOS dev server');
+
+  const isWin = platform() === 'win32';
+  const env = {
+    ...process.env,
+    PORT: String(port),
+    BROWSER: 'none', // we open the browser ourselves after health check
+  };
+
+  const child = spawn('npm', ['run', 'dev:web'], {
+    cwd: ROOT,
+    stdio: ['ignore', 'pipe', 'pipe'],
+    shell: isWin,
+    env,
+  });
+
+  child.stdout.on('data', (d) => process.stdout.write(dim(d.toString())));
+  child.stderr.on('data', (d) => process.stderr.write(dim(d.toString())));
+
+  child.on('exit', (code, signal) => {
+    if (signal === 'SIGINT' || signal === 'SIGTERM') return;
+    if (code !== 0) {
+      log.err(`Dev server exited unexpectedly with code ${code}.`);
+      process.exit(code ?? 1);
+    }
+  });
+
+  return child;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Step 7 — Wait for health
+// ─────────────────────────────────────────────────────────────────────────────
+
+async function waitForHealth(url, timeoutMs) {
+  log.step(6, 'Waiting for MyOS to be ready');
+  log.info(`Polling ${url}`);
+
+  const start = Date.now();
+  let lastErr = null;
+
+  while (Date.now() - start < timeoutMs) {
+    try {
+      const controller = new AbortController();
+      const t = setTimeout(() => controller.abort(), 2000);
+      const res = await fetch(url, { signal: controller.signal });
+      clearTimeout(t);
+      if (res.ok || res.status === 304) {
+        log.ok(`Ready after ${((Date.now() - start) / 1000).toFixed(1)}s`);
+        return true;
+      }
+      lastErr = `HTTP ${res.status}`;
+    } catch (e) {
+      lastErr = e.message;
+    }
+    // eslint-disable-next-line no-await-in-loop
+    await sleep(HEALTH_POLL_MS);
+  }
+
+  log.err(`Server did not become ready within ${timeoutMs / 1000}s. Last error: ${lastErr}`);
+  return false;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Step 8 — Open browser
+// ─────────────────────────────────────────────────────────────────────────────
+
+function openBrowser(url) {
+  log.step(7, 'Opening MyOS in your browser');
+  const p = platform();
+  let cmd;
+  let args;
+
+  if (p === 'win32') {
+    cmd = 'cmd';
+    args = ['/c', 'start', '""', url];
+  } else if (p === 'darwin') {
+    cmd = 'open';
+    args = [url];
+  } else {
+    cmd = 'xdg-open';
+    args = [url];
+  }
+
+  const r = spawnSync(cmd, args, { stdio: 'ignore', shell: false });
+  if (r.error || r.status !== 0) {
+    log.warn('Could not open the browser automatically.');
+    log.raw(`\n  ${bold('Open this URL manually:')} ${color('cyan', url)}\n`);
+    return;
+  }
+  log.ok(`Opened ${url}`);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Graceful shutdown
+// ─────────────────────────────────────────────────────────────────────────────
+
+function attachShutdown(child) {
+  const stop = (signal) => {
+    console.log(`\n${color('yellow', '⏹')}  Stopping MyOS (${signal})...`);
+    try {
+      child.kill('SIGINT');
+    } catch {
+      /* ignore */
+    }
+    setTimeout(() => process.exit(0), 300);
+  };
+  process.on('SIGINT', () => stop('SIGINT'));
+  process.on('SIGTERM', () => stop('SIGTERM'));
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Main
+// ─────────────────────────────────────────────────────────────────────────────
+
+async function main() {
+  console.clear?.();
+  banner();
+
+  verifyNode();
+  verifyProject();
+  await installDependencies();
+  ensureEnvFile();
+
+  const port = await findFreePort(Number(process.env.PORT) || DEFAULT_PORT);
+  const url = `http://localhost:${port}${HEALTH_PATH}`;
+
+  const server = startDevServer(port);
+  attachShutdown(server);
+
+  const ok = await waitForHealth(url, HEALTH_TIMEOUT_MS);
+  if (!ok) {
+    log.err('MyOS failed to start. Scroll up for the server log.');
+    try { server.kill('SIGINT'); } catch { /* ignore */ }
+    process.exit(1);
+  }
+
+  openBrowser(url);
+
+  console.log(`\n${color('green', '🚀')}  ${bold('MyOS is running.')}`);
+  console.log(`   ${dim('URL:')}    ${color('cyan', url)}`);
+  console.log(`   ${dim('Stop:')}   Ctrl+C\n`);
+}
+
+main().catch((e) => {
+  log.err(`Unexpected error: ${e?.message ?? e}`);
+  process.exit(1);
+});
+4. PLATFORM WRAPPERS
+4.1 Windows — setup-and-run.bat (double-click friendly)
+bat
+@echo off
+setlocal
+
+REM ── MyOS — One-Click Setup & Run ─────────────────────────────────────────
+REM  This script verifies Node.js, installs dependencies, starts the dev
+REM  server, and opens MyOS in your default browser.
+REM
+REM  It does NOT modify Windows settings, registry, services, or firewall.
+REM  It does NOT require administrator privileges.
+REM ─────────────────────────────────────────────────────────────────────────
+
+title MyOS — Setup & Run
+cd /d "%~dp0"
+
+echo.
+echo   MyOS — Setup ^& Run
+echo   ------------------
+echo.
+
+where node >nul 2>nul
+if errorlevel 1 (
+  echo   [X] Node.js was not found on your PATH.
+  echo.
+  echo   Please install Node.js 20 LTS or newer from:
+  echo       https://nodejs.org/
+  echo.
+  echo   During installation, keep "Add to PATH" enabled.
+  echo.
+  pause
+  exit /b 1
+)
+
+where npm >nul 2>nul
+if errorlevel 1 (
+  echo   [X] npm was not found on your PATH.
+  echo       npm ships with Node.js. Please reinstall Node.js from https://nodejs.org/
+  echo.
+  pause
+  exit /b 1
+)
+
+echo   [OK] Node.js and npm detected.
+echo.
+
+node "scripts\setup-and-run.mjs"
+
+if errorlevel 1 (
+  echo.
+  echo   MyOS exited with an error. See the output above.
+  pause
+  exit /b 1
+)
+
+endlocal
+4.2 PowerShell — setup-and-run.ps1
+powershell
+# ── MyOS — One-Click Setup & Run ─────────────────────────────────────────
+# Verifies Node.js, installs dependencies, starts the dev server, opens the browser.
+# Does NOT modify Windows settings, registry, services, or firewall.
+# Does NOT require administrator privileges.
+
+$ErrorActionPreference = 'Stop'
+Set-Location -Path $PSScriptRoot
+
+Write-Host ""
+Write-Host "  MyOS — Setup & Run" -ForegroundColor Cyan
+Write-Host "  ------------------" -ForegroundColor DarkGray
+Write-Host ""
+
+function Fail($msg, $hint) {
+  Write-Host "  [X] $msg" -ForegroundColor Red
+  if ($hint) { Write-Host "      $hint" -ForegroundColor DarkGray }
+  Write-Host ""
+  Read-Host "Press Enter to exit"
+  exit 1
+}
+
+if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
+  Fail "Node.js was not found on your PATH." "Install Node.js 20 LTS from https://nodejs.org/"
+}
+if (-not (Get-Command npm -ErrorAction SilentlyContinue)) {
+  Fail "npm was not found on your PATH." "npm ships with Node.js. Reinstall Node.js from https://nodejs.org/"
+}
+
+$nodeVersion = (node --version)
+Write-Host "  [OK] Node.js $nodeVersion" -ForegroundColor Green
+
+node "scripts\setup-and-run.mjs"
+exit $LASTEXITCODE
+4.3 macOS / Linux — setup-and-run.sh
+bash
+#!/usr/bin/env bash
+# ── MyOS — One-Click Setup & Run ─────────────────────────────────────────
+# Verifies Node.js, installs dependencies, starts the dev server, opens the browser.
+# Does NOT modify system settings. Does NOT require sudo.
+
+set -euo pipefail
+
+cd "$(dirname "$0")"
+
+echo
+echo "  MyOS — Setup & Run"
+echo "  ------------------"
+echo
+
+if ! command -v node >/dev/null 2>&1; then
+  echo "  [X] Node.js was not found on your PATH." >&2
+  echo "      Install Node.js 20 LTS from https://nodejs.org/" >&2
+  exit 1
+fi
+
+if ! command -v npm >/dev/null 2>&1; then
+  echo "  [X] npm was not found on your PATH." >&2
+  echo "      npm ships with Node.js. Reinstall Node.js from https://nodejs.org/" >&2
+  exit 1
+fi
+
+echo "  [OK] Node.js $(node --version)"
+
+exec node "scripts/setup-and-run.mjs"
+Make it executable:
+
+bash
+chmod +x setup-and-run.sh
+5. package.json SCRIPTS
+Add these to the root package.json:
+
+json
+{
+  "name": "myos",
+  "productName": "MyOS",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  },
+  "scripts": {
+    "setup": "node scripts/setup-and-run.mjs",
+    "setup:ci": "npm ci && node scripts/setup-and-run.mjs",
+    "dev": "npm run dev:web",
+    "dev:web": "vite --host 127.0.0.1",
+    "dev:desktop": "electron .",
+    "build": "vite build",
+    "build:desktop": "npm run build && electron-builder",
+    "preview": "vite preview --host 127.0.0.1",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "start": "npm run dev:web"
+  }
+}
+Rule: dev:web must bind to 127.0.0.1 (not 0.0.0.0) unless the user explicitly opts into LAN access. This is a security default.
+
+6. VITE CONFIGURATION — Browser Tab Title & Logo
+typescript
+// vite.config.ts
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { resolve } from 'node:path';
+
+export default defineConfig({
+  plugins: [react()],
+  root: resolve(__dirname, 'apps/desktop/renderer'),
+  publicDir: resolve(__dirname, 'assets'),
+  server: {
+    host: '127.0.0.1',
+    port: Number(process.env.PORT) || 5173,
+    strictPort: false, // allow fallback ports
+    open: false,       // we open the browser ourselves after health check
+  },
+  build: {
+    outDir: resolve(__dirname, 'dist/renderer'),
+    emptyOutDir: true,
+    sourcemap: true,
+  },
+  define: {
+    __APP_NAME__: JSON.stringify('MyOS'),
+    __APP_VERSION__: JSON.stringify(process.env.npm_package_version || '0.1.0'),
+  },
+});
+7. STARTUP LOGIC — What the User Sees
+When the user double-clicks setup-and-run.bat (or runs npm run setup), the console shows:
+
+text
+  ███╗   ███╗██╗   ██╗ ██████╗ ███████╗
+  ████╗ ████║╚██╗ ██╔╝██╔═══██╗██╔════╝
+  ██╔████╔██║ ╚████╔╝ ██║   ██║███████╗
+  ██║╚██╔╝██║  ╚██╔╝  ██║   ██║╚════██║
+  ██║ ╚═╝ ██║   ██║   ╚██████╔╝███████║
+  ╚═╝     ╚═╝   ╚═╝    ╚═════╝ ╚══════╝
+
+  MyOS — Setup & Run
+  A hybrid desktop environment, productivity suite, and developer workspace.
+
+[1] Checking environment
+✔  Node.js v20.11.1
+✔  npm v10.5.0
+✔  git version 2.44.0
+ℹ  Platform: win32 10.0.22631
+
+[2] Verifying project
+✔  Project: myos v0.1.0
+ℹ  Will run: npm install
+
+[3] Installing dependencies
+ℹ  This may take a few minutes on first run.
+... (npm output streamed) ...
+✔  Dependencies installed.
+
+[4] Preparing environment file
+✔  Created .env from .env.example
+ℹ  Configured database engine: sqlite
+
+[5] Starting MyOS dev server
+... (vite output streamed) ...
+
+[6] Waiting for MyOS to be ready
+ℹ  Polling http://localhost:5173/
+✔  Ready after 2.3s
+
+[7] Opening MyOS in your browser
+✔  Opened http://localhost:5173/
+
+🚀  MyOS is running.
+   URL:    http://localhost:5173/
+   Stop:   Ctrl+C
+Then the browser opens to http://localhost:5173/, where the MyOS boot animation plays once (per the Boot Experience spec), followed by the login screen with the Create account link in the top-right corner.
+
+8. BROWSER TAB IDENTITY
+When the browser opens, the tab must show:
+
+Element	Value
+Tab title	MyOS
+Favicon	MyOS logo (from /assets/branding/favicon.ico)
+Theme color	Accent from theme tokens (#4267d5 default)
+Loading title	MyOS — Starting… (only during boot)
+After login	MyOS
+Per-app	MyOS — Notes, MyOS — Files, etc.
+The document.title must be set from a single source of truth:
+
+typescript
+// apps/desktop/renderer/src/lib/documentTitle.ts
+export function setDocumentTitle(view?: string) {
+  document.title = view ? `MyOS — ${view}` : 'MyOS';
+}
+Called on route change and on app focus change. Never set the title directly in components.
+
+9. ERROR HANDLING IN THE SCRIPT
+The script must handle these failure modes gracefully:
+
+Failure	Behavior
+Node.js not installed	Clear message + link to nodejs.org + non-zero exit
+Node.js too old	Clear message with required version + exit
+npm not installed	Clear message + exit
+package.json missing	Clear message + exit
+npm install fails	Stream output, then clear error + hint + exit
+.env.example missing	Warning only; continue
+Port range exhausted	Clear error + hint + exit
+Dev server exits immediately	Clear error + exit
+Health check times out	Clear error + server log reference + exit
+Browser open fails	Print URL for manual open; do not fail
+User presses Ctrl+C	Graceful shutdown; no orphan processes
+Rule: Every failure must tell the user what happened, why, and what to do next.
+
+10. SAFETY & TRANSPARENCY
+10.1 What the script does
+Reads files in the repo.
+
+Runs npm install (installs into node_modules/, a repo-local folder).
+
+Creates .env from .env.example if missing.
+
+Starts a local dev server on 127.0.0.1.
+
+Opens a browser tab.
+
+10.2 What the script does NOT do
+Does not modify Windows registry, services, firewall, or system settings.
+
+Does not install system packages.
+
+Does not require administrator privileges.
+
+Does not delete user files.
+
+Does not connect to any database without user configuration.
+
+Does not run migrations.
+
+Does not transmit data externally.
+
+Does not install global npm packages.
+
+10.3 Transparency requirements
+The script prints its banner and each step before performing it.
+
+The script prints the exact command it will run (npm install, npm run dev:web).
+
+The script prints the URL it will open.
+
+The script prints how to stop (Ctrl+C).
+
+10.4 Idempotency
+Running the script again:
+
+Reuses node_modules if present (npm handles this).
+
+Does not overwrite an existing .env.
+
+Finds a free port (may pick a different one if 5173 is busy).
+
+Starts a fresh dev server.
+
+10.5 Reversibility
+To undo everything the script did:
+
+Delete node_modules/ (dependencies).
+
+Delete .env (environment file).
+
+Delete dist/ (build output).
+
+Nothing else was modified.
+
+11. FILES TO CREATE
+text
+MyOS/
+├── setup-and-run.bat                # Windows double-click wrapper
+├── setup-and-run.ps1                # Windows PowerShell wrapper
+├── setup-and-run.sh                 # macOS/Linux wrapper (chmod +x)
+├── scripts/
+│   └── setup-and-run.mjs            # cross-platform Node.js bootstrap
+├── assets/
+│   └── branding/
+│       ├── favicon.ico
+│       ├── favicon-16.png
+│       ├── favicon-32.png
+│       ├── favicon-48.png
+│       ├── favicon-192.png
+│       ├── favicon-512.png
+│       ├── apple-touch-icon.png
+│       ├── mask-icon.svg
+│       ├── logo.svg
+│       ├── logo-mono.svg
+│       ├── wordmark.svg
+│       └── splash.svg
+├── apps/desktop/renderer/
+│   ├── index.html                   # title + favicon links
+│   └── src/lib/documentTitle.ts     # single source of title
+├── vite.config.ts                   # host 127.0.0.1, open: false
+├── package.json                     # name: myos, productName: MyOS, engines
+└── docs/
+    ├── SETUP.md                     # user-facing setup doc
+    └── BOOTSTRAP.md                 # what the script does and does not do
+12. IMPLEMENTATION PHASES
+Phase S0 — Branding assets
+Create the MyOS logo (SVG + PNG set).
+
+Create the favicon set.
+
+Create the wordmark.
+
+Place in assets/branding/.
+
+Wire into index.html.
+
+Exit criteria: The browser tab shows the MyOS logo and title.
+
+Phase S1 — Bootstrap script
+Implement scripts/setup-and-run.mjs.
+
+Implement all seven steps.
+
+Implement error handling.
+
+Implement graceful shutdown.
+
+Exit criteria: Running node scripts/setup-and-run.mjs installs, starts, health-checks, and opens the browser.
+
+Phase S2 — Platform wrappers
+Implement setup-and-run.bat.
+
+Implement setup-and-run.ps1.
+
+Implement setup-and-run.sh + chmod +x.
+
+Add npm run setup to package.json.
+
+Exit criteria: Double-clicking on Windows works; ./setup-and-run.sh works on macOS/Linux.
+
+Phase S3 — Documentation
+Write docs/SETUP.md (user-facing).
+
+Write docs/BOOTSTRAP.md (what the script does/does not do).
+
+Update README.md with the one-command quick start.
+
+Exit criteria: A new user can clone, run one command, and see MyOS in their browser.
+
+Phase S4 — Verification
+Test on a clean machine (no node_modules).
+
+Test with node_modules already present.
+
+Test with .env missing.
+
+Test with .env present.
+
+Test with port 5173 busy.
+
+Test with no internet (should fail clearly).
+
+Test Ctrl+C (should shut down cleanly).
+
+Test on Windows, macOS, Linux.
+
+Exit criteria: All scenarios behave as specified.
+
+13. DEFINITION OF DONE
+npm run setup works on Windows, macOS, and Linux.
+
+setup-and-run.bat works on Windows by double-click.
+
+setup-and-run.sh works on macOS/Linux after chmod +x.
+
+The script verifies Node.js ≥ 20 and npm ≥ 10.
+
+The script installs dependencies.
+
+The script creates .env only if missing.
+
+The script finds a free port.
+
+The script starts the dev server.
+
+The script waits for a real health check before opening the browser.
+
+The script opens the browser to the correct URL.
+
+The script handles Ctrl+C gracefully.
+
+The script never elevates.
+
+The script never modifies Windows settings.
+
+The script never installs system packages.
+
+The script never deletes user files.
+
+The script prints what it is about to do before doing it.
+
+The browser tab shows MyOS as the title.
+
+The browser tab shows the MyOS logo as the favicon.
+
+The app's boot animation plays once (per the Boot Experience spec).
+
+The login screen shows with the "Create account" link in the corner.
+
+Documentation updated (docs/SETUP.md, docs/BOOTSTRAP.md, README.md).
+
+brain.md updated with a "Bootstrap" section.
+
+IMPLEMENTATION_STATUS.md updated.
+
+docs/CHANGELOG.md updated.
+
+Git diff reviewed.
+
+No secrets committed.
+
+Meaningful Git commit created.
+
+14. GIT COMMIT EXAMPLES
+text
+feat(branding): add MyOS logo, favicon, and wordmark
+feat(setup): add cross-platform bootstrap script
+feat(setup): add Windows batch and PowerShell wrappers
+feat(setup): add macOS/Linux shell wrapper
+feat(setup): add health check before browser launch
+feat(setup): add graceful shutdown on Ctrl+C
+feat(browser): set document title and favicon to MyOS
+docs(setup): document one-command quick start
+docs(bootstrap): document what the script does and does not do
+test(setup): verify idempotency and error handling
+fix(setup): prevent port collision on repeated runs
+15. FINAL OPERATING INSTRUCTIONS
+Before starting:
+
+Re-read v7.0 (Core), v8.0 (Expansion), and Boot Experience v1.0.
+
+Inspect the existing package.json, vite.config.ts, and index.html.
+
+Inspect the existing renderer entry point.
+
+Confirm the product name in package.json is MyOS.
+
+Confirm the branding assets exist or create them.
+
+Create docs/SETUP.md and docs/BOOTSTRAP.md as stubs.
+
+Update brain.md with a "Bootstrap" section marked IN_PROGRESS.
+
+Begin with Phase S0.
+
+During implementation:
+
+Never use sudo or require elevation.
+
+Never modify Windows registry, services, firewall, or system settings.
+
+Never install global npm packages.
+
+Never install system packages.
+
+Never delete user files.
+
+Never connect to a database without user configuration.
+
+Never run migrations.
+
+Always print what the script is about to do before doing it.
+
+Always print the exact command being run.
+
+Always handle Ctrl+C gracefully.
+
+Always respect PORT from .env.
+
+Always prefer 127.0.0.1 over 0.0.0.0 for the dev server.
+
+Always use open: false in Vite and open the browser yourself after health check.
+
+Always set the browser tab title and favicon to MyOS.
+
+Always update documentation and brain.md.
+
+Always commit meaningful units to Git.
+
+When blocked:
+
+State the exact blocker.
+
+Record what has been completed.
+
+Identify what requires approval.
+
+Continue with independent safe work where possible.
+
+At the end of an authorized session, provide:
+
+text
+Bootstrap Script Status
+Windows Batch Wrapper:           YES / NO
+Windows PowerShell Wrapper:      YES / NO
+macOS/Linux Shell Wrapper:       YES / NO
+Cross-Platform Node Script:      YES / NO
+Health Check Implemented:        YES / NO
+Browser Auto-Open Implemented:   YES / NO
+Graceful Shutdown Implemented:   YES / NO
+Branding Assets Present:         YES / NO
+Browser Tab Title = MyOS:        YES / NO
+Favicon = MyOS Logo:             YES / NO
+Documentation Updated:           YES / NO
+brain.md Updated:                YES / NO
+Mandatory honesty block:
+
+text
+APPLICATION EXECUTED BY ANTIGRAVITY:  NO
+DEV SERVER STARTED BY ANTIGRAVITY:    NO
+DEPENDENCIES INSTALLED BY ANTIGRAVITY: NO
+MIGRATIONS EXECUTED:                  NO
+WINDOWS MODIFICATIONS PERFORMED:      NO
+ELEVATION REQUESTED:                  NO
+PRODUCTION DEPLOYMENT PERFORMED:      NO
+The scripts in this document are for the user to run, not for Antigravity to run. Antigravity writes the scripts; the user executes them.
+
+16. FINAL MANDATORY DIRECTIVE
+ANTIGRAVITY: BUILD A ONE-CLICK MYOS LAUNCH EXPERIENCE. DO NOT MAKE MISTAKES.
+
+The user must be able to:
+
+Clone the repository.
+
+Run one command (or double-click one file).
+
+See MyOS boot in a browser tab with the correct logo and title.
+
+Land on the login screen with a Create account link in the corner.
+
+The script must be transparent, idempotent, cross-platform, non-elevating, and honest about every action it takes.
+
+The product name is MyOS. The logo is MyOS. The browser tab title is MyOS. Everywhere.
+
+Use brain.md for engineering memory. Use Git after every meaningful implementation unit. Do not launch the application, install dependencies, or modify the system during development — write the scripts, document them, and let the user run them.
+
+DO NOT MAKE MISTAKES, ANTIGRAVITY.

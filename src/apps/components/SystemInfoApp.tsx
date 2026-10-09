@@ -27,10 +27,10 @@ export const SystemInfoApp: React.FC<{ windowId: string }> = () => {
         <div className="flex-1">
           <div className="flex items-center justify-between">
             <h2 className="text-base font-bold">
-              {host?.hostname ? `${host.hostname} Workstation` : 'Desktop Environment & Productivity Suite'}
+              {host?.hostname ? `${host.hostname} — MyOS Workstation` : 'MyOS Workstation'}
             </h2>
             <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-semibold">
-              v6.2 Production
+              MyOS v1.0 Production
             </span>
           </div>
           <p className="text-xs text-[var(--accent-primary)] font-medium">

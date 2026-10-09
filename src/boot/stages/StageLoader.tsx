@@ -41,21 +41,17 @@ export const StageLoader: React.FC<StageLoaderProps> = ({ onComplete, reducedMot
   return (
     <div
       role="status"
-      aria-label="Initializing desktop workspace"
+      aria-label="Initializing MyOS workspace"
       className="fixed inset-0 z-[100000] bg-black flex flex-col items-center justify-center select-none text-white overflow-hidden"
     >
       <div className="relative flex flex-col items-center">
         {/* Subtle Static Logo in Loader Stage */}
-        <div className="w-16 h-16 mb-8 opacity-90">
-          <svg viewBox="0 0 100 100" className="w-full h-full" fill="none">
-            <polygon
-              points="50,10 88,32 88,76 50,98 12,76 12,32"
-              stroke="#6366f1"
-              strokeWidth="4"
-              fill="rgba(15, 23, 42, 0.4)"
-            />
-            <circle cx="50" cy="54" r="6" fill="#38bdf8" />
-          </svg>
+        <div className="w-16 h-16 mb-8 opacity-90 drop-shadow-[0_0_20px_rgba(66,103,213,0.5)]">
+          <img
+            src="/assets/branding/logo.svg"
+            alt="MyOS Logo"
+            className="w-full h-full object-contain"
+          />
         </div>
 
         {/* Orbiting Spinner or Static Ring */}

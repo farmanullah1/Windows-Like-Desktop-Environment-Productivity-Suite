@@ -85,7 +85,7 @@ export const SignupScreen: React.FC<SignupScreenProps> = ({
         </div>
         <h2 className="text-xl font-bold tracking-tight">Create your account</h2>
         <p className="text-xs text-zinc-400 mt-1">
-          Set up your profile for Antigravity Desktop OS
+          Set up your profile for MyOS Workspace
         </p>
       </div>
 

@@ -139,8 +139,8 @@ export const StartMenu: React.FC = () => {
             U
           </div>
           <div className="text-left">
-            <span className="text-xs font-semibold block leading-tight">Desktop Administrator</span>
-            <span className="text-[10px] text-[var(--text-muted)]">Local Account</span>
+            <span className="text-xs font-semibold block leading-tight">MyOS Administrator</span>
+            <span className="text-[10px] text-[var(--text-muted)]">Verified Workstation Profile</span>
           </div>
         </div>
 

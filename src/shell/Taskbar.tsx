@@ -113,14 +113,14 @@ export const Taskbar: React.FC = () => {
               soundEngine.play('click');
               setStartMenuOpen(!isStartMenuOpen);
             }}
-            className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all ${
+            className={`w-9 h-9 rounded-xl flex items-center justify-center p-1.5 transition-all ${
               isStartMenuOpen
-                ? 'bg-[var(--accent-primary)] text-white shadow-md scale-95'
-                : 'hover:bg-[var(--border-medium)] text-[var(--accent-primary)]'
+                ? 'bg-blue-600/30 text-white shadow-md ring-2 ring-blue-500 scale-95'
+                : 'hover:bg-white/10'
             }`}
-            title="Start Menu (Win)"
+            title="MyOS Start Menu"
           >
-            <Grid className="w-4 h-4" />
+            <img src="/assets/branding/logo.svg" alt="MyOS Start" className="w-5 h-5 object-contain drop-shadow-[0_0_8px_rgba(66,103,213,0.8)]" />
           </button>
 
           {/* Universal Search / Command Palette */}

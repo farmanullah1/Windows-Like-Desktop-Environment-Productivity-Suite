@@ -12,6 +12,7 @@ import { soundEngine } from '../design-system/soundEngine';
 import { useDesktop } from '../core/desktopStore';
 import { CreateAccountLink } from './CreateAccountLink';
 import { SignupScreen } from './SignupScreen';
+import { setDocumentTitle } from '../lib/documentTitle';
 
 interface LoginScreenProps {
   onLoginSuccess: (user?: any) => void;
@@ -28,6 +29,10 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [forgotPasswordNotice, setForgotPasswordNotice] = useState(false);
+
+  React.useEffect(() => {
+    setDocumentTitle(isSignup ? 'Create Account' : 'Sign In');
+  }, [isSignup]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     setCapsLockActive(e.getModifierState('CapsLock'));
@@ -114,22 +119,18 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
           />
         ) : (
           <div className="w-full max-w-[400px] p-8 rounded-2xl bg-zinc-900/70 border border-white/10 backdrop-blur-2xl shadow-2xl text-white select-none animate-fadeIn">
-            {/* Header with Antigravity Logo */}
+            {/* Header with MyOS Logo */}
             <div className="flex flex-col items-center text-center mb-6">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center text-white shadow-xl mb-3 p-2.5">
-                <svg viewBox="0 0 100 100" className="w-full h-full" fill="none">
-                  <polygon
-                    points="50,10 88,32 88,76 50,98 12,76 12,32"
-                    stroke="#ffffff"
-                    strokeWidth="5"
-                    fill="rgba(255,255,255,0.15)"
-                  />
-                  <circle cx="50" cy="54" r="9" fill="#ffffff" />
-                </svg>
+              <div className="w-16 h-16 rounded-2xl bg-zinc-950/80 border border-white/10 flex items-center justify-center text-white shadow-xl mb-3 p-2.5 drop-shadow-[0_0_20px_rgba(66,103,213,0.5)]">
+                <img
+                  src="/assets/branding/logo.svg"
+                  alt="MyOS Logo"
+                  className="w-full h-full object-contain"
+                />
               </div>
               <h2 className="text-xl font-bold tracking-tight">Welcome back</h2>
               <p className="text-xs text-zinc-400 mt-1">
-                Sign in to your Antigravity Desktop workspace
+                Sign in to your MyOS Workspace
               </p>
             </div>
 
@@ -276,7 +277,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
         {/* Footer */}
         <div className="mt-8 flex flex-col items-center gap-1.5 text-[11px] text-zinc-400 font-medium">
           <div className="flex items-center gap-4">
-            <span className="font-mono text-zinc-400">Antigravity OS v8.0.0</span>
+            <span className="font-mono text-zinc-400">MyOS v1.0.0</span>
             <span>•</span>
             <span className="hover:text-white cursor-pointer transition-colors">Privacy Policy</span>
             <span>•</span>

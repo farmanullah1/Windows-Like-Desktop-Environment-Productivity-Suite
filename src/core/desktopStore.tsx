@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState, useCallback, useMemo } from 'react';
 import { WindowState, Workspace, SnapZone, NotificationItem, SystemMetrics, StickyNote } from './types';
 import { soundEngine } from '../design-system/soundEngine';
+import { setDocumentTitle } from '../lib/documentTitle';
 
 export interface DesktopContextValue {
   // Workspaces
@@ -216,6 +217,16 @@ export const DesktopProvider: React.FC<{ children: React.ReactNode }> = ({ child
   useEffect(() => {
     localStorage.setItem('adw_active_workspace', activeWorkspaceId);
   }, [activeWorkspaceId]);
+
+  // Synchronize browser tab document.title with active focused window
+  useEffect(() => {
+    const focused = windows.find((w) => w.id === activeWindowId && !w.isMinimized);
+    if (focused && focused.title) {
+      setDocumentTitle(focused.title);
+    } else {
+      setDocumentTitle();
+    }
+  }, [activeWindowId, windows]);
 
   // Close overlays helper
   const closeAllOverlays = useCallback(() => {
