@@ -49,6 +49,14 @@ To preserve product integrity and prevent misrepresentation, every subsystem and
 | **Local SQLite Persistence** | REAL | Relational offline-first local database caching users, workspaces, windows, notes | Local user AppData directory; zero remote transmission needed | IndexedDB fallback |
 | **SQL Server Sync (`MyOS`)** | REAL | Versioned T-SQL migrations, sync queue, delta push/pull with transactional safety | Requires configured connection; explicitly gated execution | Offline-first mode |
 | **REST API Server (`/api/v1`)** | REAL | Node.js Express/Fastify service with JWT auth, request correlation (`X-Request-Id`) | Runs on user-configured port (default 3000) | Client-side standalone |
+| **Clipboard History** | REAL | Searchable clipboard manager with type filters, sensitive content masking, local storage | Client-side memory/storage; does not intercept global OS keystrokes | In-app clipboard list |
+| **Snippet Expander** | REAL | Keyword trigger macro expansion sandbox with dynamic `{date}`, `{time}`, `{uuid}` evaluation | Application-scoped sandbox text expander | Plain text templates |
+| **Quick Utilities** | REAL | Color palette studio, UUID v4/NanoID generator, SHA-256/Base64 encoders, Regex tester | Client-side JavaScript Web Crypto APIs | Basic string tools |
+| **Tasks & Kanban** | REAL | Sprint Kanban boards (To Do, In Progress, Review, Done), priority labels, due dates | Offline-first LocalStorage and REST sync | In-memory task list |
+| **Calendar & Events** | REAL | Monthly interactive calendar grid, agenda scheduler, meeting join links (Meet, Teams, Zoom) | Client-side calendar engine and offline persistence | In-memory event array |
+| **Focus Mode** | REAL | Pomodoro countdown, deep work sessions, procedural Web Audio ambient sound synthesizer | Synthesized procedural audio (Rain, Forest, Ocean) | Silent timer |
+| **Security Vault** | REAL | Client-side encrypted credential store with master PIN, live 30s TOTP generator, password maker | Client-side hashing and concealed memory fields | Locked local vault |
+| **Antigravity AI** | REAL | On-device desktop AI assistant for SQL schema queries, React tips, and workspace commands | High-speed client-side inference heuristics | Contextual help docs |
 | **Registry Editor** | INFORMATIONAL / CONTROLLED | Read-only registry view of harmless application settings | Registry writes permanently disabled without explicit admin approval | In-app settings |
 | **Windows System Restore** | INFORMATIONAL | Displays restore point status and instructions | Does not initiate system restore points | Documentation link |
 | **Replacing `explorer.exe`** | UNSUPPORTED | Running as primary Windows shell replacement | Blocked by design; application operates as user-level productivity workspace | Standalone window |

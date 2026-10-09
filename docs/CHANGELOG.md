@@ -5,6 +5,24 @@ All notable changes to the **Windows-Like Desktop Environment & Productivity Sui
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [8.0.0] - 2026-10-09
+
+### Added
+- **Master Expansion Pack 8.0 Productivity Suite**:
+  - **Clipboard History Manager** (`ClipboardManagerApp.tsx`): Real-time searchable clipboard history, type filters (Text, Code, URL, Color), sensitive content masking heuristics, and quick re-copying.
+  - **Snippet Expander & Template Sandbox** (`SnippetExpanderApp.tsx`): Keyword trigger macro expansion (`!addr`, `!date`, `!react`, `!uuid`), live dynamic variable evaluation (`{date}`, `{time}`, `{uuid}`, `{clipboard}`), and interactive testing sandbox.
+  - **Quick Utilities Studio** (`QuickUtilitiesApp.tsx`): Color palette generator & CSS copy, UUID v4 / NanoID generator, SHA-256 / Base64 cryptographic encoders, and live interactive Regex playground with match counts.
+  - **Tasks & Sprint Kanban Board** (`TasksApp.tsx`): Full Kanban columns (To Do, In Progress, In Review, Completed) plus List view, priority badges (Urgent, High, Medium, Low), project categorization, and Desktop Notification Center dispatch.
+  - **Calendar & Agenda Scheduler** (`CalendarApp.tsx`): Interactive monthly calendar grid, day agenda sidebar, event scheduling, and direct 1-click meeting join links (Google Meet, Teams, Zoom).
+  - **Focus Mode & Pomodoro Timer** (`FocusModeApp.tsx`): Customizable Pomodoro and Deep Work sessions, circular countdown progress ring, session stats, and Web Audio procedural ambient sound synthesizer (Rain, Forest, Waves).
+  - **Security Vault & Password Generator** (`VaultApp.tsx`): Master PIN locked credentials manager (Default `1234`), 30-second live TOTP authenticator countdown, cryptographic password generator with length/symbol toggles, and zero-knowledge local storage.
+  - **Antigravity AI Desktop Assistant** (`AiAssistantApp.tsx`): On-device desktop AI assistant with conversational interface, MS SQL Server query assistance, React architectural tips, and desktop commands.
+- **Section 2.1 Permission Schema Extension**:
+  - Extended `PermissionKey` union in `src/core/contracts.ts` with all 32 required capability keys across `clipboard.*`, `snippet.*`, `vault.*`, `task.*`, `calendar.*`, `ai.*`, and `database.*`.
+- **Expanded Application Catalog**:
+  - Registered all 8 new applications in `src/apps/registry.ts` and `server/index.js` bringing total platform applications to 24.
+  - Added customized 3D squircle iconography and distinct thematic gradients in `AppIconBadge.tsx`.
+
 ## [6.2.0] - 2026-10-09
 
 ### Added
