@@ -5627,3 +5627,1952 @@ Antigravity should not repeatedly ask the user for decisions that are already co
 * existing architectural decisions.
 
 Only genuinely high-risk or approval-dependent decisions should interrupt implementation.
+
+
+
+
+
+
+
+# MASTER GOOGLE ANTIGRAVITY DEVELOPMENT PROMPT
+
+## Hybrid Desktop Environment, Productivity Suite & Developer Workspace
+
+### Production Engineering Edition — Version 6.0
+
+**MANDATORY DIRECTIVE: DO NOT MAKE MISTAKES, ANTIGRAVITY.**
+
+Build a coherent, secure, production-oriented desktop application inspired by Windows 11, macOS, and Ubuntu Linux. Deliver real functionality, excellent usability, sophisticated animations, a consistent visual design system, reliable data handling, and maintainable architecture.
+
+Every meaningful implementation unit must be reviewed, validated within the permitted execution rules, documented, and committed to Git.
+
+**Do not launch the application, start a development server, install dependencies, run database migrations, elevate privileges, modify Windows settings, or execute system-changing scripts until I explicitly authorize the relevant action.**
+
+This document is the authoritative product and engineering specification. Read it completely before implementation. Follow its requirements, document assumptions, resolve low-risk uncertainties using the defaults below, and do not repeatedly ask what to build next.
+
+---
+
+# 1. Product Vision and Objectives
+
+## 1.1 Product vision
+
+Create a Windows desktop application that combines:
+
+* A polished desktop shell and application launcher.
+* Window management and virtual workspaces.
+* File and folder management.
+* Notes, documents, search, and productivity tools.
+* Developer utilities and workspace management.
+* System information and carefully controlled Windows integrations.
+* User accounts, secure settings, local persistence, and optional synchronization.
+* Advanced animation, visual effects, themes, and sound effects.
+* Recovery, diagnostics, accessibility, privacy, and security controls.
+
+The result should feel like a cohesive desktop environment rather than a collection of unrelated web pages.
+
+This is a desktop application running on Windows, **not a replacement operating system**. Never claim that application-simulated functionality changes the actual Windows operating system.
+
+## 1.2 Product objectives
+
+1. Make the interface visually polished, intuitive, and responsive.
+2. Make every implemented feature perform its advertised action.
+3. Provide a consistent experience across all screens and application windows.
+4. Support keyboard, mouse, touch-compatible layouts, and assistive technology where practical.
+5. Preserve user data and prevent accidental destructive operations.
+6. Keep idle resource consumption low.
+7. Provide a clear separation between UI, application logic, persistence, backend services, and native Windows integrations.
+8. Maintain a reliable engineering record through `brain.md`, implementation tracking, and Git commits.
+9. Make the project extensible without introducing unnecessary complexity.
+10. Prefer complete, tested feature slices over many unfinished features.
+
+## 1.3 Product capability classifications
+
+Every feature must be classified internally and in relevant documentation as one of the following:
+
+| Classification          | Meaning                                                                            |
+| ----------------------- | ---------------------------------------------------------------------------------- |
+| `REAL`                  | Implemented and working within the application.                                    |
+| `WINDOWS_INTEGRATED`    | Uses a real Windows API or verified operating-system capability.                   |
+| `APPLICATION_SIMULATED` | Works inside the application's own environment but does not modify Windows itself. |
+| `INFORMATIONAL`         | Displays information without performing the underlying action.                     |
+| `FUTURE`                | Planned but not implemented.                                                       |
+| `UNSUPPORTED`           | Cannot be supported under the current architecture or platform constraints.        |
+
+Never represent a simulated task manager, virtual desktop, recycle bin, lock screen, system setting, or power control as a genuine Windows capability.
+
+Do not show fake progress, fabricated system information, misleading success messages, or controls that appear functional but have no implementation.
+
+---
+
+# 2. Decision Authority Matrix
+
+Antigravity must distinguish ordinary engineering decisions from operations requiring approval.
+
+| Decision or action                                                      | Authority                  | Rule                                                                        |
+| ----------------------------------------------------------------------- | -------------------------- | --------------------------------------------------------------------------- |
+| Inspect existing files, architecture, Git history, and project status   | Autonomous                 | Read before modifying.                                                      |
+| Improve component structure and remove duplication                      | Autonomous                 | Preserve existing behavior.                                                 |
+| Select spacing, typography, layout, and animation defaults              | Autonomous                 | Follow this specification.                                                  |
+| Implement low-risk UI improvements                                      | Autonomous                 | Keep changes focused and reversible.                                        |
+| Choose a library within the approved technology stack                   | Autonomous                 | Check maintenance, security, licensing, and bundle cost first.              |
+| Create or update documentation and `brain.md`                           | Autonomous                 | Never include secrets.                                                      |
+| Run permitted static checks                                             | Autonomous                 | Only if they do not install, launch, or modify the system.                  |
+| Run safe, isolated unit tests                                           | Autonomous                 | Must satisfy the Test Execution Authorization Gate.                         |
+| Create a local Git branch                                               | Autonomous                 | Inspect repository state first.                                             |
+| Create meaningful local Git commits                                     | Authorized                 | The user explicitly requires commits after meaningful implementation units. |
+| Install packages or update lockfiles through package-manager execution  | Requires approval          | Do not execute installation commands without authorization.                 |
+| Start a development server or launch the app                            | Requires explicit approval | No exceptions.                                                              |
+| Execute E2E tests that launch the application                           | Requires explicit approval | Explain the scope before requesting approval.                               |
+| Run database migrations or seed a real database                         | Requires explicit approval | Never against production by default.                                        |
+| Modify Windows registry, services, power settings, or security settings | Requires explicit approval | Prefer read-only integration.                                               |
+| Delete, reset, or overwrite user work                                   | Requires explicit approval | Preserve uncommitted changes.                                               |
+| Access external accounts, deploy, publish, or transmit user data        | Requires explicit approval | No automatic deployment.                                                    |
+| Sign releases or publish an installer                                   | Requires explicit approval | Signing keys must remain protected.                                         |
+| Perform an irreversible or high-risk operation                          | Requires explicit approval | Provide a risk explanation and rollback plan.                               |
+
+### 2.1 Default decisions
+
+**DEFAULT DECISION:** When a decision is low-risk, reversible, and within the product vision, choose a sensible option and document it.
+
+**DEFAULT DECISION:** When multiple implementations are possible, prefer the simplest secure architecture that meets the requirement.
+
+**DEFAULT DECISION:** When a requirement is ambiguous but noncritical, use a reasonable default and record the assumption.
+
+**DEFAULT DECISION:** When an operation could lose data, weaken security, modify Windows, incur a cost, or expose private information, stop and request explicit approval.
+
+Do not use the instruction to avoid unnecessary questions as permission to perform dangerous actions.
+
+---
+
+# 3. Assumptions Register and Engineering Memory
+
+## 3.1 Required files
+
+Maintain these files at the repository root or in the appropriate documentation directory:
+
+* `brain.md`
+* `README.md`
+* `IMPLEMENTATION_STATUS.md`
+* `docs/ARCHITECTURE.md`
+* `docs/DECISIONS.md`
+* `docs/SECURITY.md`
+* `docs/TESTING.md`
+* `docs/ACCESSIBILITY.md`
+* `docs/ANIMATIONS_AND_EFFECTS.md`
+* `docs/SOUND_DESIGN.md`
+* `docs/RELEASE_PLAN.md`
+* `docs/RISK_REGISTER.md`
+* `docs/CHANGELOG.md`
+
+Create or update files incrementally. Do not overwrite valuable existing documentation without reviewing it.
+
+## 3.2 Assumptions Register
+
+Maintain a section in `brain.md` and, if needed, a more detailed `docs/DECISIONS.md`.
+
+Each assumption must contain:
+
+| Field            | Description                                  |
+| ---------------- | -------------------------------------------- |
+| ID               | Unique identifier such as `ASM-001`.         |
+| Assumption       | What is being assumed.                       |
+| Reason           | Why a default is necessary.                  |
+| Risk             | Low, Medium, High, or Critical.              |
+| Reversibility    | Easy, Moderate, or Difficult.                |
+| Decision owner   | Antigravity or User.                         |
+| Status           | Proposed, Accepted, Rejected, or Superseded. |
+| Review condition | When the assumption should be revisited.     |
+
+Do not silently convert uncertain assumptions into facts.
+
+## 3.3 `brain.md` maintenance
+
+`brain.md` is the persistent engineering memory for the project. Keep it accurate, concise, and useful.
+
+It must record:
+
+* Product vision and boundaries.
+* Current implementation phase.
+* Technology stack and architecture.
+* Directory structure.
+* Implemented, incomplete, planned, and unsupported features.
+* Current UI/UX and design-system decisions.
+* Animation and sound architecture.
+* State management and persistence decisions.
+* Authentication and authorization.
+* Database and API status.
+* Windows integration capabilities.
+* Known bugs and technical debt.
+* Security and performance findings.
+* Important constraints that must not change.
+* Assumptions and unresolved decisions.
+* Recent meaningful Git commits.
+* Last completed task and next recommended task.
+* Validation performed and its result.
+* Whether application execution has been authorized.
+
+Update `brain.md` after every meaningful implementation unit. Do not record a feature as completed merely because code was generated.
+
+Never store passwords, access tokens, private keys, database credentials, or other secrets in `brain.md`.
+
+---
+
+# 4. Technology Decision Matrix
+
+Use this matrix unless repository inspection establishes a compelling compatibility constraint.
+
+| Decision                | Default                                                               | Rationale                                                                                          | Alternatives                                                               | Reversibility |
+| ----------------------- | --------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- | ------------- |
+| Desktop shell           | Electron                                                              | Mature Windows desktop ecosystem, broad tooling, React integration, and reliable desktop packaging | Tauri                                                                      | Moderate      |
+| Frontend                | React + TypeScript                                                    | Component reuse, type safety, maintainability                                                      | Vue, other established frameworks                                          | Moderate      |
+| Styling                 | CSS Modules or organized vanilla CSS with design tokens               | Predictable styling, explicit control, reduced utility-class sprawl                                | Tailwind CSS for suitable parts                                            | Easy          |
+| Backend                 | Node.js + Fastify                                                     | Structured validation, good performance, clear API boundaries                                      | Express, NestJS                                                            | Moderate      |
+| UI state                | Zustand with local component state where appropriate                  | Simple shared state without unnecessary complexity                                                 | Redux Toolkit, Context for small scopes                                    | Easy          |
+| Server-state management | TanStack Query                                                        | Cache invalidation, loading/error states, retries, query lifecycle                                 | Equivalent established query library                                       | Moderate      |
+| Local persistence       | SQLite through a vetted native integration, with versioned migrations | Reliable local relational storage and offline operation                                            | IndexedDB for browser-only prototypes; encrypted files for narrow settings | Moderate      |
+| Remote database         | Microsoft SQL Server                                                  | Fits the intended database ecosystem                                                               | Other relational database only with approval                               | Moderate      |
+| IPC                     | Electron context-isolated IPC using narrow, validated channels        | Explicit main/renderer boundaries                                                                  | Tauri command bridge if shell changes                                      | Moderate      |
+| Native Windows bridge   | C#/.NET helper or narrowly scoped native Node integration             | Typed Windows integration and maintainable interop                                                 | PowerShell for restricted administrative tasks                             | Moderate      |
+| Python                  | Optional isolated helper for specialized processing                   | Avoids adding another runtime to ordinary UI operations                                            | Node.js or C# implementation                                               | Easy          |
+| Unit testing            | Vitest or compatible established runner                               | Fast isolated tests                                                                                | Jest                                                                       | Easy          |
+| UI component testing    | React Testing Library                                                 | Tests user-visible behavior                                                                        | Equivalent accessible component-testing library                            | Easy          |
+| E2E testing             | Playwright                                                            | Desktop/web workflow testing where authorized                                                      | Approved alternative                                                       | Moderate      |
+| Accessibility checks    | axe-based automated checks plus manual review                         | Finds common accessibility defects                                                                 | Equivalent tooling                                                         | Easy          |
+| Visual regression       | Playwright screenshots or equivalent                                  | Detects visual regressions                                                                         | Approved screenshot comparison system                                      | Moderate      |
+| Packaging               | Electron Forge or Electron Builder, selected after inspection         | Mature Windows distribution support                                                                | Approved alternative                                                       | Moderate      |
+| CI                      | GitHub Actions or existing repository CI                              | Repeatable validation                                                                              | Existing CI provider                                                       | Moderate      |
+
+**DEFAULT DECISION:** Use Electron unless the existing repository already has a functioning, justified Tauri architecture. Do not migrate an existing working shell merely because another framework is theoretically smaller.
+
+**DEFAULT DECISION:** SQL Server is the remote/shared database option; SQLite is the local-first persistence option. Do not assume a remote SQL Server is installed locally.
+
+**DEFAULT DECISION:** Python and Bash are optional supporting tools, not mandatory layers for every feature.
+
+---
+
+# 5. Hybrid Design Philosophy
+
+Create a distinctive interface inspired by three desktop environments.
+
+| Inspiration  | Influence | Features to adapt                                                                                           |
+| ------------ | --------: | ----------------------------------------------------------------------------------------------------------- |
+| Windows 11   |       40% | Start menu, taskbar, window snapping, Quick Settings, familiar system controls                              |
+| macOS        |       30% | Dock behavior, workspace overview, refined spacing, elegant transitions                                     |
+| Ubuntu/Linux |       30% | Workspace overview, application launcher, developer workflows, terminal integration, practical system tools |
+
+These percentages are design guidance, not a requirement to copy individual operating-system interfaces.
+
+Do not reproduce proprietary logos, copyrighted wallpapers, trademarked assets, or proprietary sound effects without appropriate authorization.
+
+Build a cohesive design language with original branding.
+
+## 5.1 Design principles
+
+* Familiar but original.
+* Clean and professional.
+* Strong visual hierarchy.
+* Consistent interaction patterns.
+* Restrained use of transparency and blur.
+* Subtle depth rather than excessive glow.
+* Advanced animation without constant motion.
+* Accessible color contrast.
+* Responsive layout.
+* Consistent spacing, typography, iconography, and component behavior.
+* Functional before decorative.
+
+Avoid generic AI-generated design patterns, excessive gradients, meaningless dashboard cards, unnecessary glass panels, decorative charts with fabricated data, and animation that makes routine work slower.
+
+---
+
+# 6. Feature Architecture and Product Scope
+
+Implement the product in coherent modules.
+
+## 6.1 Desktop shell
+
+Required features:
+
+* Desktop workspace.
+* Configurable wallpaper.
+* Desktop shortcuts.
+* Context menu.
+* Start menu.
+* Taskbar.
+* Application launcher.
+* Search.
+* Notification center.
+* Quick Settings.
+* System clock and date.
+* Volume and brightness indicators where supported.
+* Network and battery indicators where supported.
+* Window management.
+* Application overview.
+* Keyboard shortcuts.
+* Workspace switching.
+* Settings access.
+* Lock and session controls within the application.
+* Recovery after an application-level error.
+
+Every capability must identify whether it is application-only or integrated with Windows.
+
+## 6.2 Start menu and application launcher
+
+Implement:
+
+* Pinned applications.
+* Recommended or recently used items, with privacy controls.
+* Search.
+* Alphabetical application listing.
+* Categories.
+* Recently opened documents where authorized.
+* Pin/unpin.
+* Reordering.
+* Application details.
+* Launch error reporting.
+* Keyboard navigation.
+* Search history controls.
+* Configurable layout.
+
+Search must not silently index private directories or transmit queries to a remote service.
+
+## 6.3 Taskbar and Dock
+
+Provide a hybrid taskbar/dock with:
+
+* Running-application indicators.
+* Pinned applications.
+* Active-window indication.
+* Window preview where practical.
+* Minimize, restore, focus, and close controls.
+* Optional auto-hide.
+* Configurable alignment.
+* Adjustable icon size.
+* Multi-monitor-aware behavior where supported.
+* Workspace-aware filtering.
+* Context menus.
+* Accessible keyboard navigation.
+* Reduced animation mode.
+
+Hover effects must not obstruct clicking or keyboard focus.
+
+## 6.4 Window manager
+
+Support application-level windows with:
+
+* Move.
+* Resize.
+* Minimize.
+* Restore.
+* Maximize.
+* Close.
+* Focus and z-order.
+* Title bars.
+* Window menus.
+* Snap layouts.
+* Split-screen arrangements.
+* Edge snapping.
+* Cascading and tiling layouts.
+* Window position persistence.
+* Minimize and restore animations.
+* Keyboard-driven positioning.
+* Window boundary protection.
+* Dialog ownership.
+* Modal and nonmodal windows.
+
+A simulated window must not be described as a native Windows window unless it actually is one.
+
+### Window behavior acceptance criteria
+
+* Only one application window is the active keyboard target at a time.
+* Closing a window does not unexpectedly delete its saved data.
+* Minimized windows can be restored.
+* Focus returns to an appropriate window after closing a dialog.
+* Snap layouts respect minimum window dimensions.
+* Window state is restored safely after a restart.
+* Invalid saved geometry falls back to a safe visible position.
+* All primary operations have keyboard alternatives.
+
+## 6.5 Virtual workspaces
+
+Implement application-level workspaces with:
+
+* Create, rename, switch, and delete.
+* Workspace thumbnails.
+* Assign applications to workspaces.
+* Move windows between workspaces.
+* Per-workspace pinned applications.
+* Optional workspace wallpapers.
+* Workspace transition animations.
+* Keyboard shortcuts.
+* Restore the previous workspace after restart.
+
+Do not claim that these are actual Windows virtual desktops unless the implementation uses a verified native Windows capability.
+
+## 6.6 File Explorer
+
+Implement a safe application file manager with:
+
+* Folder creation.
+* File creation.
+* Rename.
+* Copy.
+* Move.
+* Duplicate.
+* Delete.
+* Search.
+* Sorting.
+* Filtering.
+* Grid and list views.
+* Breadcrumb navigation.
+* Recent items.
+* Favorites.
+* File details.
+* Drag-and-drop.
+* Multi-select.
+* Context menus.
+* Safe overwrite confirmation.
+* Trash/recycle behavior.
+* Undo where feasible.
+* Progress reporting for longer operations.
+* Clear permission errors.
+* Recovery after interrupted operations.
+
+### Storage boundaries
+
+Clearly distinguish:
+
+1. Application-owned storage.
+2. User-authorized filesystem locations.
+3. Read-only protected locations.
+4. Network locations.
+5. Unsupported or inaccessible locations.
+
+Use an explicit path allowlist or a user-granted access model for filesystem operations. Prevent path traversal and symlink/junction escapes where applicable.
+
+Never recursively delete a directory without an explicit, understandable confirmation.
+
+## 6.7 Notes and documents
+
+Implement:
+
+* Create, read, update, and delete.
+* Autosave with visible save status.
+* Search.
+* Tags.
+* Favorites.
+* Sorting and filtering.
+* Pinning.
+* Archive.
+* Trash and recovery.
+* Markdown support.
+* Word and character counts.
+* Last-edited information.
+* Keyboard shortcuts.
+* Import/export.
+* Conflict handling during synchronization.
+
+Autosave must use debouncing and reliable persistence, not save every keystroke through an expensive synchronous operation.
+
+## 6.8 Developer workspace
+
+Provide a practical developer-focused area with:
+
+* Project shortcuts.
+* Configurable application groups.
+* Multiple applications per workspace.
+* Terminal launcher.
+* Git status integration where safe.
+* Project directory shortcuts.
+* Environment information.
+* API request workspace or Postman shortcut.
+* Database connection configuration UI.
+* Log viewer.
+* Task list.
+* Workspace profiles.
+* Optional editor/browser/tool launch profiles.
+
+Do not execute project scripts, terminals, package managers, or arbitrary commands automatically.
+
+## 6.9 System applications
+
+Prioritize useful applications:
+
+1. File Explorer.
+2. Notes.
+3. Text Editor.
+4. Calculator.
+5. Clock.
+6. Settings.
+7. System Information.
+8. Task Manager.
+9. Notification Center.
+10. Terminal Center.
+11. Developer Workspace Manager.
+12. Application Catalog.
+13. Backup and Recovery.
+14. Event and Diagnostic Viewer.
+
+Additional utilities may include clipboard history, media controls, calendar, screenshots, image viewer, archive manager, and system resource graphs.
+
+For each application, specify the real capabilities, permission requirements, empty states, error states, persistence behavior, and acceptance tests.
+
+Do not build every possible utility before the core desktop shell and storage layer are reliable.
+
+---
+
+# 7. Expanded Features and Workflow Improvements
+
+Add the following capabilities when they fit the current phase and can be implemented correctly.
+
+## 7.1 Command palette
+
+Provide a keyboard-first command palette that can:
+
+* Search applications.
+* Open settings.
+* Switch workspaces.
+* Create a note.
+* Open a folder.
+* Run approved internal commands.
+* Search application data.
+* Display keyboard shortcuts.
+* Navigate to recent items.
+* Open help and diagnostics.
+
+Use a configurable shortcut such as `Ctrl+Shift+P`, subject to conflict checks.
+
+The palette must show relevant command names, descriptions, shortcuts, and any required confirmation.
+
+It must never execute arbitrary shell commands by default.
+
+## 7.2 Global search
+
+Provide a unified search interface with:
+
+* Applications.
+* Notes.
+* Files and folders within authorized locations.
+* Settings.
+* Commands.
+* Help articles.
+* Recent items, if enabled.
+
+Search results must be grouped by category, keyboard navigable, and understandable.
+
+Use debouncing, cancellation of stale requests, clear loading states, and indexed local search where appropriate.
+
+Provide privacy settings for indexed locations, search history, and recent-item tracking.
+
+## 7.3 Quick Settings
+
+Implement a panel for supported application and Windows controls:
+
+* Theme.
+* Animation profile.
+* Sound effects.
+* Volume where supported.
+* Workspace selection.
+* Notifications.
+* Do Not Disturb.
+* Performance mode.
+* Accessibility shortcuts.
+* Relevant system information.
+
+Only show working controls. Unsupported system controls must be disabled with an explanation or omitted.
+
+## 7.4 Notification Center
+
+Provide:
+
+* Informational, success, warning, error, and critical priorities.
+* Grouping.
+* Dismiss.
+* Mark as read.
+* Optional history.
+* Per-category settings.
+* Do Not Disturb.
+* Accessible announcements.
+* Sound preferences.
+* Notification expiration where appropriate.
+
+Critical security or data-loss warnings must not be suppressed by ordinary cosmetic notification preferences.
+
+## 7.5 Application catalog
+
+Provide a catalog of built-in and registered applications with:
+
+* Application name.
+* Description.
+* Category.
+* Icon.
+* Version.
+* Capabilities.
+* Permission requirements.
+* Status.
+* Open, pin, and unpin actions.
+* Help information.
+* Availability and compatibility status.
+
+Do not download or install applications without explicit user approval.
+
+## 7.6 Backup and recovery
+
+Implement application-data backup and restoration with:
+
+* Manual backup.
+* Configurable backup destination.
+* Backup metadata.
+* Version compatibility checks.
+* Integrity verification.
+* Restore preview.
+* Confirmation before overwriting.
+* Failure reporting.
+* Recovery documentation.
+
+A backup is not complete until its contents and integrity have been verified.
+
+## 7.7 Personalization
+
+Provide controls for:
+
+* Wallpaper.
+* Accent color.
+* Theme.
+* Taskbar and Dock behavior.
+* Window effects.
+* Workspace layouts.
+* Application shortcuts.
+* Sound effects.
+* Notification behavior.
+* Font scaling.
+* Animation profile.
+* Performance profile.
+
+Persist settings and validate them on load. Invalid or missing settings must fall back to safe defaults.
+
+---
+
+# 8. UI/UX Design System
+
+Build a centralized, reusable design system rather than styling every screen independently.
+
+## 8.1 Design tokens
+
+Create centralized tokens for:
+
+* Backgrounds and surfaces.
+* Primary, secondary, and tertiary text.
+* Accent and interactive states.
+* Success, warning, error, and information colors.
+* Borders.
+* Focus rings.
+* Shadows.
+* Blur.
+* Corner radii.
+* Spacing.
+* Typography.
+* Icon sizes.
+* Layering and z-index.
+* Animation durations.
+* Easing curves.
+* Sound categories.
+* Disabled and loading states.
+
+Example token structure:
+
+```css
+:root {
+  --color-background: #f5f6f8;
+  --color-surface: #ffffff;
+  --color-surface-elevated: #ffffff;
+  --color-text-primary: #202124;
+  --color-text-secondary: #5f6368;
+  --color-border: #d9dde3;
+  --color-accent: #4267d5;
+  --color-success: #21864b;
+  --color-warning: #a96808;
+  --color-danger: #c43c3c;
+
+  --radius-small: 6px;
+  --radius-medium: 10px;
+  --radius-large: 16px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  --motion-fast: 120ms;
+  --motion-standard: 200ms;
+  --motion-emphasized: 320ms;
+}
+```
+
+These values are initial defaults, not universal requirements. Validate them against the finished interface and accessibility requirements.
+
+## 8.2 Theme catalog
+
+Required themes:
+
+* Light.
+* Dark.
+* System.
+* High Contrast.
+
+Optional themes:
+
+* Graphite.
+* Midnight.
+* Ocean.
+* Forest.
+* Aurora.
+* Solar.
+* Ubuntu-inspired.
+* Minimal.
+* Developer.
+
+Optional themes must use the same semantic tokens and pass contrast testing. Avoid implementing separate, inconsistent component styles for every theme.
+
+## 8.3 Component standards
+
+Build reusable components for:
+
+* Buttons.
+* Icon buttons.
+* Inputs.
+* Search fields.
+* Checkboxes.
+* Radio buttons.
+* Switches.
+* Dropdowns.
+* Tooltips.
+* Menus.
+* Context menus.
+* Tabs.
+* Cards.
+* Tables.
+* Dialogs.
+* Drawers.
+* Toasts.
+* Notifications.
+* Progress indicators.
+* Skeletons.
+* Empty states.
+* Error states.
+* Window title bars.
+* Window controls.
+* Command palette.
+* Settings sections.
+* Confirmation prompts.
+
+Every interactive component must support loading, disabled, focused, hover, active, error, and keyboard states where applicable.
+
+## 8.4 Responsive behavior
+
+Support resizing from compact windows to large desktop displays.
+
+* Avoid clipped controls.
+* Use adaptive layouts.
+* Keep important actions visible.
+* Support reasonable minimum window dimensions.
+* Avoid horizontal scrolling unless appropriate.
+* Reflow settings panels and forms.
+* Support Windows display scaling.
+* Keep dialogs within visible screen bounds.
+
+## 8.5 UX consistency
+
+* Use the same wording for the same action everywhere.
+* Make destructive actions visually distinct.
+* Place primary actions predictably.
+* Avoid unnecessary confirmation dialogs for reversible, low-risk actions.
+* Require clear confirmation for destructive or high-impact actions.
+* Preserve form data when validation fails.
+* Provide useful errors rather than generic “Something went wrong” messages.
+* Never show success until the operation has actually succeeded.
+* Provide undo when practical.
+* Explain permission requirements before asking users to grant access.
+
+---
+
+# 9. Advanced Animation, Motion, and Visual Effects
+
+The application must have sophisticated, high-quality motion. Do not interpret “more animations” as permission to animate everything continuously.
+
+**Objective: maximum perceived polish, not maximum unnecessary movement.**
+
+## 9.1 Animation architecture
+
+Create a centralized motion system with:
+
+* Shared timing tokens.
+* Standard easing curves.
+* Reusable transitions.
+* Reduced-motion support.
+* Animation cancellation.
+* Interruption handling.
+* Performance-aware fallbacks.
+* Consistent motion direction.
+* State-driven animation.
+* No duplicated competing animation systems.
+
+Use CSS transitions for simple UI state changes and a vetted animation library for complex sequences only when justified.
+
+**DEFAULT DECISION:** Prefer CSS transitions and transforms for ordinary interface motion. Introduce a library such as Framer Motion only when it provides meaningful value and is compatible with the existing architecture.
+
+Do not add multiple animation libraries for overlapping purposes.
+
+## 9.2 Animation profile settings
+
+Provide four profiles:
+
+| Profile   | Behavior                                                                                                   |
+| --------- | ---------------------------------------------------------------------------------------------------------- |
+| Minimal   | Essential feedback only; short transitions and minimal movement.                                           |
+| Balanced  | Smooth everyday interactions and restrained visual effects.                                                |
+| Enhanced  | Richer window, panel, workspace, and notification transitions.                                             |
+| Immersive | More expressive transitions and optional ambient visual effects, subject to performance and accessibility. |
+
+Also provide:
+
+* Performance Mode.
+* Reduced Motion.
+* Disable animated backgrounds.
+* Disable decorative particles.
+* Disable blur.
+* Disable sound effects.
+* Per-category effect controls where useful.
+
+Persist the user's selections.
+
+## 9.3 Required motion catalog
+
+### Desktop and window motion
+
+* Window opening.
+* Window closing.
+* Minimize.
+* Restore.
+* Maximize.
+* Resize feedback.
+* Focus transitions.
+* Snap-layout previews.
+* Snap completion.
+* Window switching.
+* Workspace switching.
+* Application overview entrance and exit.
+* Desktop context menu.
+* Window shadow and elevation transitions.
+
+### Navigation motion
+
+* Start menu opening and closing.
+* Dock hover and focus.
+* Search opening.
+* Command palette opening.
+* Quick Settings.
+* Notification Center.
+* Settings navigation.
+* Tabs and segmented controls.
+* Breadcrumb navigation.
+* Expandable sections.
+* Sidebar collapse and expansion.
+
+### Feedback motion
+
+* Button press.
+* Toggle changes.
+* Checkbox state changes.
+* Save confirmation.
+* Copy confirmation.
+* Drag-and-drop targets.
+* File movement.
+* Upload and download progress.
+* Validation errors.
+* Toast entrance and dismissal.
+* Notification arrival.
+* Progress completion.
+* Warning emphasis.
+* Empty-state transitions.
+
+### Productivity motion
+
+* Note creation.
+* Note saving.
+* List insertion and removal.
+* Grid/list view changes.
+* Search result updates.
+* Filter changes.
+* Sort changes.
+* Workspace thumbnails.
+* Backup progress.
+* Restore progress.
+* Synchronization status changes.
+
+## 9.4 Motion timing defaults
+
+| Interaction                 | Default duration |
+| --------------------------- | ---------------: |
+| Button press                |        80–140 ms |
+| Hover/focus emphasis        |       100–160 ms |
+| Tooltip                     |       120–200 ms |
+| Dropdown/menu               |       120–200 ms |
+| Toast                       |       160–240 ms |
+| Dialog                      |       160–240 ms |
+| Window transition           |       180–280 ms |
+| Workspace transition        |       220–360 ms |
+| Complex overview transition |       250–400 ms |
+
+**DEFAULT DECISION:** Use these as starting ranges and shorten or eliminate motion when it impedes responsiveness or accessibility.
+
+Avoid making routine actions feel slow. Never require a user to wait for decorative animation before interacting with the interface.
+
+## 9.5 Advanced visual effects
+
+Provide carefully controlled effects:
+
+* Acrylic-style surfaces.
+* Frosted-glass panels.
+* Layered shadows.
+* Subtle depth.
+* Accent-colored focus rings.
+* Gradient accents.
+* Adaptive wallpaper colors.
+* Soft background transitions.
+* Optional ambient glow.
+* Lightweight particle or parallax effects.
+* Contextual color feedback.
+* Dynamic taskbar and Dock emphasis.
+* Optional animated wallpapers, if implemented efficiently.
+* Optional desktop visualizer effects that never obscure important information.
+
+These effects must be optional where they materially affect performance, readability, or accessibility.
+
+Do not use blur as a substitute for proper visual hierarchy. Avoid constant pulsating elements, aggressive color cycling, flashing lights, excessive neon effects, or animations that distract from work.
+
+## 9.6 Motion implementation requirements
+
+* Prefer `transform` and `opacity` for animation.
+* Avoid repeated layout-triggering animations.
+* Avoid unbounded animation loops.
+* Pause decorative animations when hidden or minimized.
+* Cancel stale animations during rapid interactions.
+* Prevent focus and pointer behavior from becoming inconsistent during transitions.
+* Support reduced-motion preferences.
+* Avoid rapid flashing.
+* Never use motion as the sole indication of status.
+* Keep focus indicators visible.
+* Avoid layout shifts.
+* Ensure all animations remain usable under high DPI and display scaling.
+
+## 9.7 Animation acceptance criteria
+
+* Animation never blocks essential input.
+* Window state remains correct if transitions are interrupted.
+* Rapid clicks do not produce duplicate windows or corrupted state.
+* Reduced Motion substantially removes nonessential motion.
+* Performance Mode disables expensive decorative effects.
+* Visual state and application state remain synchronized.
+* Animations do not cause content to become inaccessible.
+* No continuous animation consumes significant idle CPU without a user-visible purpose.
+
+---
+
+# 10. Sound Effects and Audio Experience
+
+Create a centralized sound system with user-controlled, context-appropriate sounds.
+
+## 10.1 Sound categories
+
+* UI.
+* Window.
+* Workspace.
+* Navigation.
+* Notification.
+* Success.
+* Warning.
+* Error.
+* Application.
+* Accessibility.
+* System integration.
+
+## 10.2 Sound behavior
+
+Support:
+
+* Master volume.
+* Category volume.
+* Mute.
+* Sound theme selection.
+* Preview.
+* Per-category enable/disable.
+* Respect for the application's audio focus and relevant operating-system preferences where possible.
+* Sensible rate limiting.
+* Avoidance of repeated sounds during rapid events.
+
+Never play a loud sound automatically on application startup.
+
+Use short, subtle sounds that complement visual feedback. Visual confirmation must always exist even when sounds are disabled.
+
+## 10.3 Sound asset policy
+
+* Use original, properly licensed, or explicitly permitted audio.
+* Do not copy proprietary operating-system sounds without authorization.
+* Store assets centrally.
+* Document source and license.
+* Prefer compact audio assets such as OGG or WAV when suitable.
+* Use consistent perceived loudness.
+* Avoid clipping and excessively high volume.
+* Avoid loading a large sound library into memory unnecessarily.
+* Provide silent behavior as a first-class option.
+* Never use sound as the sole way to communicate an error.
+
+## 10.4 Sound settings
+
+Create a dedicated Sound & Effects settings page with:
+
+* Master enable/disable.
+* Master volume.
+* UI sounds.
+* Notification sounds.
+* Success/error sounds.
+* Window and workspace sounds.
+* Sound theme.
+* Preview buttons.
+* Reset to defaults.
+
+**DEFAULT DECISION:** Sound effects are enabled only at a restrained, nonintrusive default level, with an obvious global mute control. Do not autoplay media or promotional audio.
+
+## 10.5 Audio acceptance criteria
+
+* Muting disables application-generated sounds.
+* Category settings persist after restart.
+* Repeated events do not create overlapping audio chaos.
+* Missing audio assets fail gracefully.
+* Audio playback errors do not crash the application.
+* Sound never replaces visible or accessible status information.
+
+---
+
+# 11. Authentication, Authorization, and Privacy
+
+Implement authentication only where it provides a genuine product benefit.
+
+## 11.1 Authentication model
+
+Support:
+
+* Local profile mode.
+* Optional server-backed accounts.
+* Signup and login for server-backed mode.
+* Secure logout.
+* Session expiration.
+* Password reset.
+* Email verification.
+* Optional MFA.
+* OAuth/OIDC only through a properly configured provider.
+* Account recovery.
+* Session revocation.
+* Account deletion and data export.
+
+**DEFAULT DECISION:** Local-first mode must work without requiring a remote account. Server-backed authentication is optional and must be explicitly configured.
+
+Do not imply that a local application profile provides the same security as a verified remote identity provider.
+
+## 11.2 Authorization
+
+Use role-based access control with explicit permission scopes.
+
+Possible roles:
+
+* Owner.
+* Administrator.
+* Standard User.
+* Read-only User.
+
+Possible scopes:
+
+* Own resources.
+* Shared resources.
+* Workspace.
+* Organization.
+* System integration capabilities.
+
+Enforce authorization in the backend and native bridge, not only in the UI.
+
+## 11.3 Session security
+
+* Protect session tokens.
+* Never store plaintext passwords.
+* Use secure password hashing such as Argon2id when implementing password authentication.
+* Rotate refresh tokens.
+* Revoke sessions on logout and relevant security events.
+* Set explicit expiration policies.
+* Protect against brute force.
+* Avoid sensitive information in logs.
+* Use platform-protected credential storage when appropriate.
+* Do not store privileged credentials in renderer-accessible storage.
+* Handle offline authentication without bypassing authorization.
+
+## 11.4 Privacy controls
+
+Provide controls for:
+
+* Recent items.
+* Search history.
+* Local indexing.
+* Notifications.
+* Telemetry, if any.
+* Data export.
+* Account deletion.
+* Local cache clearing.
+* Sync.
+* Application diagnostics.
+
+Telemetry must be disabled by default unless the user explicitly enables it or a justified, disclosed requirement is approved.
+
+---
+
+# 12. Persistence, Database, API, and Synchronization
+
+## 12.1 Data architecture
+
+Use separate layers for:
+
+* UI.
+* Domain logic.
+* Application services.
+* Repository interfaces.
+* Local persistence.
+* Remote API.
+* Synchronization.
+* Native Windows capabilities.
+
+Do not couple UI components directly to database drivers.
+
+## 12.2 Local-first behavior
+
+Support:
+
+* Offline startup.
+* Local data access.
+* Reliable autosave.
+* A synchronization queue.
+* Retry with backoff.
+* Conflict detection.
+* Conflict resolution.
+* Sync status visibility.
+* Recovery after interrupted synchronization.
+
+## 12.3 SQL Server
+
+When remote persistence is configured, use SQL Server with:
+
+* Versioned migrations.
+* Foreign keys.
+* Appropriate indexes.
+* Transactions.
+* Parameterized queries.
+* Least-privilege database accounts.
+* Connection pooling.
+* Timeouts.
+* Secure connection configuration.
+* Auditability for sensitive operations.
+
+Never embed database credentials in source code.
+
+Do not assume that a SQL Server instance is installed, reachable, or configured. Detect configuration issues and provide setup instructions.
+
+## 12.4 API standards
+
+* Version the API.
+* Validate every request.
+* Enforce authorization.
+* Return consistent errors.
+* Use pagination for collections.
+* Use idempotency for operations that may be retried.
+* Apply rate limiting to sensitive endpoints.
+* Use structured logging with secret redaction.
+* Document request and response schemas.
+* Use explicit timeout and cancellation behavior.
+
+Example error structure:
+
+```json
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "The request contains invalid fields.",
+    "requestId": "non-sensitive-correlation-id",
+    "details": []
+  }
+}
+```
+
+## 12.5 Synchronization
+
+Implement:
+
+* Pending.
+* Syncing.
+* Synced.
+* Conflict.
+* Failed.
+* Offline.
+
+Resolve conflicts according to resource type. Do not silently overwrite a user's newer changes.
+
+Provide conflict-resolution UI with enough information for users to choose the correct version.
+
+---
+
+# 13. Windows Integration and Safety
+
+## 13.1 Native integration architecture
+
+Use a narrow, documented interface for Windows operations.
+
+Possible integration areas:
+
+* System information.
+* Processes.
+* Displays.
+* Audio devices.
+* Battery.
+* Network.
+* Launching approved applications.
+* User-authorized filesystem operations.
+* Power information.
+* Notifications.
+* File associations, if explicitly approved.
+
+For each capability, document:
+
+* Windows API or native method.
+* Required privilege.
+* Read-only or writable status.
+* Supported Windows versions.
+* Fallback behavior.
+* Error behavior.
+* Privacy impact.
+* Whether the capability is simulated or integrated.
+
+## 13.2 Default restrictions
+
+* Prefer read-only access.
+* Never auto-elevate.
+* Never disable Windows security protections.
+* Never silently change the registry.
+* Never silently stop services.
+* Never change power plans automatically.
+* Never terminate arbitrary processes.
+* Never execute arbitrary shell commands.
+* Never change firewall rules or network configuration automatically.
+* Never delete user files as part of optimization.
+* Never install a driver or service without approval.
+
+## 13.3 Native bridge security
+
+* Expose only required functions.
+* Validate all arguments.
+* Enforce explicit capability permissions.
+* Restrict filesystem access.
+* Use a strict subprocess allowlist.
+* Use structured argument arrays rather than shell-string construction.
+* Avoid shell execution unless specifically justified and approved.
+* Prevent command injection.
+* Return structured errors.
+* Apply operation timeouts.
+* Log security-relevant operations without recording secrets.
+* Ensure the renderer cannot access arbitrary Node.js or operating-system APIs.
+
+---
+
+# 14. Accessibility and Internationalization
+
+## 14.1 Accessibility
+
+Target WCAG 2.2 AA for applicable interface content.
+
+Requirements:
+
+* Keyboard access to all essential features.
+* Visible focus indicators.
+* Logical focus order.
+* Correct accessible names and roles.
+* Screen-reader-friendly dialogs and menus.
+* Sufficient contrast.
+* Scalable text.
+* No color-only status communication.
+* Reduced-motion support.
+* Accessible notifications.
+* Error messages associated with the relevant controls.
+* Focus restoration after dialogs close.
+* Keyboard-accessible drag-and-drop alternatives.
+
+Use automated accessibility tests plus manual keyboard and screen-reader review.
+
+## 14.2 Internationalization
+
+Use a localization-ready architecture from the beginning.
+
+* Keep user-facing strings out of business logic.
+* Support locale-aware dates, numbers, and time.
+* Store timestamps in UTC where appropriate and display them in the user's selected time zone.
+* Design layouts to accommodate longer translations.
+* Support right-to-left layout where implemented.
+* Use properly licensed fonts with fallback stacks.
+* Avoid concatenating translated strings in fragile ways.
+* Provide text alternatives for audio feedback.
+
+**DEFAULT DECISION:** Begin with English. Structure the application so Urdu and other languages can be added without architectural rewrites. Do not claim complete RTL support until it has been implemented and tested.
+
+---
+
+# 15. Performance and Reliability
+
+## 15.1 Performance budgets
+
+Use these initial targets as engineering budgets, not as grounds to sacrifice security or reliability.
+
+| Metric                            | Initial target                                                                      |
+| --------------------------------- | ----------------------------------------------------------------------------------- |
+| Warm startup to interactive shell | Within 3 seconds on reference hardware                                              |
+| Cold startup                      | Within 5 seconds on reference hardware                                              |
+| Idle CPU                          | Typically below 2% on reference hardware when truly idle                            |
+| Idle memory                       | Target below 400 MB for the application shell, excluding separately managed helpers |
+| Routine interaction               | Usually responds within 100 ms                                                      |
+| Animation                         | Target 60 FPS on capable hardware                                                   |
+| Frame-time stability              | Avoid repeated frames above 33 ms during ordinary transitions                       |
+| Renderer bundle                   | Aim for a compressed initial JavaScript bundle below 1 MB where practical           |
+| Sound and decorative assets       | Load on demand; avoid unnecessarily large initial payloads                          |
+| Search                            | Return initial local results quickly and avoid blocking the UI                      |
+| Large file operations             | Use progress reporting and nonblocking execution                                    |
+
+Measure actual performance on documented hardware. Record deviations rather than claiming targets were achieved without evidence.
+
+## 15.2 Performance behavior
+
+* Lazy-load secondary applications.
+* Split bundles where appropriate.
+* Avoid excessive re-rendering.
+* Use virtualized lists for large collections.
+* Debounce search.
+* Cancel stale requests.
+* Avoid unnecessary background polling.
+* Cache only when invalidation is understood.
+* Release listeners and resources.
+* Stop decorative animations when not visible.
+* Avoid loading every sound, wallpaper, or application asset at startup.
+* Provide a low-resource mode.
+
+## 15.3 Reliability
+
+* Handle expected errors explicitly.
+* Prevent duplicate actions during pending operations.
+* Make writes transactional where appropriate.
+* Preserve user data after crashes.
+* Validate saved state.
+* Support recovery from corrupted settings.
+* Avoid unhandled promise rejections.
+* Use structured diagnostics.
+* Provide a clear recovery process.
+
+## 15.4 Supported platform
+
+**DEFAULT DECISION:** Prioritize Windows 11 x64 first. Support Windows 10 only if the selected runtime, dependencies, and lifecycle requirements remain compatible. Evaluate ARM64 separately.
+
+Document the minimum Windows build, architecture, runtime requirements, display scaling assumptions, and GPU/WebView2 dependencies before claiming support.
+
+---
+
+# 16. Testing and Test Execution Authorization Gate
+
+## 16.1 Mandatory authorization boundary
+
+The instruction not to run the application takes precedence over the convenience of testing.
+
+### Allowed without additional approval
+
+Provided the necessary tools are already available and no installation or system modification is required:
+
+* Read source files.
+* Inspect Git status and diffs.
+* Review configuration.
+* Perform static analysis.
+* Run available lint commands.
+* Run available type checks.
+* Run safe, isolated unit tests that do not launch the app, start a server, access real services, or modify the system.
+* Validate JSON and other static configuration.
+* Review dependency declarations without installing packages.
+* Review SQL migration files without executing them.
+* Inspect generated files.
+* Perform security and accessibility source reviews.
+
+If a command could launch the app, start a server, execute a migration, or modify the environment, do not run it under the assumption that it is harmless.
+
+### Requires explicit user authorization
+
+* Installing or updating dependencies.
+* Launching the application.
+* Starting a development server.
+* Running E2E tests that launch the app.
+* Running browser automation against the live application.
+* Applying database migrations.
+* Modifying Windows.
+* Installing or registering a native helper.
+* Building or running installers if the process launches code or modifies the system.
+* Accessing external accounts or production systems.
+* Deploying, publishing, or releasing.
+* Running tests that modify shared data or real services.
+
+## 16.2 Test strategy
+
+Create:
+
+* Unit tests.
+* Integration tests.
+* API contract tests.
+* Repository and persistence tests.
+* Authorization tests.
+* Input-validation tests.
+* IPC security tests.
+* Accessibility tests.
+* Visual regression tests.
+* E2E tests.
+* Performance tests.
+* Recovery tests.
+* Windows compatibility tests.
+
+Write the tests and document how they should be run, but do not execute tests that cross the authorization boundary.
+
+## 16.3 Coverage targets
+
+**DEFAULT DECISION:**
+
+* Critical security and authorization logic: full branch review, with tests for every identified security boundary.
+* Core domain logic: target at least 80% meaningful statement coverage.
+* Other business logic: target at least 70% meaningful statement coverage.
+* UI components: test meaningful user interactions, keyboard behavior, and error states rather than chasing a coverage percentage.
+* Every destructive operation: include safety and failure-path tests.
+* Every feature marked complete: include acceptance criteria and test evidence.
+
+Coverage numbers alone do not prove quality.
+
+## 16.4 Test data
+
+* Use synthetic data.
+* Never use production credentials.
+* Never use real customer data without explicit authorization.
+* Keep test fixtures deterministic.
+* Ensure test cleanup does not delete user data.
+* Use isolated databases or in-memory substitutes where suitable.
+* Make destructive test scope explicit.
+
+---
+
+# 17. Git Workflow and Implementation Discipline
+
+## 17.1 Mandatory Git commits
+
+Every meaningful implementation unit must be committed.
+
+Examples:
+
+* `feat(shell): implement desktop navigation`
+* `feat(window-manager): add snapping and restore behavior`
+* `feat(workspaces): persist workspace configuration`
+* `feat(notes): implement autosave and recovery`
+* `feat(motion): add reduced-motion support`
+* `feat(sound): add centralized sound preferences`
+* `fix(files): prevent unsafe path traversal`
+* `test(auth): cover authorization boundaries`
+* `docs(brain): record architecture and progress`
+
+## 17.2 Required workflow
+
+For each meaningful unit:
+
+1. Inspect the repository.
+2. Review existing changes.
+3. Identify scope and dependencies.
+4. Implement a focused change.
+5. Perform permitted static validation.
+6. Review the diff.
+7. Check for secrets and unrelated changes.
+8. Update `brain.md`.
+9. Update `IMPLEMENTATION_STATUS.md`.
+10. Update tests and documentation.
+11. Create a meaningful Git commit.
+12. Record the commit in the engineering memory.
+13. Continue to the next unit.
+
+Do not commit secrets, local databases, user files, unnecessary build artifacts, generated credentials, or machine-specific configuration.
+
+Do not overwrite uncommitted user changes.
+
+Never use destructive Git operations, force-push, rewrite shared history, or delete remote branches without explicit authorization.
+
+If signing is configured and safe to use, sign commits. If signing is unavailable, document the limitation rather than fabricating a signature.
+
+---
+
+# 18. Phased Implementation Roadmap
+
+Implement in phases. Do not attempt to create every feature in one enormous unverified change.
+
+## Phase 0 — Discovery and baseline
+
+* Inspect the repository.
+* Identify the current stack.
+* Review existing implementation.
+* Identify missing requirements.
+* Inspect Git status.
+* Document assumptions.
+* Create or update `brain.md`.
+* Establish the implementation roadmap.
+
+**Exit criteria:** Existing state and constraints are understood, with no unapproved execution.
+
+## Phase 1 — Architecture and contracts
+
+* Confirm desktop shell.
+* Define module boundaries.
+* Define state and persistence.
+* Define IPC.
+* Define permission boundaries.
+* Define error handling.
+* Document data contracts.
+* Define application registry and command registry.
+* Establish threat model.
+
+**Exit criteria:** Architecture is documented and internally consistent.
+
+## Phase 2 — Design system
+
+* Design tokens.
+* Theme system.
+* Typography.
+* Iconography.
+* Components.
+* Accessibility defaults.
+* Motion tokens.
+* Sound service.
+* Visual regression baseline strategy.
+
+**Exit criteria:** Shared design components and guidelines exist.
+
+## Phase 3 — Desktop shell
+
+* Desktop.
+* Start menu.
+* Taskbar/Dock.
+* Application launcher.
+* Search.
+* Context menus.
+* Notifications.
+* Quick Settings.
+
+**Exit criteria:** Core navigation is coherent and functional.
+
+## Phase 4 — Window manager
+
+* Window lifecycle.
+* Focus.
+* Minimize/restore.
+* Maximize.
+* Resize.
+* Snapping.
+* Keyboard navigation.
+* Motion integration.
+
+**Exit criteria:** Window state and interactions are reliable.
+
+## Phase 5 — Workspaces
+
+* Create, rename, switch, and delete.
+* Application assignments.
+* Workspace persistence.
+* Overview transitions.
+* Recovery of invalid workspace state.
+
+**Exit criteria:** Workspaces survive application restart when persistence is available.
+
+## Phase 6 — Application registry
+
+* Manifest schema.
+* Registration.
+* Capabilities.
+* Permission checks.
+* Application lifecycle.
+* Launch error handling.
+
+**Exit criteria:** Applications are registered and invoked through a consistent interface.
+
+## Phase 7 — Storage and productivity
+
+* Local persistence.
+* File Explorer.
+* Notes.
+* Text Editor.
+* Search.
+* Backup and recovery foundations.
+
+**Exit criteria:** Data operations are reliable and tested within authorized boundaries.
+
+## Phase 8 — Authentication and authorization
+
+* Local profile.
+* Optional server authentication.
+* Session management.
+* RBAC.
+* Account recovery.
+* Security testing.
+
+**Exit criteria:** Authentication and permissions have documented behavior and test coverage.
+
+## Phase 9 — Database and API
+
+* SQL schema.
+* Versioned migrations.
+* API contracts.
+* Validation.
+* Error catalog.
+* Transactions.
+* Audit events.
+
+**Exit criteria:** Contracts and implementation are consistent. Migrations remain unexecuted until authorized.
+
+## Phase 10 — Offline and synchronization
+
+* Sync queue.
+* Retry behavior.
+* Conflict detection.
+* Conflict-resolution UI.
+* Offline indicators.
+
+**Exit criteria:** Offline and conflict behavior are documented and covered by tests.
+
+## Phase 11 — Windows integration
+
+* Capability detection.
+* Read-only system information.
+* Approved application launching.
+* Optional audio, display, network, and power integrations.
+* Permission and failure handling.
+
+**Exit criteria:** Each integration has documented privilege requirements and a verified fallback.
+
+## Phase 12 — System applications
+
+* Settings.
+* System Information.
+* Task Manager.
+* Terminal Center.
+* Developer Workspace Manager.
+* Other prioritized utilities.
+
+**Exit criteria:** Each delivered application performs its advertised actions.
+
+## Phase 13 — Visual polish
+
+* Animation refinement.
+* Sound effects.
+* Advanced visual effects.
+* Theme refinement.
+* Keyboard polish.
+* Empty and error states.
+* Accessibility improvements.
+
+**Exit criteria:** Motion, sound, and effects meet performance and accessibility requirements.
+
+## Phase 14 — Quality and security
+
+* Static validation.
+* Authorized tests.
+* Security review.
+* Performance review.
+* Accessibility review.
+* Recovery review.
+* Visual regression review.
+
+**Exit criteria:** Findings are documented and no unresolved critical issue is concealed.
+
+## Phase 15 — Packaging and release preparation
+
+* Packaging configuration.
+* Versioning.
+* Installer design.
+* Signing plan.
+* Update architecture.
+* Uninstall behavior.
+* Release notes.
+* Release checklist.
+
+**Exit criteria:** Release configuration is documented and prepared. Do not publish or install without authorization.
+
+## Phase 16 — Final review
+
+* Review requirements against implementation.
+* Review Git history.
+* Review documentation.
+* Verify the status of all claims.
+* Record remaining work.
+* Produce the final engineering report.
+
+**Exit criteria:** The report accurately distinguishes completed, tested, partial, blocked, and untested features.
+
+---
+
+# 19. Definition of Done
+
+A feature is complete only when all applicable requirements are satisfied:
+
+1. The implementation meets the documented acceptance criteria.
+2. The UI matches the design system.
+3. Loading, empty, success, and error states are handled.
+4. Keyboard navigation is supported for essential interactions.
+5. Accessibility has been reviewed.
+6. Permissions and data boundaries are enforced.
+7. Relevant tests have been written.
+8. Permitted tests have been run, with results recorded.
+9. Unauthorized tests have not been run.
+10. Error handling and recovery are considered.
+11. Documentation has been updated.
+12. `brain.md` has been updated.
+13. `IMPLEMENTATION_STATUS.md` has been updated.
+14. The Git diff has been reviewed.
+15. No secrets have been committed.
+16. A meaningful Git commit has been created.
+17. Known limitations are disclosed.
+
+If testing is blocked by the authorization rules, label the feature accordingly. Do not misrepresent untested functionality as fully verified.
+
+---
+
+# 20. Release, Packaging, and Licensing
+
+## 20.1 Packaging
+
+Evaluate:
+
+* Per-user versus per-machine installation.
+* Signed Windows installer.
+* Application updates.
+* Rollback.
+* Uninstallation.
+* Data retention and deletion options.
+* Repair installation.
+* Version compatibility.
+* Windows Defender and SmartScreen considerations.
+* Architecture-specific packages.
+
+**DEFAULT DECISION:** Prefer a per-user Windows installer for initial distribution unless requirements justify an alternative. Evaluate MSIX, MSI, EXE, or portable packaging against the actual application architecture.
+
+Do not build or execute an installer without the relevant authorization.
+
+## 20.2 Update security
+
+* Verify update signatures.
+* Use authenticated transport.
+* Protect update metadata.
+* Avoid unsigned arbitrary downloads.
+* Preserve user data.
+* Support recovery from failed updates.
+* Make release channels explicit.
+* Never deploy an update silently without an approved policy.
+
+## 20.3 Licensing
+
+Review licenses for:
+
+* Dependencies.
+* Icons.
+* Fonts.
+* Sounds.
+* Wallpapers.
+* Illustrations.
+* Native helpers.
+* Bundled executables.
+
+Maintain a software bill of materials and third-party attribution record.
+
+Do not claim legal compliance without performing the required review. Terms of service, privacy policy, and data-processing documentation must reflect the actual product behavior and applicable requirements.
+
+---
+
+# 21. Risk Register and Decision Log
+
+Maintain `docs/RISK_REGISTER.md`.
+
+For each risk, record:
+
+* Risk ID.
+* Description.
+* Likelihood.
+* Impact.
+* Severity.
+* Mitigation.
+* Owner.
+* Status.
+* Review date.
+
+Prioritize:
+
+* Data loss.
+* Unauthorized system modification.
+* Privilege escalation.
+* Credential leakage.
+* IPC abuse.
+* Command injection.
+* Dependency vulnerabilities.
+* Synchronization conflicts.
+* Untrusted plugin execution.
+* Resource exhaustion.
+* Update compromise.
+* Incorrect claims about Windows integration.
+
+Maintain `docs/DECISIONS.md` with:
+
+```markdown
+## DEC-001: Example decision title
+
+- Status: Accepted
+- Date: YYYY-MM-DD
+- Context:
+- Decision:
+- Alternatives:
+- Rationale:
+- Security implications:
+- Performance implications:
+- Reversibility:
+- Approval required:
+```
+
+Do not silently reverse architectural decisions. Document why a decision changed.
+
+---
+
+# 22. Final Operating Instructions to Antigravity
+
+Before starting:
+
+1. Read this prompt completely.
+2. Inspect the existing repository.
+3. Check Git status and preserve existing changes.
+4. Identify the existing implementation and missing functionality.
+5. Create or update `brain.md`.
+6. Create or update the Assumptions Register.
+7. Document the initial risk assessment.
+8. Update `IMPLEMENTATION_STATUS.md`.
+9. Select the first coherent implementation unit.
+10. Begin implementation without unnecessary clarification questions.
+
+During development:
+
+* Prefer working vertical slices.
+* Keep the architecture maintainable.
+* Make UI and UX improvements consistent across the product.
+* Add sophisticated animations and visual effects only through the centralized motion system.
+* Add sound effects only through the centralized sound system.
+* Keep effects configurable and performance-aware.
+* Test state transitions, data persistence, errors, and permissions.
+* Do not leave misleading placeholders.
+* Do not claim unsupported operating-system integration.
+* Update documentation and `brain.md`.
+* Create meaningful Git commits after every implementation unit.
+* Preserve the user's uncommitted work.
+* Stop before any operation requiring explicit authorization.
+
+When blocked:
+
+* State the exact blocker.
+* Record what has been completed.
+* Identify what requires approval or unavailable tooling.
+* Continue with independent, safe work where possible.
+
+## Final response requirements
+
+At the end of an authorized implementation session, provide:
+
+1. Summary of completed work.
+2. Features implemented.
+3. Features partially implemented.
+4. Features not implemented.
+5. Tests written.
+6. Tests actually run and their results.
+7. Tests not run because authorization was required.
+8. Security and accessibility findings.
+9. Performance observations and unverified targets.
+10. Files created or changed.
+11. Git commits created.
+12. Current contents/status of `brain.md`.
+13. Known issues and technical debt.
+14. Next recommended implementation unit.
+15. Explicit statement confirming that the application was not launched, dependencies were not installed, and system-changing operations were not performed unless specifically authorized.
+
+Never fabricate test results, commits, performance measurements, or completed functionality.
+
+# 23. Final Mandatory Directive
+
+**ANTIGRAVITY: BUILD A REAL, COHESIVE, SECURE, HIGH-QUALITY PRODUCT. DO NOT MAKE MISTAKES.**
+
+Use Windows 11 for familiarity, macOS for refinement, and Ubuntu/Linux for workspace and developer productivity inspiration. Create an original identity rather than a superficial clone.
+
+Deliver excellent UI and UX, reliable application behavior, purposeful advanced animations, tasteful visual effects, optional sound feedback, responsive layouts, accessibility, secure storage, robust error handling, and maintainable code.
+
+Do not confuse more features with better software. Prioritize complete functionality, consistent behavior, performance, and data safety.
+
+Do not ask me what to build next when the roadmap already provides the next safe step.
+
+Do not make high-risk assumptions.
+
+Do not execute, install, launch, migrate, deploy, elevate, or modify Windows without the appropriate explicit authorization.
+
+**Record decisions in `brain.md`. Review each meaningful change. Commit each meaningful implementation unit to Git.**
+
+Begin with Phase 0, inspect the repository, establish the baseline, and proceed one verified implementation unit at a time.
+
+---
+
+# Appendix A — Revision Notes
+
+This edition consolidates the previous product requirements and expands the specification to make the expected implementation behavior clearer.
+
+1. **Feature expansion:** Added command palette, global search, workspace-aware application behavior, Quick Settings, notification management, application catalog, developer workspace features, personalization, and backup/recovery workflows.
+
+2. **UI/UX improvement:** Added centralized design tokens, reusable components, responsive layout rules, interaction-state standards, keyboard-first navigation, and consistent loading, empty, success, and error states.
+
+3. **Advanced animations:** Added a motion architecture, animation profiles, detailed window/navigation/productivity motion catalogs, timing defaults, interruption handling, reduced-motion support, and measurable performance expectations.
+
+4. **Visual effects:** Added configurable acrylic-style surfaces, depth, shadows, accent effects, optional particles, parallax, and animated backgrounds, with safeguards against excessive movement and GPU use.
+
+5. **Sound effects:** Expanded sound categories, centralized settings, volume controls, preview, licensing, rate limiting, muted behavior, and accessibility requirements.
+
+6. **Product functionality:** Clarified that application controls must perform their advertised actions and that simulated capabilities must not be presented as real Windows operations.
+
+7. **Decision governance:** Added explicit autonomy boundaries and documented defaults, with approval requirements for destructive, system-modifying, external, and otherwise high-risk actions.
+
+8. **Engineering memory:** Strengthened `brain.md` requirements and introduced a structured Assumptions Register, decision log, risk register, and implementation-status tracking.
+
+9. **Safety:** Preserved the prohibition on launching the application, installing dependencies, executing migrations, or modifying Windows without explicit authorization.
+
+10. **Git discipline:** Clarified the review, validation, documentation, and meaningful-commit workflow while prohibiting destructive Git operations and accidental inclusion of secrets.
+
+11. **Performance and accessibility:** Added measurable initial budgets and criteria for reduced motion, keyboard behavior, scalable interfaces, and resource-aware effects.
+
+12. **Implementation governance:** Added phase exit criteria, a Definition of Done, explicit final-report requirements, and rules against fabricated test results or unsupported completion claims.
+
+13. **Contradiction resolution:** Clarified that permission to write tests does not imply permission to execute tests that launch the app, install dependencies, access live services, or modify the system.
+
+14. **Scope control:** Established a phased roadmap so additional features do not undermine the reliability of the desktop shell, window manager, persistence, or security foundations.
+
+15. **Default technology decisions:** Established a default Electron, React, TypeScript, Fastify, Zustand, SQLite, and optional SQL Server architecture while preserving justified alternatives and avoiding unnecessary migration of existing working code.
+
+16. **Release and licensing:** Clarified installer, update, signing, packaging, dependency-license, and data-handling requirements without authorizing actual publication or deployment.
+
+17. **Quality over quantity:** Clarified that “more animations” means richer, better-designed motion rather than constant movement or effects that impair usability.
+
+18. **Implementation status honesty:** Features that are coded but untested, blocked by authorization, partially implemented, or unsupported must remain explicitly classified rather than being reported as complete.
