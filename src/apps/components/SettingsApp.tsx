@@ -80,8 +80,8 @@ export const SettingsApp: React.FC<{ windowId: string }> = () => {
   const [dbServer, setDbServer] = useState(dbStatus?.server || 'localhost');
   const [dbPort, setDbPort] = useState(String(dbStatus?.port || 1433));
   const [dbName, setDbName] = useState(dbStatus?.database || 'MyOS');
-  const [dbUser, setDbUser] = useState(dbStatus?.user || 'sa');
-  const [dbPassword, setDbPassword] = useState('');
+  const [dbUser, setDbUser] = useState(dbStatus?.user || 'adw_app_user');
+  const [dbPassword, setDbPassword] = useState('AdwDesktop2026!Secure');
   const [dbEncrypt, setDbEncrypt] = useState(dbStatus?.encrypted ?? true);
   const [dbTesting, setDbTesting] = useState(false);
   const [dbTestResult, setDbTestResult] = useState<any>(null);
