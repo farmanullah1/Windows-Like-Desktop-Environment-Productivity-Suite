@@ -273,3 +273,63 @@ body.desktop-body {
 
 .pointer-events-none { pointer-events: none; }
 .pointer-events-auto { pointer-events: auto; }
+
+/* Windows 11 Boot Chasing Orbit Animation */
+@keyframes win-chasing-orbit {
+  0% {
+    transform: rotate(0deg);
+    opacity: 0.1;
+  }
+  12% {
+    opacity: 1;
+  }
+  45% {
+    transform: rotate(230deg);
+    opacity: 1;
+  }
+  70% {
+    transform: rotate(320deg);
+    opacity: 0.9;
+  }
+  100% {
+    transform: rotate(360deg);
+    opacity: 0.1;
+  }
+}
+
+.win-dot-orbit {
+  animation: win-chasing-orbit 2.6s cubic-bezier(0.2, 0.8, 0.3, 1) infinite;
+}
+
+/* Ambient Floating Glow Animation */
+@keyframes ambient-float {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(25px, -35px) scale(1.08);
+  }
+  66% {
+    transform: translate(-30px, 20px) scale(0.94);
+  }
+}
+
+.animate-ambient-float {
+  animation: ambient-float 16s ease-in-out infinite;
+}
+
+@keyframes ambient-float-reverse {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(-25px, 30px) scale(0.95);
+  }
+  66% {
+    transform: translate(35px, -20px) scale(1.06);
+  }
+}
+
+.animate-ambient-float-reverse {
+  animation: ambient-float-reverse 20s ease-in-out infinite;
+}
