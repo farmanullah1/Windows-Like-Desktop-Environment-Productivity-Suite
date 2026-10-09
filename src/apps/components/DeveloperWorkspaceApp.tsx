@@ -16,7 +16,8 @@ import {
   Plus,
   Trash2,
 } from 'lucide-react';
-import { useDesktopStore } from '../../core/desktopStore';
+import { useDesktop } from '../../core/desktopStore';
+import { Workspace } from '../../core/types';
 
 interface DevTask {
   id: string;
@@ -33,7 +34,7 @@ interface AppProfile {
 }
 
 export const DeveloperWorkspaceApp: React.FC<{ windowId: string }> = () => {
-  const { openApp, activeWorkspaceId, workspaces } = useDesktopStore();
+  const { openApp, activeWorkspaceId, workspaces } = useDesktop();
 
   const [activeTab, setActiveTab] = useState<'overview' | 'profiles' | 'database' | 'tasks' | 'logs'>('overview');
   const [dbHost, setDbHost] = useState('localhost');
@@ -115,7 +116,7 @@ export const DeveloperWorkspaceApp: React.FC<{ windowId: string }> = () => {
     setTasks(tasks.filter((t) => t.id !== id));
   };
 
-  const currentWorkspace = workspaces.find((w) => w.id === activeWorkspaceId);
+  const currentWorkspace = workspaces.find((w: Workspace) => w.id === activeWorkspaceId);
 
   return (
     <div className="flex h-full w-full bg-[var(--bg-surface)] text-[var(--text-primary)] select-none text-xs">
