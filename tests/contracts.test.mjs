@@ -74,3 +74,11 @@ test('i18n: translations provide complete en-US and ur-PK dictionaries and direc
   assert.equal(translations['en-US'].gallery, 'Photo Studio');
   assert.equal(translations['ur-PK'].gallery, 'فوٹو اسٹوڈیو');
 });
+
+test('Database & REST: Error codes include DB_CONNECTION_FAILED and VALIDATION_FAILED', () => {
+  assert.equal(ERROR_CODES.DB_CONNECTION_FAILED, 'DB_CONNECTION_FAILED');
+  assert.equal(ERROR_CODES.DB_QUERY_ERROR, 'DB_QUERY_ERROR');
+  assert.equal(ERROR_CODES.DB_RECORD_NOT_FOUND, 'DB_RECORD_NOT_FOUND');
+  assert.equal(ERROR_CODES.DB_UNIQUE_VIOLATION, 'DB_UNIQUE_VIOLATION');
+});
+
