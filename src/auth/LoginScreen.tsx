@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import {
   Lock,
+  Mail,
   Eye,
   EyeOff,
   ShieldCheck,
   AlertCircle,
   HardDrive,
   Fingerprint,
+  Sparkles,
+  ArrowRight,
+  Database,
+  CheckCircle2,
+  X,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { soundEngine } from '../design-system/soundEngine';
@@ -25,27 +31,32 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
   const [email, setEmail] = useState('admin@desktop.local');
   const [password, setPassword] = useState('admin123');
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
   const [capsLockActive, setCapsLockActive] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [forgotPasswordNotice, setForgotPasswordNotice] = useState(false);
+  const [showForgotModal, setShowForgotModal] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
+  const [resetSent, setResetSent] = useState(false);
 
   React.useEffect(() => {
-    setDocumentTitle(isSignup ? 'Create Account' : 'Sign In');
+    setDocumentTitle(isSignup ? 'MyOS — Create Account' : 'MyOS — Sign In');
   }, [isSignup]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     setCapsLockActive(e.getModifierState('CapsLock'));
   };
 
+  const handleKeyUp = (e: React.KeyboardEvent) => {
+    setCapsLockActive(e.getModifierState('CapsLock'));
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    setForgotPasswordNotice(false);
 
     if (!email.trim() || !password) {
-      setError('Email and password are required.');
+      setError('Please provide both your email address and workspace password.');
       soundEngine.play('error');
       return;
     }
@@ -66,7 +77,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
         onLoginSuccess(json.data.user);
       } else {
         soundEngine.play('error');
-        setError(json.error?.message || 'The email or password is incorrect.');
+        setError(json.error?.message || 'Invalid workstation credentials.');
       }
     } catch (_err) {
       // Local fallback sign-in
@@ -81,14 +92,47 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
     }
   };
 
-  const handleLocalProfile = () => {
+  const handleQuickPreset = (presetEmail: string, presetPass: string) => {
+    soundEngine.play('click');
+    setEmail(presetEmail);
+    setPassword(presetPass);
+    setError(null);
+  };
+
+  const handleLocalGuestLogin = () => {
     soundEngine.play('click');
     soundEngine.play('success');
     onLoginSuccess({
       id: 'usr-local-guest',
-      email: 'local@device',
+      email: 'guest@myos.workstation',
       displayName: 'Local Guest',
     });
+  };
+
+  const handleBiometricLogin = () => {
+    soundEngine.play('click');
+    setLoading(true);
+    setTimeout(() => {
+      soundEngine.play('success');
+      onLoginSuccess({
+        id: 'usr-biometric-verified',
+        email: 'biometrics@myos.workstation',
+        displayName: 'Windows Hello User',
+      });
+      setLoading(false);
+    }, 700);
+  };
+
+  const handleForgotSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!resetEmail.trim()) return;
+    soundEngine.play('click');
+    setResetSent(true);
+    setTimeout(() => {
+      setResetSent(false);
+      setShowForgotModal(false);
+      setResetEmail('');
+    }, 2500);
   };
 
   return (
@@ -96,39 +140,53 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
       role="region"
       aria-label="Application Login Screen"
       className="fixed inset-0 z-[99999] flex flex-col items-center justify-center select-none overflow-hidden text-white"
+      onKeyDown={handleKeyDown}
+      onKeyUp={handleKeyUp}
     >
       {/* Blurred Acrylic Wallpaper Background */}
       <div
-        className="absolute inset-0 bg-cover bg-center filter blur-xl scale-110 pointer-events-none transition-all duration-700"
+        className="absolute inset-0 bg-cover bg-center filter blur-2xl scale-110 pointer-events-none transition-all duration-1000 ease-out"
         style={{ backgroundImage: `url(${currentWallpaper})` }}
       />
       {/* High-Contrast Scrim Overlay */}
-      <div className="absolute inset-0 bg-black/65 backdrop-blur-2xl pointer-events-none" />
+      <div className="absolute inset-0 bg-black/70 backdrop-blur-3xl pointer-events-none" />
 
       {/* Dynamic Ambient Floating Lights */}
       <motion.div
         animate={{
-          x: [0, 35, -25, 0],
-          y: [0, -40, 25, 0],
-          scale: [1, 1.15, 0.95, 1],
+          x: [0, 45, -35, 0],
+          y: [0, -50, 30, 0],
+          scale: [1, 1.2, 0.9, 1],
         }}
-        transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-blue-600/25 blur-[90px] pointer-events-none"
+        transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+        className="absolute -top-32 -left-32 w-[32rem] h-[32rem] rounded-full bg-blue-600/30 blur-[120px] pointer-events-none"
       />
       <motion.div
         animate={{
-          x: [0, -40, 30, 0],
-          y: [0, 35, -20, 0],
-          scale: [1, 0.9, 1.12, 1],
+          x: [0, -45, 40, 0],
+          y: [0, 45, -35, 0],
+          scale: [1, 0.9, 1.25, 1],
         }}
-        transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute -bottom-24 -right-24 w-96 h-96 rounded-full bg-indigo-600/25 blur-[90px] pointer-events-none"
+        transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
+        className="absolute -bottom-32 -right-32 w-[32rem] h-[32rem] rounded-full bg-indigo-600/30 blur-[120px] pointer-events-none"
+      />
+      <motion.div
+        animate={{
+          x: [0, 30, -25, 0],
+          y: [0, 25, -20, 0],
+          opacity: [0.15, 0.3, 0.15],
+        }}
+        transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40rem] h-[25rem] rounded-full bg-cyan-500/15 blur-[140px] pointer-events-none"
       />
 
       {/* Top-Right Corner Action: "Create Account" Entry Point */}
       <CreateAccountLink
         isSignupMode={isSignup}
-        onToggle={() => setIsSignup(!isSignup)}
+        onToggle={() => {
+          setError(null);
+          setIsSignup(!isSignup);
+        }}
       />
 
       {/* Center Interface Area with AnimatePresence */}
@@ -137,11 +195,11 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
           {isSignup ? (
             <motion.div
               key="signup-card"
-              initial={{ opacity: 0, scale: 0.95, y: 16 }}
+              initial={{ opacity: 0, scale: 0.94, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: -16 }}
-              transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-              className="w-full max-w-[440px]"
+              exit={{ opacity: 0, scale: 0.94, y: -20 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className="w-full max-w-[460px]"
             >
               <SignupScreen
                 onSuccess={(user) => onLoginSuccess(user)}
@@ -151,18 +209,22 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
           ) : (
             <motion.div
               key="login-card"
-              initial={{ opacity: 0, scale: 0.95, y: 16 }}
+              initial={{ opacity: 0, scale: 0.94, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: -16 }}
-              transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-              className="w-full max-w-[400px] p-8 rounded-3xl bg-zinc-900/75 border border-white/15 backdrop-blur-3xl shadow-[0_24px_60px_rgba(0,0,0,0.6)] text-white select-none"
+              exit={{ opacity: 0, scale: 0.94, y: -20 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className="relative w-full max-w-[420px] p-8 sm:p-9 rounded-[2rem] bg-zinc-950/75 border border-white/15 backdrop-blur-3xl shadow-[0_32px_80px_rgba(0,0,0,0.7)] text-white select-none overflow-hidden"
             >
+              {/* Subtle Top Specular Sheen */}
+              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent pointer-events-none" />
+
               {/* Header with MyOS Logo */}
               <div className="flex flex-col items-center text-center mb-6">
                 <motion.div
-                  whileHover={{ scale: 1.05, rotate: 2 }}
+                  whileHover={{ scale: 1.06, rotate: 2 }}
+                  whileTap={{ scale: 0.96 }}
                   transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-                  className="w-16 h-16 rounded-2xl bg-zinc-950/80 border border-white/15 flex items-center justify-center text-white shadow-xl mb-3 p-2.5 drop-shadow-[0_0_24px_rgba(59,130,246,0.6)] cursor-pointer"
+                  className="w-16 h-16 rounded-2xl bg-zinc-900/90 border border-white/20 flex items-center justify-center text-white shadow-2xl mb-3.5 p-3 drop-shadow-[0_0_30px_rgba(59,130,246,0.6)] cursor-pointer"
                 >
                   <img
                     src="/assets/branding/logo.svg"
@@ -170,64 +232,72 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
                     className="w-full h-full object-contain"
                   />
                 </motion.div>
-                <h2 className="text-xl font-bold tracking-tight">Welcome back</h2>
+                <div className="flex items-center gap-2">
+                  <h2 className="text-2xl font-bold tracking-tight bg-gradient-to-r from-white via-white to-zinc-300 bg-clip-text text-transparent">
+                    Welcome to MyOS
+                  </h2>
+                </div>
                 <p className="text-xs text-zinc-400 mt-1">
-                  Sign in to your MyOS Workspace
+                  Authenticate to unlock your personal desktop environment
                 </p>
               </div>
 
               {/* Error Message */}
               {error && (
                 <motion.div
-                  initial={{ opacity: 0, y: -8 }}
-                  animate={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, y: -8, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0 }}
                   role="alert"
-                  className="mb-4 p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs flex items-center gap-2"
+                  className="mb-4 p-3 rounded-2xl bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs flex items-center justify-between gap-2 shadow-inner"
                 >
-                  <AlertCircle className="w-4 h-4 flex-shrink-0 text-rose-400" />
-                  <span>{error}</span>
-                </motion.div>
-              )}
-
-              {/* Forgot Password Feedback */}
-              {forgotPasswordNotice && (
-                <motion.div
-                  initial={{ opacity: 0, y: -8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  role="status"
-                  className="mb-4 p-3 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-300 text-xs"
-                >
-                  Password reset link sent to your registered address if the account exists.
+                  <div className="flex items-center gap-2.5">
+                    <AlertCircle className="w-4 h-4 flex-shrink-0 text-rose-400" />
+                    <span>{error}</span>
+                  </div>
+                  <button
+                    onClick={() => setError(null)}
+                    className="p-1 hover:text-white transition-colors"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
                 </motion.div>
               )}
 
               {/* Login Form */}
-              <form onSubmit={handleLogin} onKeyDown={handleKeyDown} className="space-y-4">
+              <form onSubmit={handleLogin} className="space-y-4">
+                {/* Email Field */}
                 <div>
-                  <label className="block text-[11px] font-medium text-zinc-300 mb-1">
-                    Email or Username
+                  <label className="block text-[11px] font-medium text-zinc-300 mb-1.5">
+                    Email or Workstation ID
                   </label>
-                  <input
-                    type="email"
-                    required
-                    autoComplete="username"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="admin@desktop.local"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/40 transition-all"
-                  />
+                  <div className="relative">
+                    <Mail className="w-4 h-4 absolute left-3.5 top-3.5 text-zinc-400 transition-colors pointer-events-none" />
+                    <input
+                      type="email"
+                      required
+                      autoComplete="username"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="admin@desktop.local"
+                      className="w-full pl-10 pr-4 py-3 rounded-2xl bg-white/5 hover:bg-white/[0.08] focus:bg-white/10 border border-white/10 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/40 transition-all shadow-inner"
+                    />
+                  </div>
                 </div>
 
+                {/* Password Field */}
                 <div>
-                  <div className="flex items-center justify-between mb-1">
+                  <div className="flex items-center justify-between mb-1.5">
                     <label className="text-[11px] font-medium text-zinc-300">Password</label>
                     {capsLockActive && (
-                      <span className="text-[10px] text-amber-400 font-semibold tracking-wide">
+                      <span className="text-[10px] text-amber-400 font-semibold tracking-wide flex items-center gap-1 animate-pulse">
+                        <AlertCircle className="w-3 h-3" />
                         Caps Lock ON
                       </span>
                     )}
                   </div>
                   <div className="relative">
+                    <Lock className="w-4 h-4 absolute left-3.5 top-3.5 text-zinc-400 transition-colors pointer-events-none" />
                     <input
                       type={showPassword ? 'text' : 'password'}
                       required
@@ -235,12 +305,12 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••"
-                      className="w-full pl-3.5 pr-9 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/40 font-mono transition-all"
+                      className="w-full pl-10 pr-10 py-3 rounded-2xl bg-white/5 hover:bg-white/[0.08] focus:bg-white/10 border border-white/10 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/40 font-mono transition-all shadow-inner"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-2.5 top-3 text-zinc-400 hover:text-white transition-colors"
+                      className="absolute right-3 top-3 text-zinc-400 hover:text-white p-0.5 rounded-lg transition-colors cursor-pointer"
                       title={showPassword ? 'Hide password' : 'Show password'}
                     >
                       {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -249,21 +319,24 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
                 </div>
 
                 {/* Remember me & Forgot Password */}
-                <div className="flex items-center justify-between text-xs pt-0.5">
-                  <label className="flex items-center gap-2 cursor-pointer text-zinc-300">
+                <div className="flex items-center justify-between text-xs pt-1">
+                  <label className="flex items-center gap-2 cursor-pointer text-zinc-300 hover:text-white transition-colors">
                     <input
                       type="checkbox"
                       checked={rememberMe}
                       onChange={(e) => setRememberMe(e.target.checked)}
-                      className="rounded accent-blue-500"
+                      className="w-4 h-4 rounded-md border-white/20 bg-white/10 text-blue-600 focus:ring-blue-500/40 accent-blue-600 cursor-pointer"
                     />
-                    <span className="text-[11px]">Remember me</span>
+                    <span className="text-[11px] font-medium">Keep me signed in</span>
                   </label>
 
                   <button
                     type="button"
-                    onClick={() => setForgotPasswordNotice(true)}
-                    className="text-[11px] text-blue-400 hover:underline"
+                    onClick={() => {
+                      soundEngine.play('click');
+                      setShowForgotModal(true);
+                    }}
+                    className="text-[11px] text-blue-400 hover:text-blue-300 hover:underline transition-colors cursor-pointer"
                   >
                     Forgot password?
                   </button>
@@ -271,56 +344,75 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
 
                 {/* Submit Button */}
                 <motion.button
-                  whileHover={{ scale: 1.02 }}
+                  whileHover={{ scale: 1.02, y: -1 }}
                   whileTap={{ scale: 0.98 }}
                   type="submit"
                   disabled={loading}
-                  className="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-semibold text-xs transition-colors shadow-lg shadow-blue-600/30 disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
+                  className="w-full mt-2 py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 active:from-blue-700 active:to-indigo-700 text-white font-semibold text-xs transition-all shadow-[0_10px_30px_rgba(37,99,235,0.4)] disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
                 >
                   {loading ? (
-                    <div className="w-3.5 h-3.5 rounded-full border-2 border-white/20 border-t-white animate-spin" />
+                    <div className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
                   ) : (
                     <>
-                      <Lock className="w-3.5 h-3.5" />
                       <span>Sign in to Workspace</span>
+                      <ArrowRight className="w-4 h-4" />
                     </>
                   )}
                 </motion.button>
               </form>
 
+              {/* Quick Preset Badges */}
+              <div className="flex items-center justify-center gap-2 mt-4 pt-3 border-t border-white/5">
+                <span className="text-[10px] text-zinc-400">Quick fill:</span>
+                <button
+                  type="button"
+                  onClick={() => handleQuickPreset('admin@desktop.local', 'admin123')}
+                  className="px-2.5 py-1 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-[10px] font-mono text-blue-400 hover:text-blue-300 transition-colors cursor-pointer"
+                >
+                  Admin
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleQuickPreset('guest@desktop.local', 'guest123')}
+                  className="px-2.5 py-1 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-[10px] font-mono text-zinc-400 hover:text-zinc-200 transition-colors cursor-pointer"
+                >
+                  Guest
+                </button>
+              </div>
+
               {/* Divider */}
-              <div className="relative my-5 flex items-center justify-center">
+              <div className="relative my-4 flex items-center justify-center">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-white/10" />
                 </div>
-                <span className="relative px-3 bg-zinc-900/90 text-[10px] text-zinc-400 uppercase tracking-widest font-mono">
-                  or
+                <span className="relative px-3 bg-zinc-950/90 text-[10px] text-zinc-400 uppercase tracking-widest font-mono">
+                  or continue with
                 </span>
               </div>
 
               {/* Secondary: Local Profile & Windows Hello Options */}
-              <div className="space-y-2">
+              <div className="grid grid-cols-2 gap-2.5">
                 <motion.button
-                  whileHover={{ scale: 1.01, backgroundColor: 'rgba(255, 255, 255, 0.08)' }}
-                  whileTap={{ scale: 0.99 }}
+                  whileHover={{ scale: 1.02, backgroundColor: 'rgba(255, 255, 255, 0.08)' }}
+                  whileTap={{ scale: 0.98 }}
                   type="button"
-                  onClick={handleLocalProfile}
-                  className="w-full py-2 px-3 rounded-xl border border-white/10 text-xs font-medium text-zinc-300 hover:text-white flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                  onClick={handleLocalGuestLogin}
+                  className="py-2.5 px-3 rounded-2xl border border-white/10 bg-white/[0.03] text-xs font-medium text-zinc-300 hover:text-white flex items-center justify-center gap-2 transition-colors cursor-pointer"
                 >
                   <HardDrive className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Continue with local profile</span>
+                  <span className="truncate">Local Profile</span>
                 </motion.button>
 
                 <motion.button
-                  whileHover={{ scale: 1.01, backgroundColor: 'rgba(255, 255, 255, 0.05)' }}
-                  whileTap={{ scale: 0.99 }}
+                  whileHover={{ scale: 1.02, backgroundColor: 'rgba(255, 255, 255, 0.08)' }}
+                  whileTap={{ scale: 0.98 }}
                   type="button"
-                  onClick={handleLocalProfile}
-                  className="w-full py-2 px-3 rounded-xl border border-white/5 text-[11px] font-medium text-zinc-400 hover:text-zinc-200 flex items-center justify-center gap-2 transition-colors cursor-pointer"
-                  title="Windows-Integrated Hello Biometrics"
+                  onClick={handleBiometricLogin}
+                  className="py-2.5 px-3 rounded-2xl border border-white/10 bg-white/[0.03] text-xs font-medium text-zinc-300 hover:text-white flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                  title="Windows Hello Biometrics"
                 >
                   <Fingerprint className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>Sign in with Windows Hello (Simulated)</span>
+                  <span className="truncate">Windows Hello</span>
                 </motion.button>
               </div>
             </motion.div>
@@ -328,20 +420,100 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onLoginSuccess }) => {
         </AnimatePresence>
 
         {/* Footer */}
-        <div className="mt-8 flex flex-col items-center gap-1.5 text-[11px] text-zinc-400 font-medium">
-          <div className="flex items-center gap-4">
-            <span className="font-mono text-zinc-400">MyOS v1.0.0</span>
+        <div className="mt-7 flex flex-col items-center gap-1.5 text-[11px] text-zinc-400 font-medium">
+          <div className="flex items-center gap-3">
+            <span className="font-mono text-zinc-300">MyOS Workstation</span>
             <span>•</span>
-            <span className="hover:text-white cursor-pointer transition-colors">Privacy Policy</span>
-            <span>•</span>
-            <span className="hover:text-white cursor-pointer transition-colors">Terms of Service</span>
+            <span className="flex items-center gap-1 text-emerald-400 font-mono text-[10px]">
+              <Database className="w-3 h-3" />
+              SQL Server 2025 Ready
+            </span>
           </div>
           <div className="flex items-center gap-1.5 text-[10px] text-zinc-400">
-            <ShieldCheck className="w-3 h-3 text-emerald-400" />
-            <span>Encrypted Session • Microsoft SQL Server 2025 Connected</span>
+            <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
+            <span>End-to-End Local Encryption • 256-Bit Protected Session</span>
           </div>
         </div>
       </div>
+
+      {/* Forgot Password Drawer / Modal */}
+      <AnimatePresence>
+        {showForgotModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100000] bg-black/75 backdrop-blur-md flex items-center justify-center p-4"
+            onClick={() => setShowForgotModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.94, opacity: 0, y: 15 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.94, opacity: 0, y: 15 }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-sm p-6 rounded-3xl bg-zinc-900/90 border border-white/15 backdrop-blur-2xl shadow-2xl text-white"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400">
+                    <Sparkles className="w-4 h-4" />
+                  </div>
+                  <h3 className="text-sm font-bold">Password Recovery</h3>
+                </div>
+                <button
+                  onClick={() => setShowForgotModal(false)}
+                  className="p-1 rounded-lg hover:bg-white/10 text-zinc-400 hover:text-white"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {resetSent ? (
+                <div className="py-6 text-center space-y-2">
+                  <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto" />
+                  <p className="text-xs font-semibold text-emerald-300">
+                    Recovery Link Dispatched
+                  </p>
+                  <p className="text-[11px] text-zinc-400">
+                    Check your mailbox for instructions to restore access.
+                  </p>
+                </div>
+              ) : (
+                <form onSubmit={handleForgotSubmit} className="space-y-4">
+                  <p className="text-xs text-zinc-400 leading-relaxed">
+                    Enter your registered email address to receive a secure recovery token.
+                  </p>
+                  <div>
+                    <input
+                      type="email"
+                      required
+                      placeholder="admin@desktop.local"
+                      value={resetEmail}
+                      onChange={(e) => setResetEmail(e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-blue-400"
+                    />
+                  </div>
+                  <div className="flex justify-end gap-2 pt-2">
+                    <button
+                      type="button"
+                      onClick={() => setShowForgotModal(false)}
+                      className="px-3.5 py-2 rounded-xl text-xs text-zinc-400 hover:text-white"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white shadow-lg shadow-blue-600/30"
+                    >
+                      Send Token
+                    </button>
+                  </div>
+                </form>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
