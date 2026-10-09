@@ -122,6 +122,10 @@ export const translations: Record<LocaleCode, TranslationDictionary> = {
     clock: 'گھڑی اور ٹائمر',
     apiTester: 'اے پی آئی ٹیسٹر',
     jsonFormatter: 'جے ایس او این فارمیٹر',
+    devWorkspace: 'ڈویلپر ورک اسپیس',
+    textEditor: 'ٹیکسٹ ایڈیٹر',
+    appCatalog: 'ایپ کیٹلاگ',
+    eventViewer: 'ایونٹ ویور',
   },
 };
 
