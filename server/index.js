@@ -220,6 +220,39 @@ let inMemoryNotifications = [
   },
 ];
 
+let inMemoryApplications = [
+  { applicationId: 'app-1', applicationKey: 'file-explorer', name: 'File Explorer', version: '5.0.0', classification: 'Core', isEnabled: true, isSystemApplication: true, description: 'Browse and organize files and folders.' },
+  { applicationId: 'app-2', applicationKey: 'settings', name: 'Settings', version: '5.0.0', classification: 'Core', isEnabled: true, isSystemApplication: true, description: 'System preferences and themes.' },
+  { applicationId: 'app-3', applicationKey: 'notes', name: 'Notes', version: '5.0.0', classification: 'Productivity', isEnabled: true, isSystemApplication: true, description: 'Markdown notes with automatic sync.' },
+  { applicationId: 'app-4', applicationKey: 'terminal', name: 'Terminal Center', version: '5.0.0', classification: 'Developer', isEnabled: true, isSystemApplication: true, description: 'Interactive shell and diagnostics.' },
+  { applicationId: 'app-5', applicationKey: 'task-manager', name: 'Task Manager', version: '5.0.0', classification: 'System', isEnabled: true, isSystemApplication: true, description: 'Inspect active processes and host performance.' },
+  { applicationId: 'app-6', applicationKey: 'system-info', name: 'System Information', version: '5.0.0', classification: 'System', isEnabled: true, isSystemApplication: true, description: 'Host hardware and OS metrics.' },
+  { applicationId: 'app-7', applicationKey: 'calculator', name: 'Calculator', version: '5.0.0', classification: 'Productivity', isEnabled: true, isSystemApplication: true, description: 'Mathematical calculations.' },
+  { applicationId: 'app-8', applicationKey: 'clock', name: 'Clock & Timer', version: '5.0.0', classification: 'Productivity', isEnabled: true, isSystemApplication: true, description: 'World clock, timer, and stopwatch.' },
+  { applicationId: 'app-9', applicationKey: 'api-tester', name: 'API Tester', version: '5.0.0', classification: 'Developer', isEnabled: true, isSystemApplication: true, description: 'HTTP REST endpoint inspection.' },
+  { applicationId: 'app-10', applicationKey: 'json-viewer', name: 'JSON Studio', version: '5.0.0', classification: 'Developer', isEnabled: true, isSystemApplication: true, description: 'JSON structure analysis.' },
+  { applicationId: 'app-11', applicationKey: 'dev-workspace', name: 'Developer Hub', version: '5.0.0', classification: 'Developer', isEnabled: true, isSystemApplication: true, description: 'Developer productivity suite.' },
+  { applicationId: 'app-12', applicationKey: 'text-editor', name: 'Text Editor', version: '5.0.0', classification: 'Productivity', isEnabled: true, isSystemApplication: true, description: 'Rich code and text editing.' },
+  { applicationId: 'app-13', applicationKey: 'app-catalog', name: 'App Catalog', version: '5.0.0', classification: 'System', isEnabled: true, isSystemApplication: true, description: 'Application registry and marketplace.' },
+  { applicationId: 'app-14', applicationKey: 'diagnostics', name: 'Diagnostics', version: '5.0.0', classification: 'System', isEnabled: true, isSystemApplication: true, description: 'System health and event logging.' },
+  { applicationId: 'app-15', applicationKey: 'media-player', name: 'Media Player', version: '5.0.0', classification: 'Productivity', isEnabled: true, isSystemApplication: true, description: 'Audio & video visualizer playback.' },
+  { applicationId: 'app-16', applicationKey: 'gallery', name: 'Photo Gallery', version: '5.0.0', classification: 'Productivity', isEnabled: true, isSystemApplication: true, description: 'Image preview and organization.' },
+];
+
+let inMemoryFiles = [
+  { id: 'f-docs', name: 'Documents', type: 'folder', parentId: null, path: '/Documents', sizeKb: 0, updatedAt: '2026-10-08' },
+  { id: 'f-downloads', name: 'Downloads', type: 'folder', parentId: null, path: '/Downloads', sizeKb: 0, updatedAt: '2026-10-08' },
+  { id: 'f-pictures', name: 'Pictures', type: 'folder', parentId: null, path: '/Pictures', sizeKb: 0, updatedAt: '2026-10-08' },
+  { id: 'f-projects', name: 'Projects', type: 'folder', parentId: null, path: '/Projects', sizeKb: 0, updatedAt: '2026-10-08' },
+  { id: 'f-welcome', name: 'Welcome_ADW5.txt', type: 'file', extension: 'txt', sizeKb: 4, parentId: null, path: '/Welcome_ADW5.txt', updatedAt: '2026-10-08' },
+  { id: 'f-spec', name: 'System_Specification.md', type: 'file', extension: 'md', sizeKb: 54, parentId: 'f-docs', path: '/Documents/System_Specification.md', updatedAt: '2026-10-08' },
+  { id: 'f-todo', name: 'Sprint_Roadmap.txt', type: 'file', extension: 'txt', sizeKb: 12, parentId: 'f-docs', path: '/Documents/Sprint_Roadmap.txt', updatedAt: '2026-10-08' },
+  { id: 'f-wallpaper', name: 'Aurora_Wallpaper.png', type: 'file', extension: 'png', sizeKb: 1420, parentId: 'f-pictures', path: '/Pictures/Aurora_Wallpaper.png', updatedAt: '2026-10-08' },
+  { id: 'f-code', name: 'desktopStore.ts', type: 'file', extension: 'ts', sizeKb: 18, parentId: 'f-projects', path: '/Projects/desktopStore.ts', updatedAt: '2026-10-08' },
+];
+
+let inMemoryWindowStates = [];
+
 // Auth middleware for protected routes
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
@@ -568,7 +601,223 @@ app.post('/api/v1/notifications/read-all', (_req, res) => {
 });
 
 // ==========================================
-// 7. SYNCHRONIZATION ENDPOINTS
+// 7. APPLICATIONS CATALOG ENDPOINTS (Section 12.5)
+// ==========================================
+app.get('/api/v1/applications', async (_req, res) => {
+  try {
+    const rows = await db.executeQuery('SELECT ApplicationId AS applicationId, ApplicationKey AS applicationKey, Name AS name, Version AS version, Description AS description, Classification AS classification, IsEnabled AS isEnabled, IsSystemApplication AS isSystemApplication, ManifestJson AS manifestJson FROM dbo.Applications WHERE IsEnabled = 1 ORDER BY Name ASC');
+    if (rows && rows.length > 0) {
+      return successEnvelope(res, rows);
+    }
+  } catch (_e) {
+    // Fall back to memory
+  }
+  successEnvelope(res, inMemoryApplications);
+});
+
+app.post('/api/v1/applications', authenticateToken, async (req, res) => {
+  const { applicationKey, name, version, description, classification, manifestJson } = req.body;
+  if (!applicationKey || !name) {
+    return errorEnvelope(res, 'VALIDATION_FAILED', 'Application key and name are required.');
+  }
+
+  const newApp = {
+    applicationId: `app-${randomUUID().substring(0, 8)}`,
+    applicationKey,
+    name,
+    version: version || '1.0.0',
+    description: description || '',
+    classification: classification || 'Community',
+    isEnabled: true,
+    isSystemApplication: false,
+    manifestJson: manifestJson ? JSON.stringify(manifestJson) : null,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+
+  try {
+    await db.executeQuery(
+      'INSERT INTO dbo.Applications (ApplicationId, ApplicationKey, Name, Version, Description, Classification, IsEnabled, IsSystemApplication, ManifestJson) VALUES (@id, @key, @name, @ver, @desc, @class, 1, 0, @manifest)',
+      {
+        id: newApp.applicationId,
+        key: newApp.applicationKey,
+        name: newApp.name,
+        ver: newApp.version,
+        desc: newApp.description,
+        class: newApp.classification,
+        manifest: newApp.manifestJson,
+      }
+    );
+  } catch (_e) {
+    // Fall back to memory
+  }
+
+  inMemoryApplications.push(newApp);
+  successEnvelope(res, newApp, 201);
+});
+
+// ==========================================
+// 8. USER FILES & VIRTUAL FS ENDPOINTS (Section 12.5)
+// ==========================================
+app.get('/api/v1/files', async (req, res) => {
+  try {
+    const rows = await db.executeQuery('SELECT FileId AS id, ParentFileId AS parentId, Name AS name, Path AS path, IsDirectory AS isDirectory, SizeBytes AS sizeBytes, MimeType AS mimeType, UpdatedAt AS updatedAt FROM dbo.UserFiles WHERE DeletedAt IS NULL ORDER BY IsDirectory DESC, Name ASC');
+    if (rows && rows.length > 0) {
+      const mapped = rows.map((r) => ({
+        id: r.id,
+        name: r.name,
+        type: r.isDirectory ? 'folder' : 'file',
+        parentId: r.parentId || null,
+        path: r.path,
+        sizeKb: r.sizeBytes ? Math.round(r.sizeBytes / 1024) : 0,
+        updatedAt: r.updatedAt ? new Date(r.updatedAt).toISOString().split('T')[0] : '2026-10-08',
+      }));
+      return successEnvelope(res, mapped);
+    }
+  } catch (_e) {
+    // Fall back to memory
+  }
+  successEnvelope(res, inMemoryFiles);
+});
+
+app.post('/api/v1/files', async (req, res) => {
+  const { name, type, parentId, path: filePath, sizeKb, extension } = req.body;
+  if (!name) {
+    return errorEnvelope(res, 'VALIDATION_FAILED', 'File name is required.');
+  }
+
+  const isFolder = type === 'folder';
+  const newFile = {
+    id: `f-${randomUUID().substring(0, 8)}`,
+    name,
+    type: isFolder ? 'folder' : 'file',
+    parentId: parentId || null,
+    path: filePath || `/${name}`,
+    sizeKb: sizeKb || (isFolder ? 0 : 1),
+    extension: extension || (name.includes('.') ? name.split('.').pop() : undefined),
+    updatedAt: new Date().toISOString().split('T')[0],
+  };
+
+  try {
+    await db.executeQuery(
+      'INSERT INTO dbo.UserFiles (FileId, UserId, ParentFileId, Name, Path, IsDirectory, SizeBytes, MimeType) VALUES (@id, @userId, @parentId, @name, @path, @isDir, @size, @mime)',
+      {
+        id: newFile.id,
+        userId: req.user?.sub || 'usr-admin-01',
+        parentId: newFile.parentId,
+        name: newFile.name,
+        path: newFile.path,
+        isDir: isFolder ? 1 : 0,
+        size: (newFile.sizeKb || 0) * 1024,
+        mime: isFolder ? 'inode/directory' : 'application/octet-stream',
+      }
+    );
+  } catch (_e) {
+    // Fall back to memory
+  }
+
+  inMemoryFiles.push(newFile);
+  successEnvelope(res, newFile, 201);
+});
+
+app.patch('/api/v1/files/:id', async (req, res) => {
+  const { id } = req.params;
+  const file = inMemoryFiles.find((f) => f.id === id);
+  if (!file) {
+    return errorEnvelope(res, 'FILE_NOT_FOUND', `File ${id} not found.`, 404);
+  }
+
+  Object.assign(file, req.body, { updatedAt: new Date().toISOString().split('T')[0] });
+
+  try {
+    if (req.body.name) {
+      await db.executeQuery('UPDATE dbo.UserFiles SET Name = @name, UpdatedAt = SYSUTCDATETIME() WHERE FileId = @id', {
+        id,
+        name: req.body.name,
+      });
+    }
+  } catch (_e) {
+    // Fall back
+  }
+
+  successEnvelope(res, file);
+});
+
+app.delete('/api/v1/files/:id', async (req, res) => {
+  const { id } = req.params;
+  inMemoryFiles = inMemoryFiles.filter((f) => f.id !== id && f.parentId !== id);
+
+  try {
+    await db.executeQuery('UPDATE dbo.UserFiles SET DeletedAt = SYSUTCDATETIME() WHERE FileId = @id OR ParentFileId = @id', { id });
+  } catch (_e) {
+    // Fall back
+  }
+
+  successEnvelope(res, { deletedId: id });
+});
+
+// ==========================================
+// 9. WINDOW STATES PERSISTENCE (Section 12.5)
+// ==========================================
+app.get('/api/v1/window-states', async (req, res) => {
+  try {
+    const rows = await db.executeQuery('SELECT WindowStateId AS windowStateId, ApplicationKey AS applicationKey, X AS x, Y AS y, Width AS width, Height AS height, IsMaximized AS isMaximized, IsMinimized AS isMinimized, ZIndex AS zIndex, StateJson AS stateJson FROM dbo.WindowStates');
+    if (rows && rows.length > 0) {
+      return successEnvelope(res, rows);
+    }
+  } catch (_e) {
+    // Fall back to memory
+  }
+  successEnvelope(res, inMemoryWindowStates);
+});
+
+app.post('/api/v1/window-states', async (req, res) => {
+  const { applicationKey, x, y, width, height, isMaximized, isMinimized, zIndex, stateJson } = req.body;
+  const entry = {
+    windowStateId: `ws-win-${randomUUID().substring(0, 8)}`,
+    applicationKey,
+    x,
+    y,
+    width,
+    height,
+    isMaximized: Boolean(isMaximized),
+    isMinimized: Boolean(isMinimized),
+    zIndex: Number(zIndex) || 0,
+    stateJson: stateJson ? JSON.stringify(stateJson) : null,
+  };
+
+  try {
+    await db.executeQuery(
+      'MERGE dbo.WindowStates AS target USING (SELECT @key AS ApplicationKey) AS source ON (target.ApplicationKey = source.ApplicationKey) WHEN MATCHED THEN UPDATE SET X = @x, Y = @y, Width = @w, Height = @h, IsMaximized = @isMax, IsMinimized = @isMin, ZIndex = @z, UpdatedAt = SYSUTCDATETIME() WHEN NOT MATCHED THEN INSERT (WindowStateId, UserId, ApplicationKey, X, Y, Width, Height, IsMaximized, IsMinimized, ZIndex) VALUES (@id, @userId, @key, @x, @y, @w, @h, @isMax, @isMin, @z);',
+      {
+        id: entry.windowStateId,
+        userId: req.user?.sub || 'usr-admin-01',
+        key: applicationKey,
+        x,
+        y,
+        w: width,
+        h: height,
+        isMax: entry.isMaximized ? 1 : 0,
+        isMin: entry.isMinimized ? 1 : 0,
+        z: entry.zIndex,
+      }
+    );
+  } catch (_e) {
+    // Fall back to memory
+  }
+
+  const existingIdx = inMemoryWindowStates.findIndex((w) => w.applicationKey === applicationKey);
+  if (existingIdx !== -1) {
+    inMemoryWindowStates[existingIdx] = entry;
+  } else {
+    inMemoryWindowStates.push(entry);
+  }
+
+  successEnvelope(res, entry);
+});
+
+// ==========================================
+// 10. SYNCHRONIZATION ENDPOINTS
 // ==========================================
 app.get('/api/v1/sync/status', (req, res) => {
   successEnvelope(res, {

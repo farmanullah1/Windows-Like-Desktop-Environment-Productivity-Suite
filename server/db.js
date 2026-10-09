@@ -101,6 +101,98 @@ async function ensureCoreTables() {
           CreatedAt DATETIME2(3) NOT NULL DEFAULT SYSUTCDATETIME()
         );
       END;
+
+      -- Section 12.5: Applications Table
+      IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Applications')
+      BEGIN
+        CREATE TABLE dbo.Applications (
+          ApplicationId NVARCHAR(64) PRIMARY KEY,
+          ApplicationKey NVARCHAR(150) NOT NULL UNIQUE,
+          Name NVARCHAR(200) NOT NULL,
+          Version NVARCHAR(50) NOT NULL,
+          Description NVARCHAR(1000) NULL,
+          Classification NVARCHAR(50) NOT NULL,
+          IsEnabled BIT NOT NULL DEFAULT 1,
+          IsSystemApplication BIT NOT NULL DEFAULT 0,
+          ManifestJson NVARCHAR(MAX) NULL,
+          CreatedAt DATETIME2(3) NOT NULL DEFAULT SYSUTCDATETIME(),
+          UpdatedAt DATETIME2(3) NOT NULL DEFAULT SYSUTCDATETIME()
+        );
+      END;
+
+      -- Section 12.5: UserFiles Table
+      IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'UserFiles')
+      BEGIN
+        CREATE TABLE dbo.UserFiles (
+          FileId NVARCHAR(64) PRIMARY KEY,
+          UserId NVARCHAR(64) NOT NULL,
+          ParentFileId NVARCHAR(64) NULL,
+          Name NVARCHAR(500) NOT NULL,
+          Path NVARCHAR(2000) NOT NULL,
+          IsDirectory BIT NOT NULL DEFAULT 0,
+          SizeBytes BIGINT NULL,
+          MimeType NVARCHAR(200) NULL,
+          ContentHash NVARCHAR(128) NULL,
+          CreatedAt DATETIME2(3) NOT NULL DEFAULT SYSUTCDATETIME(),
+          UpdatedAt DATETIME2(3) NOT NULL DEFAULT SYSUTCDATETIME(),
+          DeletedAt DATETIME2(3) NULL
+        );
+      END;
+
+      -- Section 12.5: WindowStates Table
+      IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'WindowStates')
+      BEGIN
+        CREATE TABLE dbo.WindowStates (
+          WindowStateId NVARCHAR(64) PRIMARY KEY,
+          UserId NVARCHAR(64) NOT NULL,
+          WorkspaceId NVARCHAR(64) NULL,
+          ApplicationKey NVARCHAR(150) NOT NULL,
+          X INT NULL,
+          Y INT NULL,
+          Width INT NULL,
+          Height INT NULL,
+          IsMaximized BIT NOT NULL DEFAULT 0,
+          IsMinimized BIT NOT NULL DEFAULT 0,
+          ZIndex INT NOT NULL DEFAULT 0,
+          StateJson NVARCHAR(MAX) NULL,
+          UpdatedAt DATETIME2(3) NOT NULL DEFAULT SYSUTCDATETIME()
+        );
+      END;
+
+      -- Section 12.5: Notifications Table
+      IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Notifications')
+      BEGIN
+        CREATE TABLE dbo.Notifications (
+          NotificationId NVARCHAR(64) PRIMARY KEY,
+          UserId NVARCHAR(64) NOT NULL,
+          Title NVARCHAR(300) NOT NULL,
+          Message NVARCHAR(2000) NOT NULL,
+          Severity NVARCHAR(30) NOT NULL,
+          Category NVARCHAR(100) NULL,
+          IsRead BIT NOT NULL DEFAULT 0,
+          CreatedAt DATETIME2(3) NOT NULL DEFAULT SYSUTCDATETIME(),
+          ReadAt DATETIME2(3) NULL,
+          MetadataJson NVARCHAR(MAX) NULL
+        );
+      END;
+
+      -- Section 12.5: SyncQueue Table
+      IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'SyncQueue')
+      BEGIN
+        CREATE TABLE dbo.SyncQueue (
+          SyncOperationId NVARCHAR(64) PRIMARY KEY,
+          UserId NVARCHAR(64) NOT NULL,
+          EntityType NVARCHAR(100) NOT NULL,
+          EntityId NVARCHAR(200) NOT NULL,
+          Operation NVARCHAR(30) NOT NULL,
+          PayloadJson NVARCHAR(MAX) NOT NULL,
+          AttemptCount INT NOT NULL DEFAULT 0,
+          Status NVARCHAR(30) NOT NULL DEFAULT 'PENDING',
+          LastError NVARCHAR(2000) NULL,
+          CreatedAt DATETIME2(3) NOT NULL DEFAULT SYSUTCDATETIME(),
+          UpdatedAt DATETIME2(3) NOT NULL DEFAULT SYSUTCDATETIME()
+        );
+      END;
     `);
   } catch (err) {
     // eslint-disable-next-line no-console
