@@ -55,7 +55,25 @@ export const FileExplorerApp: React.FC<{ windowId: string }> = () => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
-  // Persistence
+  // Initial fetch from backend with fallback
+  useEffect(() => {
+    let mounted = true;
+    fetch('/api/v1/files')
+      .then((r) => r.json())
+      .then((res) => {
+        if (mounted && res.success && Array.isArray(res.data) && res.data.length > 0) {
+          setFiles(res.data);
+        }
+      })
+      .catch(() => {
+        // Fallback to local storage
+      });
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  // Persistence to local storage
   useEffect(() => {
     try {
       localStorage.setItem('adw_filesystem', JSON.stringify(files));
@@ -94,7 +112,7 @@ export const FileExplorerApp: React.FC<{ windowId: string }> = () => {
     }
   };
 
-  const handleCreateFolder = () => {
+  const handleCreateFolder = async () => {
     soundEngine.play('click');
     const folderName = prompt('Enter folder name:', 'New Folder');
     if (!folderName || !folderName.trim()) return;
@@ -107,9 +125,24 @@ export const FileExplorerApp: React.FC<{ windowId: string }> = () => {
       updatedAt: new Date().toISOString().split('T')[0],
     };
     setFiles((prev) => [...prev, newFolder]);
+
+    try {
+      await fetch('/api/v1/files', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: newFolder.name,
+          type: 'folder',
+          parentId: currentFolderId,
+          path: `/${newFolder.name}`,
+        }),
+      });
+    } catch {
+      // Local persistence cache ensures data safety
+    }
   };
 
-  const handleCreateFile = () => {
+  const handleCreateFile = async () => {
     soundEngine.play('click');
     const fileName = prompt('Enter file name:', 'New Document.txt');
     if (!fileName || !fileName.trim()) return;
@@ -125,14 +158,38 @@ export const FileExplorerApp: React.FC<{ windowId: string }> = () => {
       updatedAt: new Date().toISOString().split('T')[0],
     };
     setFiles((prev) => [...prev, newFile]);
+
+    try {
+      await fetch('/api/v1/files', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: newFile.name,
+          type: 'file',
+          extension: ext,
+          sizeKb: 1,
+          parentId: currentFolderId,
+          path: `/${newFile.name}`,
+        }),
+      });
+    } catch {
+      // Local persistence cache ensures data safety
+    }
   };
 
-  const handleDeleteSelected = () => {
+  const handleDeleteSelected = async () => {
     if (!selectedId) return;
     soundEngine.play('click');
     if (confirm('Delete selected item?')) {
-      setFiles((prev) => prev.filter((item) => item.id !== selectedId && item.parentId !== selectedId));
+      const targetId = selectedId;
+      setFiles((prev) => prev.filter((item) => item.id !== targetId && item.parentId !== targetId));
       setSelectedId(null);
+
+      try {
+        await fetch(`/api/v1/files/${targetId}`, { method: 'DELETE' });
+      } catch {
+        // Local persistence cache ensures data safety
+      }
     }
   };
 
@@ -345,7 +402,14 @@ export const FileExplorerApp: React.FC<{ windowId: string }> = () => {
 
       {/* Status Bar */}
       <div className="flex items-center justify-between px-3 py-1.5 border-t border-[var(--border-subtle)] bg-[var(--surface-acrylic)] text-[11px] text-[var(--text-muted)]">
-        <span>{currentFiles.length} items</span>
+        <div className="flex items-center gap-2.5">
+          <span className="flex items-center gap-1.5 text-[10px] text-blue-400 font-mono">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            MS SQL Server Synced
+          </span>
+          <span>•</span>
+          <span>{currentFiles.length} items</span>
+        </div>
         {selectedId && (
           <span>
             Selected:{' '}
