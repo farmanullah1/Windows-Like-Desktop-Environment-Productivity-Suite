@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 
 interface StageLoaderProps {
   onComplete: () => void;
@@ -6,11 +7,11 @@ interface StageLoaderProps {
 }
 
 const INIT_STEPS = [
-  'Initializing kernel services…',
-  'Verifying Microsoft SQL Server connectivity…',
-  'Hydrating 24 application manifests…',
-  'Restoring theme tokens & audio synthesizer…',
-  'Desktop workspace ready…',
+  'Starting MyOS kernel services…',
+  'Initializing Microsoft SQL Server database provider…',
+  'Hydrating 24 desktop applications & shell manifests…',
+  'Synthesizing Fluent theme tokens & audio engine…',
+  'Launching secure desktop workspace…',
 ];
 
 export const StageLoader: React.FC<StageLoaderProps> = ({ onComplete, reducedMotion = false }) => {
@@ -28,8 +29,8 @@ export const StageLoader: React.FC<StageLoaderProps> = ({ onComplete, reducedMot
       });
     }, 260);
 
-    // Total duration ~1350ms (or 600ms in reduced motion)
-    const duration = reducedMotion ? 600 : 1350;
+    // Total duration ~1400ms (or 600ms in reduced motion)
+    const duration = reducedMotion ? 600 : 1400;
     const timer = setTimeout(onComplete, duration);
 
     return () => {
@@ -38,47 +39,81 @@ export const StageLoader: React.FC<StageLoaderProps> = ({ onComplete, reducedMot
     };
   }, [onComplete, reducedMotion]);
 
+  const dotDelays = [0, 0.15, 0.3, 0.45, 0.6];
+
   return (
     <div
       role="status"
       aria-label="Initializing MyOS workspace"
       className="fixed inset-0 z-[100000] bg-black flex flex-col items-center justify-center select-none text-white overflow-hidden"
     >
-      <div className="relative flex flex-col items-center">
-        {/* Subtle Static Logo in Loader Stage */}
-        <div className="w-16 h-16 mb-8 opacity-90 drop-shadow-[0_0_20px_rgba(66,103,213,0.5)]">
+      <div className="relative flex flex-col items-center max-w-sm px-6 text-center">
+        {/* Glowing Logo at Stage Loader */}
+        <motion.div
+          initial={{ opacity: 0.8, scale: 0.98 }}
+          animate={{ opacity: [0.85, 1, 0.85], scale: [0.98, 1.02, 0.98] }}
+          transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+          className="w-16 h-16 mb-9 p-1 rounded-2xl drop-shadow-[0_0_24px_rgba(59,130,246,0.6)]"
+        >
           <img
             src="/assets/branding/logo.svg"
             alt="MyOS Logo"
             className="w-full h-full object-contain"
           />
-        </div>
+        </motion.div>
 
-        {/* Orbiting Spinner or Static Ring */}
-        <div className="relative w-10 h-10 mb-6 flex items-center justify-center">
+        {/* Authentic Windows 11 Orbiting Chasing Dots Spinner */}
+        <div className="relative w-12 h-12 mb-7 flex items-center justify-center">
           {!reducedMotion ? (
-            <div className="w-8 h-8 rounded-full border-2 border-blue-500/20 border-t-blue-400 animate-spin" />
+            <div className="relative w-10 h-10">
+              {dotDelays.map((delay, index) => (
+                <div
+                  key={index}
+                  className="absolute inset-0 win-dot-orbit pointer-events-none"
+                  style={{ animationDelay: `${delay}s` }}
+                >
+                  <div className="w-1.5 h-1.5 mx-auto rounded-full bg-blue-400 shadow-[0_0_8px_rgba(96,165,250,1),0_0_14px_rgba(59,130,246,0.8)]" />
+                </div>
+              ))}
+            </div>
           ) : (
-            <div className="w-3 h-3 rounded-full bg-blue-400" />
+            <div className="w-3.5 h-3.5 rounded-full bg-blue-400 animate-pulse shadow-[0_0_10px_rgba(96,165,250,0.8)]" />
           )}
         </div>
 
-        {/* Honest Progress Text */}
-        <p
-          aria-live="polite"
-          className="text-xs font-mono text-zinc-400 tracking-wide text-center h-5 transition-opacity duration-200"
-        >
-          {INIT_STEPS[stepIndex]}
-        </p>
+        {/* Animated Progress Text with Framer Motion */}
+        <div className="h-6 flex items-center justify-center">
+          <AnimatePresence mode="wait">
+            <motion.p
+              key={stepIndex}
+              initial={reducedMotion ? { opacity: 0 } : { opacity: 0, y: 4, filter: 'blur(3px)' }}
+              animate={reducedMotion ? { opacity: 1 } : { opacity: 1, y: 0, filter: 'blur(0px)' }}
+              exit={reducedMotion ? { opacity: 0 } : { opacity: 0, y: -4, filter: 'blur(3px)' }}
+              transition={{ duration: 0.18, ease: 'easeOut' }}
+              className="text-xs font-mono text-zinc-400 tracking-wide"
+            >
+              {INIT_STEPS[stepIndex]}
+            </motion.p>
+          </AnimatePresence>
+        </div>
 
-        {/* Step Indicator Dots */}
-        <div className="flex gap-1.5 mt-4">
+        {/* Step Indicator Glowing Dots */}
+        <div className="flex gap-2 mt-5">
           {INIT_STEPS.map((_, idx) => (
-            <div
+            <motion.div
               key={idx}
-              className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-                idx <= stepIndex ? 'bg-blue-400 scale-110' : 'bg-zinc-800'
-              }`}
+              animate={{
+                scale: idx === stepIndex ? 1.3 : 1,
+                backgroundColor: idx <= stepIndex ? '#60a5fa' : '#27272a',
+                boxShadow:
+                  idx === stepIndex
+                    ? '0 0 10px rgba(96,165,250,0.9)'
+                    : idx < stepIndex
+                    ? '0 0 5px rgba(96,165,250,0.5)'
+                    : 'none',
+              }}
+              transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+              className="w-1.5 h-1.5 rounded-full"
             />
           ))}
         </div>
