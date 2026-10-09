@@ -1,3 +1,4 @@
+@import "tailwindcss";
 /* Reset & Core Framework Utilities */
 @import './design-system/tokens.css';
 @import './design-system/themes.css';
