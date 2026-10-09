@@ -232,6 +232,38 @@ export const SettingsApp: React.FC<{ windowId: string }> = () => {
               </div>
             </div>
 
+            {/* Desktop Wallpaper 4K Gallery */}
+            <div className="space-y-2">
+              <label className="text-xs font-semibold uppercase text-[var(--text-muted)]">Desktop 4K Wallpaper</label>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                {[
+                  { name: 'Nordic Aurora', url: '/wallpapers/aurora.jpg' },
+                  { name: 'Cyberpunk Neon', url: '/wallpapers/cyberpunk.jpg' },
+                  { name: 'Fluent Silk', url: '/wallpapers/fluent_silk.jpg' },
+                  { name: 'Cosmic Nebula', url: '/wallpapers/cosmic_nebula.jpg' },
+                ].map((wp) => (
+                  <div
+                    key={wp.url}
+                    onClick={() => {
+                      setWallpaper(wp.url);
+                      soundEngine.play('click');
+                      addNotification('Wallpaper Applied', `Desktop wallpaper updated to ${wp.name}.`, 'success', 'Personalization');
+                    }}
+                    className={`relative rounded-xl overflow-hidden border cursor-pointer transition-all ${
+                      currentWallpaper === wp.url
+                        ? 'border-[var(--accent-primary)] ring-2 ring-[var(--accent-primary)]/40 scale-102 shadow-md'
+                        : 'border-[var(--border-subtle)] hover:border-white/40'
+                    }`}
+                  >
+                    <img src={wp.url} alt={wp.name} className="w-full h-16 object-cover" />
+                    <div className="p-1.5 bg-[var(--surface-card)] text-center">
+                      <span className="text-[10px] font-medium block truncate">{wp.name}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {/* Accent Color */}
             <div className="space-y-2">
               <label className="text-xs font-semibold uppercase text-[var(--text-muted)]">Accent Color</label>
