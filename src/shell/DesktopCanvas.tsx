@@ -8,14 +8,27 @@ import {
   Plus,
   RefreshCw,
   Palette,
+  Image as ImageIcon,
+  Music,
+  LayoutGrid,
+  Sparkles,
 } from 'lucide-react';
 import { useDesktop } from '../core/desktopStore';
 import { soundEngine } from '../design-system/soundEngine';
+import { AppIconBadge } from '../design-system/AppIconBadge';
+import { DesktopWidgets } from './DesktopWidgets';
 
 interface ContextMenuPos {
   x: number;
   y: number;
 }
+
+const WALLPAPERS = [
+  '/wallpapers/aurora.jpg',
+  '/wallpapers/cyberpunk.jpg',
+  '/wallpapers/fluent_silk.jpg',
+  '/wallpapers/cosmic_nebula.jpg',
+];
 
 export const DesktopCanvas: React.FC = () => {
   const {
@@ -24,6 +37,11 @@ export const DesktopCanvas: React.FC = () => {
     workspaces,
     activeWorkspaceId,
     addNotification,
+    currentWallpaper,
+    setWallpaper,
+    widgetsVisible,
+    toggleWidgets,
+    addStickyNote,
   } = useDesktop();
 
   const [contextMenu, setContextMenu] = useState<ContextMenuPos | null>(null);
@@ -41,35 +59,62 @@ export const DesktopCanvas: React.FC = () => {
     if (contextMenu) setContextMenu(null);
   };
 
+  const handleCycleWallpaper = () => {
+    const currentIndex = WALLPAPERS.indexOf(currentWallpaper);
+    const nextIndex = (currentIndex + 1) % WALLPAPERS.length;
+    const nextWp = WALLPAPERS[nextIndex];
+    setWallpaper(nextWp);
+    soundEngine.play('click');
+    addNotification('Wallpaper Changed', 'Cycled to next high-resolution desktop theme.', 'success', 'Personalization');
+  };
+
   const desktopIcons = [
-    { id: 'dt-pc', title: 'This PC', icon: Monitor, appId: 'system-info', titleDisplay: 'System Information' },
-    { id: 'dt-files', title: 'File Explorer', icon: Folder, appId: 'file-explorer', titleDisplay: 'File Explorer' },
-    { id: 'dt-notes', title: 'Notes', icon: FileText, appId: 'notes', titleDisplay: 'Notes' },
-    { id: 'dt-term', title: 'Terminal', icon: Terminal, appId: 'terminal', titleDisplay: 'Terminal Center' },
-    { id: 'dt-settings', title: 'Settings', icon: Settings, appId: 'settings', titleDisplay: 'Settings' },
+    { id: 'dt-pc', title: 'This PC', appId: 'system-info', titleDisplay: 'System Information' },
+    { id: 'dt-files', title: 'File Explorer', appId: 'file-explorer', titleDisplay: 'File Explorer' },
+    { id: 'dt-media', title: 'Groove Music', appId: 'media-player', titleDisplay: 'Groove Media Player' },
+    { id: 'dt-gallery', title: 'Photo Studio', appId: 'gallery', titleDisplay: 'Photo Studio' },
+    { id: 'dt-notes', title: 'Notes', appId: 'notes', titleDisplay: 'Notes' },
+    { id: 'dt-term', title: 'Terminal', appId: 'terminal', titleDisplay: 'Terminal Center' },
+    { id: 'dt-settings', title: 'Settings', appId: 'settings', titleDisplay: 'Settings' },
   ];
 
   return (
     <div
       onClick={handleCanvasClick}
       onContextMenu={handleContextMenu}
-      className="absolute inset-0 z-[var(--z-desktop)] select-none overflow-hidden bg-gradient-to-br from-[#0a0e17] via-[#0d1424] to-[#121024]"
+      className="absolute inset-0 z-[var(--z-desktop)] select-none overflow-hidden bg-slate-950"
     >
-      {/* Ambient desktop lighting glow */}
-      <div className="absolute top-1/4 left-1/3 w-[600px] h-[600px] rounded-full bg-blue-600/10 blur-[140px] pointer-events-none" />
-      <div className="absolute bottom-1/3 right-1/4 w-[500px] h-[500px] rounded-full bg-purple-600/10 blur-[130px] pointer-events-none" />
+      {/* Dynamic 4K Wallpaper Layer with Vignette */}
+      <div
+        className="absolute inset-0 bg-cover bg-center transition-all duration-700 ease-out"
+        style={{ backgroundImage: `url(${currentWallpaper})` }}
+      />
+      <div className="absolute inset-0 bg-black/30 backdrop-brightness-95 pointer-events-none" />
 
-      {/* Top Bar / Workspace Badge */}
-      <div className="absolute top-3 left-4 flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--surface-translucent)] border border-[var(--border-subtle)] backdrop-blur-xl shadow-sm text-xs font-medium text-[var(--text-secondary)]">
-        <span className="w-2 h-2 rounded-full bg-[var(--accent-primary)] animate-pulse" />
-        <span>Workspace:</span>
-        <strong className="text-[var(--text-primary)] font-semibold">{activeWorkspace?.name || 'Main'}</strong>
+      {/* Top Bar / Workspace Badge & Widgets Toggle */}
+      <div className="absolute top-3 left-4 flex items-center gap-2">
+        <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-black/40 border border-white/15 backdrop-blur-xl shadow-lg text-xs font-medium text-white/90">
+          <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+          <span className="text-white/60">Workspace:</span>
+          <strong className="text-white font-semibold">{activeWorkspace?.name || 'Main'}</strong>
+        </div>
+
+        <button
+          onClick={toggleWidgets}
+          className={`px-3 py-1.5 rounded-full border text-xs font-medium flex items-center gap-1.5 backdrop-blur-xl shadow-lg transition-all ${
+            widgetsVisible
+              ? 'bg-blue-600/60 border-blue-400/50 text-white'
+              : 'bg-black/40 border-white/15 text-white/70 hover:text-white'
+          }`}
+        >
+          <LayoutGrid className="w-3.5 h-3.5" />
+          <span>Widgets</span>
+        </button>
       </div>
 
-      {/* Desktop Icons Column */}
-      <div className="p-4 pt-14 flex flex-col gap-2 w-28">
+      {/* Desktop Icons Column with 3D Squircles */}
+      <div className="p-4 pt-14 flex flex-col gap-3 w-28">
         {desktopIcons.map((item) => {
-          const Icon = item.icon;
           return (
             <div
               key={item.id}
@@ -78,12 +123,10 @@ export const DesktopCanvas: React.FC = () => {
                 soundEngine.play('click');
                 openApp(item.appId, item.titleDisplay, item.appId);
               }}
-              className="flex flex-col items-center p-2 rounded-xl hover:bg-[var(--surface-translucent)] hover:backdrop-blur-md cursor-pointer group transition-all text-center"
+              className="flex flex-col items-center p-2 rounded-2xl hover:bg-white/15 hover:backdrop-blur-md cursor-pointer group transition-all text-center"
             >
-              <div className="w-12 h-12 rounded-2xl bg-[var(--surface-card)] border border-[var(--border-subtle)] flex items-center justify-center text-[var(--accent-primary)] group-hover:scale-105 group-hover:border-[var(--accent-primary)] group-hover:shadow-lg transition-all mb-1">
-                <Icon className="w-6 h-6" />
-              </div>
-              <span className="text-[11px] font-medium text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)] line-clamp-2">
+              <AppIconBadge appId={item.appId} size="lg" className="mb-1" />
+              <span className="text-[11px] font-medium text-white drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)] line-clamp-2 px-1 rounded">
                 {item.title}
               </span>
             </div>
@@ -91,13 +134,55 @@ export const DesktopCanvas: React.FC = () => {
         })}
       </div>
 
+      {/* Desktop Widgets Layer */}
+      <DesktopWidgets />
+
       {/* Right Click Desktop Context Menu */}
       {contextMenu && (
         <div
           onClick={(e) => e.stopPropagation()}
           style={{ top: contextMenu.y, left: contextMenu.x }}
-          className="fixed w-52 p-1.5 rounded-xl bg-[var(--surface-menu)] border border-[var(--border-strong)] shadow-2xl backdrop-blur-2xl z-[var(--z-context-menu)] text-xs divide-y divide-[var(--border-subtle)] animate-in fade-in zoom-in-95 duration-100"
+          className="fixed w-56 p-1.5 rounded-2xl bg-slate-900/90 border border-white/20 shadow-2xl backdrop-blur-2xl z-[var(--z-context-menu)] text-xs divide-y divide-white/10 text-white animate-in fade-in zoom-in-95 duration-100"
         >
+          <div className="py-1">
+            <button
+              onClick={() => {
+                setContextMenu(null);
+                handleCycleWallpaper();
+              }}
+              className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-xl hover:bg-white/15 transition-colors text-left"
+            >
+              <ImageIcon className="w-4 h-4 text-rose-400" />
+              <span>Next Wallpaper</span>
+            </button>
+            <button
+              onClick={() => {
+                setContextMenu(null);
+                toggleWidgets();
+                soundEngine.play('click');
+              }}
+              className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-xl hover:bg-white/15 transition-colors text-left"
+            >
+              <LayoutGrid className="w-4 h-4 text-blue-400" />
+              <span>{widgetsVisible ? 'Hide Widgets' : 'Show Widgets'}</span>
+            </button>
+            <button
+              onClick={() => {
+                setContextMenu(null);
+                addStickyNote({
+                  text: 'New thought or note...',
+                  color: 'yellow',
+                  x: contextMenu.x,
+                  y: contextMenu.y,
+                });
+              }}
+              className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-xl hover:bg-white/15 transition-colors text-left"
+            >
+              <Plus className="w-4 h-4 text-amber-400" />
+              <span>Add Sticky Note</span>
+            </button>
+          </div>
+
           <div className="py-1">
             <button
               onClick={() => {
@@ -105,9 +190,9 @@ export const DesktopCanvas: React.FC = () => {
                 setContextMenu(null);
                 openApp('terminal', 'Terminal Center', 'Terminal');
               }}
-              className="w-full flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-[var(--surface-elevated)] transition-colors text-left"
+              className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-xl hover:bg-white/15 transition-colors text-left"
             >
-              <Terminal className="w-3.5 h-3.5 text-cyan-400" />
+              <Terminal className="w-4 h-4 text-emerald-400" />
               <span>Open in Terminal</span>
             </button>
             <button
@@ -116,11 +201,22 @@ export const DesktopCanvas: React.FC = () => {
                 setContextMenu(null);
                 openApp('file-explorer', 'File Explorer', 'Folder');
               }}
-              className="w-full flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-[var(--surface-elevated)] transition-colors text-left"
+              className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-xl hover:bg-white/15 transition-colors text-left"
             >
-              <Folder className="w-3.5 h-3.5 text-amber-400" />
+              <Folder className="w-4 h-4 text-amber-400" />
               <span>Open File Explorer</span>
             </button>
+            <button
+              onClick={() => {
+                soundEngine.play('click');
+                setContextMenu(null);
+                openApp('media-player', 'Groove Media Player', 'Music');
+              }}
+              className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-xl hover:bg-white/15 transition-colors text-left"
+            >
+              <Music className="w-4 h-4 text-cyan-400" />
+              <span>Open Media Player</span>
+            </button>
           </div>
 
           <div className="py-1">
@@ -128,37 +224,23 @@ export const DesktopCanvas: React.FC = () => {
               onClick={() => {
                 soundEngine.play('click');
                 setContextMenu(null);
-                openApp('notes', 'Notes', 'FileText');
+                openApp('gallery', 'Photo Studio', 'Image');
               }}
-              className="w-full flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-[var(--surface-elevated)] transition-colors text-left"
+              className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-xl hover:bg-white/15 transition-colors text-left"
             >
-              <Plus className="w-3.5 h-3.5 text-emerald-400" />
-              <span>New Note Document</span>
+              <Palette className="w-4 h-4 text-fuchsia-400" />
+              <span>Wallpaper & Photos...</span>
             </button>
             <button
               onClick={() => {
                 soundEngine.play('click');
                 setContextMenu(null);
-                addNotification('Desktop Refreshed', 'Refreshed window matrix and workspace canvas.', 'info', 'Shell');
+                addNotification('Desktop Refreshed', 'Refreshed desktop canvas matrix.', 'info', 'Shell');
               }}
-              className="w-full flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-[var(--surface-elevated)] transition-colors text-left"
+              className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-xl hover:bg-white/15 transition-colors text-left"
             >
-              <RefreshCw className="w-3.5 h-3.5 text-blue-400" />
+              <RefreshCw className="w-4 h-4 text-sky-400" />
               <span>Refresh Desktop</span>
-            </button>
-          </div>
-
-          <div className="py-1">
-            <button
-              onClick={() => {
-                soundEngine.play('click');
-                setContextMenu(null);
-                openApp('settings', 'Settings', 'Settings');
-              }}
-              className="w-full flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-[var(--surface-elevated)] transition-colors text-left"
-            >
-              <Palette className="w-3.5 h-3.5 text-purple-400" />
-              <span>Personalize...</span>
             </button>
           </div>
         </div>

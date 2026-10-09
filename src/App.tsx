@@ -8,6 +8,7 @@ import { StartMenu } from './shell/StartMenu';
 import { QuickSettings } from './shell/QuickSettings';
 import { NotificationCenter } from './shell/NotificationCenter';
 import { CommandPalette } from './shell/CommandPalette';
+import { LockScreen } from './shell/LockScreen';
 import './design-system/tokens.css';
 import './design-system/themes.css';
 
@@ -30,6 +31,9 @@ export const App: React.FC = () => {
 
           {/* Layer 4: Hybrid Taskbar / Dock */}
           <Taskbar />
+
+          {/* Layer 5: Session Lock Screen */}
+          <LockScreen />
         </div>
       </DesktopProvider>
     </ThemeProvider>

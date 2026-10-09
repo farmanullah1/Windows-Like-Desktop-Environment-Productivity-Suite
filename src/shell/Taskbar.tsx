@@ -23,6 +23,7 @@ import { useDesktop } from '../core/desktopStore';
 import { useTheme } from '../design-system/ThemeProvider';
 import { getPinnedApps, getAllApps } from '../apps/registry';
 import { soundEngine } from '../design-system/soundEngine';
+import { AppIconBadge } from '../design-system/AppIconBadge';
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   Folder,
