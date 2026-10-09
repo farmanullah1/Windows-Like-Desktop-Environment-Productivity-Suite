@@ -7,6 +7,7 @@ import {
   Battery,
   Bell,
   X,
+  Clock,
 } from 'lucide-react';
 import { useDesktop } from '../core/desktopStore';
 import { useTheme } from '../design-system/ThemeProvider';

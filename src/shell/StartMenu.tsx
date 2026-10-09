@@ -20,6 +20,14 @@ export const StartMenu: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [showPowerMenu, setShowPowerMenu] = useState(false);
+  const [userProfile] = useState<{ displayName: string; email: string }>(() => {
+    try {
+      const saved = localStorage.getItem('adw_current_user');
+      return saved ? JSON.parse(saved) : { displayName: 'Administrator', email: 'admin@desktop.local' };
+    } catch {
+      return { displayName: 'Administrator', email: 'admin@desktop.local' };
+    }
+  });
   const apps = getAllApps();
 
   if (!isStartMenuOpen) return null;
@@ -176,12 +184,16 @@ export const StartMenu: React.FC = () => {
       {/* User Footer & Power Bar */}
       <div className="p-3 border-t border-[var(--border-subtle)] bg-[var(--surface-acrylic)] flex items-center justify-between relative">
         <div className="flex items-center gap-2.5 px-2 py-1 rounded-xl hover:bg-[var(--surface-card)] cursor-pointer transition-colors">
-          <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white text-xs font-bold shadow-sm">
-            U
+          <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-blue-600 via-indigo-600 to-cyan-500 flex items-center justify-center text-white text-xs font-bold shadow-sm">
+            {userProfile?.displayName ? userProfile.displayName.charAt(0).toUpperCase() : 'A'}
           </div>
           <div className="text-left">
-            <span className="text-xs font-semibold block leading-tight">MyOS Administrator</span>
-            <span className="text-[10px] text-[var(--text-muted)]">Verified Workstation Profile</span>
+            <span className="text-xs font-semibold block leading-tight">
+              {userProfile?.displayName || 'MyOS Administrator'}
+            </span>
+            <span className="text-[10px] text-[var(--text-muted)]">
+              {userProfile?.email || 'Verified Workstation Profile'}
+            </span>
           </div>
         </div>
 

@@ -24,7 +24,14 @@ export const App: React.FC = () => {
     setBootComplete(true);
   };
 
-  const handleLoginSuccess = () => {
+  const handleLoginSuccess = (user?: { id: string; email: string; displayName: string }) => {
+    if (user) {
+      try {
+        localStorage.setItem('adw_current_user', JSON.stringify(user));
+      } catch {
+        // safe localStorage fallback
+      }
+    }
     soundEngine.play('welcome_chime');
     setIsAuthenticated(true);
   };
