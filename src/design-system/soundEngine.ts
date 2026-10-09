@@ -15,7 +15,9 @@ export type SoundEffectType =
   | 'workspace_switch'
   | 'notification'
   | 'success'
-  | 'error';
+  | 'error'
+  | 'boot_chime'
+  | 'welcome_chime';
 
 class SoundEngine {
   private ctx: AudioContext | null = null;
@@ -129,6 +131,12 @@ class SoundEngine {
           break;
         case 'error':
           this.playError(now);
+          break;
+        case 'boot_chime':
+          this.playBootChime(now);
+          break;
+        case 'welcome_chime':
+          this.playWelcomeChime(now);
           break;
       }
     } catch {
@@ -334,6 +342,50 @@ class SoundEngine {
 
     osc.start(now);
     osc.stop(now + 0.22);
+  }
+
+  private playBootChime(now: number): void {
+    if (!this.ctx || !this.uiGain) return;
+    // Harmonic progression: C4 (261.63Hz) -> G4 (392Hz) -> C5 (523.25Hz) with warm resonance
+    const freqs = [261.63, 392.00, 523.25];
+    freqs.forEach((freq, idx) => {
+      const osc = this.ctx!.createOscillator();
+      const gain = this.ctx!.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, now + idx * 0.12);
+
+      gain.gain.setValueAtTime(0.001, now + idx * 0.12);
+      gain.gain.linearRampToValueAtTime(0.14, now + idx * 0.12 + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.12 + 0.55);
+
+      osc.connect(gain);
+      gain.connect(this.uiGain!);
+
+      osc.start(now + idx * 0.12);
+      osc.stop(now + idx * 0.12 + 0.6);
+    });
+  }
+
+  private playWelcomeChime(now: number): void {
+    if (!this.ctx || !this.uiGain) return;
+    // Uplifting E major triad chime: E5 (659.25Hz), G#5 (830.6Hz), B5 (987.77Hz)
+    const freqs = [659.25, 830.61, 987.77];
+    freqs.forEach((freq, idx) => {
+      const osc = this.ctx!.createOscillator();
+      const gain = this.ctx!.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+
+      gain.gain.setValueAtTime(0.001, now + idx * 0.06);
+      gain.gain.linearRampToValueAtTime(0.12, now + idx * 0.06 + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.4);
+
+      osc.connect(gain);
+      gain.connect(this.uiGain!);
+
+      osc.start(now + idx * 0.06);
+      osc.stop(now + idx * 0.06 + 0.42);
+    });
   }
 }
 

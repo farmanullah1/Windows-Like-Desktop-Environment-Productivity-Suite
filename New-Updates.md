@@ -2138,3 +2138,1272 @@ Extended Definition of Done — 20 criteria per subsystem.
 Extended Git commit conventions — new commit message examples.
 
 Extended honesty block — AI model download, vault, automation, plugin, companion, and enterprise status added.
+
+
+
+MASTER GOOGLE ANTIGRAVITY DEVELOPMENT PROMPT
+Boot & Login Experience — Version 1.0
+Cinematic Startup Sequence with Integrated Authentication
+Status: Subsystem Specification (companion to v7.0 Core and v8.0 Expansion)
+Scope: Application cold-start experience — boot animation, login screen, account creation entry
+Target Platform: Windows 10/11 (x64 first, ARM64 evaluated)
+Development Environment: Google Antigravity
+Execution Mode: BUILD-FIRST / USER-AUTHORIZED EXECUTION ONLY
+Capability Honesty: Mandatory — every element classified REAL / WINDOWS-INTEGRATED / APPLICATION-SIMULATED / INFORMATIONAL / FUTURE / UNSUPPORTED
+
+0. ABSOLUTE DIRECTIVE
+DO NOT MAKE ANY MISTAKES, ANTIGRAVITY.
+This document specifies the first impression of the entire product. It is the moment that decides whether the user trusts the application. It must be polished, cinematic, fast, accessible, and — above all — honest.
+
+The boot animation and login screen are APPLICATION-SIMULATED experiences. They do not boot Windows. They do not replace Windows Hello. They do not lock the operating system. Every claim in the UI must be truthful.
+
+The single most important behavioral rule of this subsystem:
+
+The full boot animation must run ONLY on a genuine application cold start (npm run dev, npm start, packaged launch, or explicit restart). It must NEVER replay on renderer refresh, hot-module reload, React re-render, navigation, or route change.
+
+If Antigravity cannot guarantee this, the subsystem is not complete.
+
+1. PURPOSE & SCOPE
+1.1 Purpose
+Provide a premium, cinematic launch experience that:
+
+Introduces the product identity with an original animated boot sequence.
+
+Transitions seamlessly into an integrated login screen.
+
+Offers account creation as a clearly accessible secondary action in a corner.
+
+Feels fast, smooth, and intentional.
+
+Respects accessibility, performance, and user preferences.
+
+Never replays on refresh — only on genuine app launch.
+
+1.2 Scope
+In scope:
+
+Boot splash animation.
+
+Loading/progress indication.
+
+Transition into login screen.
+
+Login form (email + password, MFA challenge, biometric if available).
+
+"Create account" entry point in a corner.
+
+"Continue without account" (local profile mode) where supported.
+
+Transition from login into the desktop shell.
+
+Reduced-motion and performance-mode variants.
+
+Sound design for boot and login.
+
+Accessibility for the entire sequence.
+
+Cold-start detection mechanism.
+
+Out of scope:
+
+The signup form itself (specified in v7.0 §15.2 — this document only defines the entry point and transition into it).
+
+The desktop shell (specified in v7.0 §18).
+
+The lock screen (specified in v7.0 §37 — this is a separate, later experience).
+
+Windows-level boot, login, or Hello integration (WINDOWS-INTEGRATED features, if implemented, must be labeled honestly).
+
+2. CRITICAL RULE — COLD START ONLY
+2.1 The rule
+The full boot animation sequence must execute exactly once per application process launch and never again until the process is fully terminated and restarted.
+
+2.2 What counts as a cold start (animation plays)
+Event	Animation plays?
+npm run dev first launch	✅ YES
+npm start (production build)	✅ YES
+Packaged .exe launch	✅ YES
+User selects "Restart application" from the menu	✅ YES
+Explicit app.relaunch() after update	✅ YES
+Second instance opened while first is running	❌ NO (focus existing window)
+OS resumes from sleep	❌ NO
+App window restored from minimized	❌ NO
+2.3 What does NOT count as a cold start (animation must NOT play)
+Event	Animation plays?
+Renderer refresh (Ctrl+R, F5)	❌ NO
+Vite / webpack HMR reload	❌ NO
+React StrictMode double-mount in dev	❌ NO
+Route change / navigation	❌ NO
+Component re-render	❌ NO
+Window resize	❌ NO
+Workspace switch	❌ NO
+Theme change	❌ NO
+Logout → return to login	⚠️ Login shows, but boot animation does NOT replay
+Session expiration → login	⚠️ Login shows, but boot animation does NOT replay
+User manually locks the app	⚠️ Lock screen shows, not boot
+2.4 How to guarantee this — the mechanism
+The boot animation must be gated by a main-process-owned, in-memory, per-process-launch flag that is never persisted and never derivable from renderer state.
+
+2.4.1 Main process
+typescript
+// apps/desktop/electron/bootState.ts
+
+/**
+ * Boot state is process-local. It is created fresh every time the
+ * Electron main process starts and is destroyed when the process exits.
+ * It is NEVER written to disk, NEVER stored in SQLite, NEVER persisted
+ * to sessionStorage or localStorage.
+ */
+interface BootState {
+  /** True until the first renderer has consumed the cold-boot signal. */
+  isFirstRendererLoad: boolean;
+  /** Monotonic process start timestamp (not persisted). */
+  processStartedAt: number;
+  /** Unique ID for this process launch. */
+  launchId: string;
+}
+
+const bootState: BootState = {
+  isFirstRendererLoad: true,
+  processStartedAt: Date.now(),
+  launchId: crypto.randomUUID(),
+};
+
+/**
+ * Called exactly once per renderer, and only for the first renderer
+ * attached to this main process. Subsequent calls (from reloads,
+ * new windows, HMR) return false.
+ */
+export function consumeColdBootSignal(): {
+  isColdBoot: boolean;
+  launchId: string;
+} {
+  const isColdBoot = bootState.isFirstRendererLoad;
+  if (isColdBoot) {
+    bootState.isFirstRendererLoad = false;
+  }
+  return { isColdBoot, launchId: bootState.launchId };
+}
+2.4.2 IPC channel
+Register a single, read-and-consume IPC channel:
+
+text
+boot:consume-cold-signal  →  { isColdBoot: boolean; launchId: string }
+This channel is:
+
+Read-only from the renderer's perspective.
+
+Consumable exactly once per process (idempotent after first call).
+
+Validated with Zod.
+
+Available only during the boot window (before the desktop shell mounts).
+
+2.4.3 Preload
+typescript
+// apps/desktop/preload/boot.ts
+contextBridge.exposeInMainWorld('boot', {
+  consumeColdSignal: (): Promise<{ isColdBoot: boolean; launchId: string }> =>
+    ipcRenderer.invoke('boot:consume-cold-signal'),
+});
+2.4.4 Renderer
+typescript
+// apps/desktop/renderer/boot/useColdBoot.ts
+export function useColdBoot() {
+  const [state, setState] = useState<
+    'checking' | 'cold' | 'warm'
+  >('checking');
+
+  useEffect(() => {
+    let cancelled = false;
+    window.boot.consumeColdSignal().then(({ isColdBoot }) => {
+      if (cancelled) return;
+      setState(isColdBoot ? 'cold' : 'warm');
+    });
+    return () => { cancelled = true; };
+  }, []); // <- empty deps, runs once per renderer mount
+
+  return state;
+}
+2.4.5 Rule for HMR safety
+During development, Vite/webpack HMR may remount React trees. The useEffect with empty deps may run again. The IPC channel is consumable-once, so the second call returns isColdBoot: false. This is the guarantee.
+
+Do not use sessionStorage, localStorage, cookies, or any renderer-persisted state to gate the boot animation. Those survive refreshes and would break the rule in the other direction (they would suppress the animation on a genuine cold start if the renderer is reused).
+
+2.4.6 Second-instance handling
+Use app.requestSingleInstanceLock(). If a second instance is launched while the first is running:
+
+Do not start a new process.
+
+Focus the existing window.
+
+Do not replay the boot animation.
+
+2.4.7 Relaunch handling
+If the app relaunches itself (e.g., after an update), call app.relaunch() and app.exit(). The new process will have a fresh bootState, so the animation will play. This is correct — a relaunch is a genuine cold start.
+
+2.5 Acceptance criteria for §2
+Launching the app via npm run dev shows the full boot animation exactly once.
+
+Pressing Ctrl+R in the renderer does not replay the boot animation.
+
+Editing a React file and triggering HMR does not replay the boot animation.
+
+Navigating between routes does not replay the boot animation.
+
+Logging out returns to the login screen (not the boot animation).
+
+Restarting the app via the app menu replays the boot animation.
+
+Opening a second instance focuses the first window and does not replay the animation.
+
+The mechanism works identically in dev and packaged builds.
+
+No boot state is ever written to disk, SQLite, sessionStorage, or localStorage.
+
+3. BOOT SEQUENCE — STAGE BY STAGE
+The boot sequence is a deterministic state machine. Every stage has an explicit duration, a minimum and maximum time, an exit condition, and a reduced-motion variant.
+
+3.1 State machine
+text
+IDLE
+  → CONSUME_COLD_SIGNAL
+      → (cold)   COLD_BOOT
+      → (warm)   WARM_BOOT
+      → (error)  BOOT_ERROR
+
+COLD_BOOT
+  → STAGE_VOID          (black screen, 80–120 ms)
+  → STAGE_LOGO          (logo reveal, 500–900 ms)
+  → STAGE_LOADER        (progress indication, 600–2000 ms)
+  → STAGE_HANDOFF       (fade out, 300–500 ms)
+  → LOGIN_ENTRY
+
+WARM_BOOT
+  → LOGIN_ENTRY         (no animation; instant)
+
+LOGIN_ENTRY
+  → LOGIN_READY         (login panel interactive)
+  → (submit)            AUTHENTICATING
+  → (success)           DESKTOP_HANDOFF
+  → (failure)           LOGIN_ERROR
+  → (create account)    SIGNUP_ENTRY
+  → (local profile)     LOCAL_PROFILE_ENTRY
+
+AUTHENTICATING
+  → (mfa required)      MFA_CHALLENGE
+  → (success)           DESKTOP_HANDOFF
+  → (failure)           LOGIN_ERROR
+
+MFA_CHALLENGE
+  → (success)           DESKTOP_HANDOFF
+  → (failure)           MFA_ERROR
+  → (cancel)            LOGIN_READY
+
+SIGNUP_ENTRY
+  → (back)              LOGIN_READY
+  → (success)           DESKTOP_HANDOFF
+
+LOCAL_PROFILE_ENTRY
+  → (success)           DESKTOP_HANDOFF
+
+DESKTOP_HANDOFF
+  → DESKTOP
+
+BOOT_ERROR
+  → (retry)             COLD_BOOT
+  → (safe mode)         DESKTOP_SAFE
+3.2 Stage durations
+Stage	Min	Target	Max	Reduced Motion
+STAGE_VOID	60 ms	100 ms	150 ms	40 ms (instant black)
+STAGE_LOGO	400 ms	700 ms	1200 ms	200 ms (fade only, no scale)
+STAGE_LOADER	400 ms	1200 ms	2500 ms	300 ms (no spinner; static dot)
+STAGE_HANDOFF	200 ms	350 ms	500 ms	150 ms (fade only)
+LOGIN_ENTRY (panel reveal)	200 ms	350 ms	600 ms	150 ms (fade only)
+DESKTOP_HANDOFF	250 ms	400 ms	700 ms	200 ms (fade only)
+Rule: The total cold-boot sequence (VOID → LOGO → LOADER → HANDOFF) must not exceed 3 seconds on reference hardware, and must not be shorter than 1.2 seconds even if all async work completes instantly (to avoid a jarring flash).
+
+Rule: The boot sequence must wait for both:
+
+The minimum display duration, and
+
+The application's readiness signal (preload, main-process services, session restoration).
+
+Whichever finishes last determines the exit from STAGE_LOADER.
+
+4. STAGE_VOID — The Black Screen
+4.1 Purpose
+A brief, intentional pause before the logo. It signals "something is starting" and prevents a flash of unstyled content.
+
+4.2 Behavior
+Pure black (#000000) in dark theme.
+
+Pure near-black (#0d1015) in light theme (never a jarring white flash).
+
+No text, no logo, no spinner.
+
+Optional: a single 1-pixel accent-colored dot in the dead center, at 20% opacity, fading in over the stage duration. This is the seed of the logo reveal.
+
+4.3 Accessibility
+prefers-reduced-motion: reduce to 40 ms or skip entirely.
+
+Never show a flashing element.
+
+Never show high-contrast content that would shock.
+
+4.4 Performance
+No animations that require JS.
+
+Rendered as part of the initial HTML/CSS so it appears before React hydrates.
+
+5. STAGE_LOGO — The Identity Reveal
+5.1 Purpose
+Introduce the product identity with a memorable, original animation. This is the "moment" of the boot.
+
+5.2 Design requirements
+The logo must be original — no Microsoft, Apple, Ubuntu, or third-party OS branding.
+
+The logo must be vector (SVG) for crisp rendering at any DPI.
+
+The logo must work as a monochrome glyph in High Contrast mode.
+
+The logo must have an accessible name announced to screen readers.
+
+5.3 Animation composition
+The logo reveal is a layered sequence. Each layer is independent and can be tuned.
+
+Layer	Element	Animation	Duration	Delay
+L1	Accent dot	Scale 0.5 → 1.0, opacity 0 → 1	300 ms	0 ms
+L2	Logo glyph	Opacity 0 → 1, scale 0.92 → 1.0	500 ms	100 ms
+L3	Logo glow	Radial gradient opacity 0 → 0.35	600 ms	200 ms
+L4	Subtle ring	Scale 0.6 → 1.1, opacity 0.4 → 0	800 ms	250 ms
+L5	Wordmark	Opacity 0 → 1, translateY 6px → 0	400 ms	500 ms
+L6	Tagline (optional)	Opacity 0 → 0.6	400 ms	700 ms
+Easing: cubic-bezier(0.2, 0, 0, 1) (decelerate) for most layers. L4 ring uses cubic-bezier(0.05, 0.7, 0.1, 1).
+
+Total: ~900 ms.
+
+5.4 Reduced-motion variant
+L1: instant
+
+L2: fade only (no scale)
+
+L3: instant
+
+L4: skipped
+
+L5: fade only (no translate)
+
+L6: instant
+
+Total: ~300 ms
+
+5.5 Performance-mode variant
+L4 ring: skipped
+
+L3 glow: reduced opacity
+
+Total: ~600 ms
+
+5.6 Sound
+A single, subtle "boot chime" plays at the start of STAGE_LOGO.
+
+Original or properly licensed audio only.
+
+Volume respects the user's system volume and app sound settings.
+
+Never plays if sound is muted, if ENABLE_WEB_AUDIO_SOUNDS=false, or if the user disabled boot sounds.
+
+Duration: 400–800 ms.
+
+Frequency: gentle, low-to-mid range, no sharp transients.
+
+Visual equivalent: the logo reveal itself. Sound is never the sole indicator.
+
+5.7 Accessibility
+Screen reader announcement: "Starting [Product Name]."
+
+Logo has role="img" and aria-label="[Product Name] logo".
+
+No rapid flashing (well below 3 Hz).
+
+High Contrast mode: logo renders as a solid monochrome glyph with a visible border.
+
+6. STAGE_LOADER — Progress Indication
+6.1 Purpose
+Communicate that the application is initializing and provide honest progress feedback.
+
+6.2 Honest progress rule
+Never show a fake progress bar.
+
+If real progress can be measured (e.g., number of services initialized, number of migrations checked), show it. If it cannot, show an indeterminate indicator — never a bar that pretends to move.
+
+6.3 Initialization tasks (real)
+The loader reflects actual, measurable initialization:
+
+Task	Weight	Can fail?
+Preload bridge ready	5%	No
+Main process services ready	15%	Yes
+Local database open + migrate check	20%	Yes
+Session restoration	15%	Yes
+Capability detection	10%	No
+Application registry load	10%	Yes
+Theme + settings load	10%	No
+Sync queue hydration	10%	Yes
+Font + asset preload	5%	No
+Total: 100%.
+
+6.4 Visual design
+The loader uses one of the following, chosen by the design system:
+
+Option A — Orbiting dot (default):
+
+A small accent-colored dot orbits a circle of radius R.
+
+The orbit trail fades behind the dot.
+
+R = 24 px at 100% DPI, scaled by devicePixelRatio.
+
+Orbit duration: 1400 ms per revolution.
+
+GPU-composited (transform: rotate() on a container, not per-frame JS).
+
+Option B — Breathing pulse:
+
+A soft accent-colored circle pulses at 40% → 60% opacity.
+
+Period: 1800 ms.
+
+Used when a spinner would feel too busy.
+
+Option C — Segmented ring:
+
+A ring of N segments (N = 8), each fading in sequence.
+
+Segment duration: 160 ms.
+
+Loop duration: 1280 ms.
+
+Rule: Only one loader style is active at a time. It is selected by the design system, not per-render.
+
+6.5 Progress text
+Below the loader, an optional line of text:
+
+text
+Initializing…
+Loading your workspace…
+Restoring session…
+Almost ready…
+Rules:
+
+Text must be truthful. "Restoring session" only appears while session restoration is actually running.
+
+Text must not cycle faster than 800 ms per message.
+
+Text must be localized via the i18n system.
+
+Text must be announced to screen readers via aria-live="polite".
+
+6.6 Failure handling
+If a task fails:
+
+The loader stops.
+
+A clear, honest error message appears (see §12).
+
+The user is offered: Retry, Continue in safe mode (where safe), View details, Quit.
+
+6.7 Reduced-motion variant
+Loader becomes a static accent dot.
+
+Progress text updates normally.
+
+Total loader duration still respects the minimum.
+
+6.8 Performance
+Loader uses transform and opacity only.
+
+No layout-triggering animations.
+
+No continuous canvas rendering.
+
+Loader is paused if the window is hidden (though during boot the window is visible).
+
+7. STAGE_HANDOFF — Transition to Login
+7.1 Purpose
+Smoothly dissolve the boot sequence into the login screen.
+
+7.2 Animation
+Element	Animation	Duration	Easing
+Logo	Opacity 1 → 0, scale 1.0 → 1.04	350 ms	cubic-bezier(0.3, 0, 0.8, 0.15)
+Loader	Opacity 1 → 0	250 ms	same
+Background	Cross-fade from boot gradient to login wallpaper	400 ms	cubic-bezier(0.2, 0, 0, 1)
+Login panel	Opacity 0 → 1, translateY 12px → 0, scale 0.98 → 1.0	350 ms	cubic-bezier(0.2, 0, 0, 1)
+Total: ~750 ms, overlapping.
+
+7.3 Reduced-motion variant
+Logo and loader fade out in 150 ms.
+
+Login panel fades in over 200 ms. No translate, no scale.
+
+8. LOGIN SCREEN
+8.1 Purpose
+Provide a secure, elegant, keyboard-first login experience with a clearly accessible account-creation entry point.
+
+8.2 Layout
+text
+┌──────────────────────────────────────────────────────────────┐
+│                                                  [Create     │
+│                                                   account] → │
+│                                                              │
+│                                                              │
+│                    ┌────────────────────┐                    │
+│                    │                    │                    │
+│                    │   [Avatar / Logo]  │                    │
+│                    │                    │                    │
+│                    │   Welcome back     │                    │
+│                    │                    │                    │
+│                    │   [Email field]    │                    │
+│                    │   [Password field] │                    │
+│                    │   [☐ Remember me]  │                    │
+│                    │                    │                    │
+│                    │   [   Sign in   ]  │                    │
+│                    │                    │                    │
+│                    │   Forgot password? │                    │
+│                    │                    │                    │
+│                    │   ─── or ───       │                    │
+│                    │                    │                    │
+│                    │   [Continue local] │                    │
+│                    │                    │                    │
+│                    └────────────────────┘                    │
+│                                                              │
+│                                                              │
+│  [version]                              [privacy] [terms]   │
+└──────────────────────────────────────────────────────────────┘
+8.3 Background
+Uses the active wallpaper, blurred and darkened (acrylic-style).
+
+If no wallpaper is set, uses a subtle animated gradient (paused in Performance Mode).
+
+If Reduced Motion is enabled, uses a static gradient.
+
+The background must never reduce text contrast. A scrim is always applied.
+
+8.4 Login panel
+Centered card with acrylic surface.
+
+Max width: 400 px.
+
+Padding: 32 px.
+
+Corner radius: --radius-large (16 px).
+
+Shadow: layered elevation token.
+
+Border: 1 px subtle border + 1 px inner highlight.
+
+The panel is the focus target on entry.
+
+8.5 Fields
+Email field:
+
+type="email", autocomplete="username".
+
+aria-label or associated <label>.
+
+Validated on blur and on submit.
+
+Error text appears below, associated via aria-describedby.
+
+No layout shift when errors appear (reserve space).
+
+Password field:
+
+type="password", autocomplete="current-password".
+
+Show/hide toggle (icon button, aria-pressed).
+
+Caps Lock indicator (detected via KeyboardEvent.getModifierState('CapsLock')).
+
+Validated on submit only.
+
+Remember me:
+
+Checkbox, autocomplete not applicable.
+
+Tooltip explains what is remembered and where.
+
+Default: unchecked (privacy-first).
+
+Submit button:
+
+Primary action.
+
+Disabled while pending.
+
+Shows a subtle inline spinner during authentication.
+
+Full keyboard activation (Enter submits).
+
+Forgot password link:
+
+Opens the forgot-password flow.
+
+Never reveals whether an email exists.
+
+Divider + local profile:
+
+"or" divider.
+
+"Continue with local profile" button — only shown if local profile mode is enabled.
+
+Clearly labeled as local-only: "Your data stays on this device."
+
+8.6 Create account entry — the corner link
+This is the critical detail the user requested.
+
+Placement: Top-right corner of the screen.
+
+Design:
+
+Text: "Create account" or "New here? Create account".
+
+Style: subtle link, accent color on hover.
+
+Icon: a small + or user-plus glyph.
+
+Always visible, always keyboard-focusable.
+
+Minimum touch target: 44×44 px (visual size may be smaller, but the hit area must be ≥ 44 px).
+
+aria-label="Create a new account".
+
+Behavior:
+
+Clicking or activating opens the signup flow.
+
+Does not reload the app.
+
+Does not replay the boot animation.
+
+Transitions into the signup screen with the same motion language as the login panel.
+
+Responsive behavior:
+
+On narrow windows (< 600 px), the link remains in the top-right but may shrink to an icon + tooltip.
+
+Never moves to a location that would be clipped or hidden.
+
+Accessibility:
+
+Fully keyboard reachable.
+
+Focus ring always visible.
+
+Screen reader announces: "Create a new account, link" or "Create a new account, button".
+
+Honesty:
+
+If signup is disabled (e.g., offline, or local-only build), the link must be hidden or disabled with a clear explanation — never a dead link.
+
+8.7 Secondary entries
+Depending on configuration, additional entries may appear below the login form:
+
+"Continue with local profile" (if enabled).
+
+"Sign in with Windows Hello" (if WINDOWS-INTEGRATED biometric is implemented — labeled honestly).
+
+"Sign in with SSO" (if enterprise SSO is configured).
+
+"Recover account" (link to recovery flow).
+
+Rule: Never show a sign-in option that does not work. If a provider is unavailable, hide it or disable it with an explanation.
+
+8.8 Footer
+App version (from package.json or build metadata).
+
+Privacy policy link.
+
+Terms of service link.
+
+Optional: "Check for updates" link.
+
+All footer text must meet contrast requirements (≥ 4.5:1 for normal text).
+
+8.9 Motion
+Element	Animation	Duration	Delay
+Panel	Opacity 0 → 1, translateY 12px → 0	350 ms	0 ms
+Avatar/Logo	Opacity 0 → 1, scale 0.9 → 1.0	400 ms	100 ms
+Welcome text	Opacity 0 → 1	300 ms	180 ms
+Fields	Opacity 0 → 1, translateY 6px → 0	250 ms each	240/300 ms
+Submit button	Opacity 0 → 1, scale 0.96 → 1.0	250 ms	380 ms
+Footer	Opacity 0 → 1	300 ms	450 ms
+Corner "Create account"	Opacity 0 → 1, translateX 6px → 0	300 ms	200 ms
+Reduced-motion variant: all fades only, no translate or scale, total ~200 ms.
+
+9. ACCOUNT CREATION ENTRY FLOW
+9.1 Transition from login to signup
+When the user activates "Create account":
+
+The login panel animates out: opacity 1 → 0, translateY 0 → -8px, 250 ms.
+
+The signup panel animates in: opacity 0 → 1, translateY 12px → 0, 350 ms.
+
+The corner link updates to "Back to sign in".
+
+Focus moves to the first field of the signup form.
+
+A screen reader announcement: "Create a new account. Form."
+
+The boot animation is not replayed.
+
+9.2 Signup form
+The signup form itself is specified in v7.0 §15.2. This document only defines:
+
+The transition into it.
+
+The transition back to login.
+
+The corner link behavior.
+
+9.3 Returning to login
+From signup, a "Back to sign in" link returns to login with the reverse animation.
+
+10. DESKTOP HANDOFF — Transition into the App
+10.1 Purpose
+After successful authentication (or local profile entry), transition smoothly into the desktop shell.
+
+10.2 Animation
+Element	Animation	Duration	Easing
+Login panel	Opacity 1 → 0, scale 1.0 → 0.98	250 ms	cubic-bezier(0.3, 0, 0.8, 0.15)
+Background	Blur 20px → 0px, brightness 0.7 → 1.0	400 ms	cubic-bezier(0.2, 0, 0, 1)
+Desktop shell	Opacity 0 → 1, scale 1.02 → 1.0	400 ms	cubic-bezier(0.2, 0, 0, 1)
+Taskbar/Dock	translateY 20px → 0	350 ms	delay 150 ms
+Desktop icons	Staggered fade-in	40 ms each	delay 200 ms
+Widgets (if visible)	Fade-in	300 ms	delay 300 ms
+Total: ~700 ms.
+
+10.3 Reduced-motion variant
+All fades, no transforms.
+
+Total ~400 ms.
+
+10.4 Sound
+A subtle "welcome" chime plays at the start of the handoff.
+
+Respects all sound settings.
+
+Visual equivalent: the desktop shell itself.
+
+10.5 Accessibility
+Screen reader announcement: "Signed in. Desktop ready."
+
+Focus moves to the desktop shell's default focus target (taskbar or first window, per the shell spec).
+
+Focus is never trapped on the login screen after handoff.
+
+11. ERROR HANDLING
+11.1 Boot errors
+If a boot initialization task fails:
+
+The loader stops.
+
+An error card replaces the loader.
+
+The card contains:
+
+What happened: a plain-language description.
+
+Why it happened: when known.
+
+What the user can do: Retry, Safe mode, View details, Quit.
+
+Technical details: expandable, non-sensitive.
+
+The error card is keyboard-navigable.
+
+The error is logged to the diagnostic log (never containing secrets).
+
+11.2 Login errors
+Error	UI message	Action
+Invalid credentials	"The email or password is incorrect."	Stay on login
+Email not verified	"Please verify your email. Resend verification?"	Show resend link
+MFA required	(Transition to MFA challenge)	Show MFA field
+MFA invalid	"The code is incorrect or expired."	Stay on MFA
+Account locked	"Too many attempts. Try again in N minutes."	Show countdown
+Rate limited	"Too many attempts. Please wait."	Disable submit
+Network error	"Cannot reach the server. Check your connection."	Retry, Offline mode
+Server error	"Something went wrong on our side. Try again."	Retry
+Token reuse detected	"Your session was ended for security. Please sign in again."	Return to login
+Rule: Never reveal whether an email exists (no user enumeration).
+
+Rule: Never show a raw stack trace.
+
+Rule: Every error must be actionable.
+
+11.3 Safe mode
+If the app fails to boot twice in a row, offer Safe Mode:
+
+Disables plugins, automation, widgets, and heavy subsystems.
+
+Loads the desktop shell with minimal services.
+
+Shows a banner: "Safe mode — some features are disabled."
+
+Provides a "Restart normally" action.
+
+Safe mode is APPLICATION-SIMULATED — it is an in-app mode, not a Windows mode. Label it honestly.
+
+12. REDUCED MOTION, PERFORMANCE MODE, AND ACCESSIBILITY
+12.1 Reduced Motion
+When prefers-reduced-motion: reduce is detected, or the user enables "Reduced Motion" in Settings:
+
+All transforms are removed or minimized.
+
+All animations are shortened.
+
+The boot sequence still runs, but with fades only.
+
+The loader becomes static.
+
+The desktop handoff is a simple cross-fade.
+
+12.2 Performance Mode
+When Performance Mode is enabled:
+
+The loader uses a simpler style (no orbiting dot).
+
+Background blur is reduced.
+
+Particle/gradient effects are disabled.
+
+Sound is still available but at a reduced default volume.
+
+The boot sequence total time is unchanged (perceived performance must not suffer).
+
+12.3 High Contrast
+The logo renders as a solid monochrome glyph.
+
+The loader uses a high-contrast stroke.
+
+The login panel uses a solid background, not acrylic.
+
+Focus rings are always visible.
+
+No color-only status communication.
+
+12.4 Screen readers
+All stages announce their state via aria-live="polite" (or assertive for errors).
+
+The logo has an accessible name.
+
+The loader has an accessible name and value.
+
+The login form uses semantic HTML (<form>, <label>, <input>, <button>).
+
+Errors are associated with their fields.
+
+Focus order is logical.
+
+Focus is visible at all times.
+
+12.5 Keyboard
+The entire sequence is keyboard-navigable.
+
+Enter submits the login form.
+
+Escape clears non-destructive state (e.g., closes the error card).
+
+Tab cycles through focusable elements in logical order.
+
+The "Create account" corner link is reachable via Tab from the top of the page.
+
+No keyboard trap.
+
+12.6 Internationalization
+All user-facing strings use translation keys.
+
+The sequence supports RTL layouts.
+
+The corner link position mirrors correctly in RTL.
+
+Fonts are selected via the font fallback system.
+
+Date, time, and number formatting is locale-aware.
+
+13. SOUND DESIGN
+13.1 Sounds in this subsystem
+Event	Sound	Duration	Category
+Boot start	Boot chime	600 ms	SYSTEM
+Login success	Welcome chime	400 ms	SUCCESS
+Login failure	Soft error tone	300 ms	ERROR
+Account creation start	Subtle transition	200 ms	UI
+Desktop handoff	Welcome chime	400 ms	SYSTEM
+13.2 Rules
+All sounds are original or properly licensed.
+
+No copyrighted OS sounds.
+
+Volume respects user settings and system mute.
+
+Every sound has a visual equivalent.
+
+Sound is never the sole indicator of status.
+
+If ENABLE_WEB_AUDIO_SOUNDS=false, no sounds play.
+
+If the user disabled boot sounds, none play.
+
+Sounds are rate-limited (no overlapping chaos).
+
+14. PERFORMANCE BUDGETS
+Metric	Target
+Time to first pixel (VOID)	< 100 ms
+Time to logo visible	< 300 ms
+Time to loader visible	< 700 ms
+Total cold-boot to login ready	< 3 s on reference hardware
+Warm-boot to login ready	< 500 ms
+Frame rate during boot animation	60 FPS target, never below 45 FPS
+Memory during boot	< 200 MB peak
+CPU during boot	< 15% average
+Rule: The boot sequence must never block the main thread. All animations are CSS/compositor-driven. No synchronous work in animation frames.
+
+Rule: The boot sequence must not delay the app's actual readiness. If the app is ready before the minimum display time, wait. If the app is slow, show honest progress.
+
+15. CAPABILITY CLASSIFICATION
+Element	Classification	Notes
+Boot animation	APPLICATION-SIMULATED	Does not boot Windows
+Logo reveal	APPLICATION-SIMULATED	Original asset
+Loader	REAL	Reflects real initialization
+Login form	REAL	Uses the auth system
+Create account link	REAL	Opens the signup flow
+Local profile mode	REAL	Local-only
+Windows Hello sign-in	WINDOWS-INTEGRATED (if implemented)	Labeled honestly
+SSO sign-in	REAL (requires IdP)	Labeled honestly
+Safe mode	APPLICATION-SIMULATED	In-app mode
+Boot sound	REAL (local audio)	Original or licensed
+Rule: Never claim the boot animation boots Windows. Never claim the login screen is the Windows login screen. Never claim safe mode is Windows Safe Mode.
+
+16. FILES TO CREATE
+text
+apps/desktop/
+├── electron/
+│   ├── bootState.ts                 # process-local boot flag
+│   ├── ipc/
+│   │   └── boot.ts                  # boot:consume-cold-signal handler
+│   └── window/
+│       └── createMainWindow.ts      # window creation with boot gating
+├── preload/
+│   └── boot.ts                      # contextBridge for boot API
+└── renderer/
+    ├── boot/
+    │   ├── BootSequence.tsx         # top-level state machine
+    │   ├── useColdBoot.ts           # cold-boot detection hook
+    │   ├── stages/
+    │   │   ├── StageVoid.tsx
+    │   │   ├── StageLogo.tsx
+    │   │   ├── StageLoader.tsx
+    │   │   └── StageHandoff.tsx
+    │   └── BootError.tsx
+    ├── auth/
+    │   ├── LoginScreen.tsx
+    │   ├── CreateAccountLink.tsx    # corner entry
+    │   ├── MfaChallenge.tsx
+    │   └── LoginError.tsx
+    └── desktop/
+        └── DesktopHandoff.tsx       # transition into shell
+
+packages/
+├── contracts/
+│   └── boot/
+│       └── boot.contract.ts         # Zod schemas for boot IPC
+└── ui/
+    └── boot/
+        ├── BootLogo.tsx             # original SVG logo
+        ├── BootLoader.tsx           # loader variants
+        └── BootSound.ts             # sound trigger
+
+assets/
+├── branding/
+│   ├── logo.svg
+│   ├── logo-mono.svg                # high contrast
+│   └── wordmark.svg
+└── sounds/
+    ├── boot-chime.ogg
+    ├── welcome-chime.ogg
+    └── error-tone.ogg
+
+docs/
+├── BOOT_EXPERIENCE.md
+├── LOGIN_UX.md
+└── SOUND_DESIGN.md (extend)
+
+brain.md (extend)
+17. IMPLEMENTATION PHASES
+Phase B0 — Boot state mechanism
+Implement bootState.ts in the main process.
+
+Implement the boot:consume-cold-signal IPC channel with Zod validation.
+
+Implement the preload bridge.
+
+Implement useColdBoot.ts in the renderer.
+
+Write unit tests proving:
+
+First call returns isColdBoot: true.
+
+Second call returns isColdBoot: false.
+
+Reloading the renderer does not replay the boot.
+
+Write an integration test (within authorization) proving HMR does not replay.
+
+Exit criteria: Cold-boot detection is provably correct.
+
+Phase B1 — Boot sequence UI
+Implement STAGE_VOID.
+
+Implement STAGE_LOGO with the original SVG logo.
+
+Implement STAGE_LOADER with honest progress.
+
+Implement STAGE_HANDOFF.
+
+Wire to the real initialization tasks.
+
+Implement reduced-motion and performance variants.
+
+Implement the boot sound.
+
+Exit criteria: The boot animation runs once per cold start, respects preferences, and never replays on refresh.
+
+Phase B2 — Login screen
+Implement the login panel with all fields.
+
+Implement the corner "Create account" link.
+
+Implement error states.
+
+Implement the transition to signup.
+
+Implement the transition to MFA.
+
+Implement the transition to desktop handoff.
+
+Implement local profile entry (if enabled).
+
+Implement Windows Hello entry (if implemented; labeled honestly).
+
+Exit criteria: Login works, is keyboard-accessible, is screen-reader-friendly, and the corner link is always reachable.
+
+Phase B3 — Polish
+Motion refinement across all stages.
+
+Sound refinement.
+
+Accessibility pass (axe + manual + keyboard + screen reader).
+
+Performance pass (measure and record).
+
+Visual regression baseline.
+
+High Contrast pass.
+
+RTL pass.
+
+Localization pass (en-US, ur-PK).
+
+Exit criteria: The sequence feels premium, is accessible, and meets budgets.
+
+Phase B4 — Error & recovery
+Implement boot error handling.
+
+Implement safe mode.
+
+Implement retry logic.
+
+Implement the diagnostic log for boot failures.
+
+Implement the "restart application" action.
+
+Exit criteria: Failures are honest, recoverable, and never leave the user stuck.
+
+18. DEFINITION OF DONE
+This subsystem is complete only when:
+
+The boot animation plays exactly once per cold start.
+
+The boot animation never plays on renderer refresh.
+
+The boot animation never plays on HMR reload.
+
+The boot animation never plays on route change.
+
+Logout returns to the login screen, not the boot animation.
+
+The login screen is fully keyboard-navigable.
+
+The "Create account" corner link is always visible and reachable.
+
+The "Create account" link never reloads the app.
+
+All animations respect Reduced Motion.
+
+All animations respect Performance Mode.
+
+High Contrast mode renders correctly.
+
+Screen readers announce each stage.
+
+Sounds are original or properly licensed.
+
+Sounds respect mute and settings.
+
+Errors are honest and actionable.
+
+No fake progress bars.
+
+No claim that the boot animation boots Windows.
+
+No claim that the login screen is the Windows login.
+
+No secrets in logs.
+
+Total cold-boot time ≤ 3 s on reference hardware.
+
+Tests written and (where authorized) run.
+
+Documentation updated (docs/BOOT_EXPERIENCE.md, docs/LOGIN_UX.md).
+
+brain.md updated.
+
+IMPLEMENTATION_STATUS.md updated.
+
+docs/CHANGELOG.md updated.
+
+Git diff reviewed.
+
+No secrets committed.
+
+Meaningful Git commit created.
+
+19. GIT COMMIT EXAMPLES
+text
+feat(boot): add process-local cold-boot signal
+feat(boot): implement boot sequence state machine
+feat(boot): add original animated logo reveal
+feat(boot): implement honest initialization loader
+feat(boot): add reduced-motion and performance variants
+feat(auth): implement login screen
+feat(auth): add corner create-account entry
+feat(auth): implement MFA challenge transition
+feat(auth): implement desktop handoff animation
+feat(sound): add boot and welcome chimes
+test(boot): verify cold-boot signal is consumable once
+test(boot): verify refresh does not replay animation
+test(auth): cover login error states
+docs(boot): document boot experience
+docs(auth): document login UX
+fix(boot): prevent animation replay on HMR
+20. FINAL OPERATING INSTRUCTIONS
+Before starting:
+
+Re-read v7.0 §15 (Authentication) and §28 (Motion).
+
+Re-read this document in full.
+
+Inspect the existing renderer entry point and router.
+
+Inspect how the renderer is currently mounted.
+
+Inspect the main process window creation.
+
+Confirm no existing boot/loading screen conflicts.
+
+Create docs/BOOT_EXPERIENCE.md as a stub.
+
+Update brain.md with a "Boot Experience" section marked IN_PROGRESS.
+
+Begin with Phase B0.
+
+During implementation:
+
+Never use sessionStorage, localStorage, cookies, or any renderer-persisted state to gate the boot animation.
+
+Never persist the cold-boot flag to disk.
+
+Never replay the boot animation on refresh, HMR, or navigation.
+
+Never show a fake progress bar.
+
+Never claim the boot animation boots Windows.
+
+Never claim the login screen is the Windows login.
+
+Never block the main thread with animations.
+
+Never autoplay loud audio.
+
+Always provide a visual equivalent for every sound.
+
+Always respect Reduced Motion.
+
+Always respect High Contrast.
+
+Always keep the "Create account" link reachable.
+
+Always update documentation and brain.md.
+
+Always commit meaningful units to Git.
+
+When blocked:
+
+State the exact blocker.
+
+Record what has been completed.
+
+Identify what requires approval.
+
+Continue with independent safe work where possible.
+
+At the end of an authorized session, provide the standard expansion report plus:
+
+text
+Boot Experience Status
+Cold-Boot Detection Verified:     YES / NO
+Refresh Replay Verified Absent:   YES / NO
+HMR Replay Verified Absent:       YES / NO
+Login Screen Status
+Create Account Entry Status
+Motion Compliance:                YES / NO
+Accessibility Compliance:         YES / NO
+Performance Budget Met:           YES / NO
+Mandatory honesty block:
+
+text
+APPLICATION EXECUTED:            NO
+DEV SERVER STARTED:              NO
+DEPENDENCIES INSTALLED:          NO
+DATABASE MIGRATIONS EXECUTED:    NO
+WINDOWS MODIFICATIONS PERFORMED: NO
+ELEVATION REQUESTED:             NO
+PRODUCTION DEPLOYMENT PERFORMED: NO
+If any operation was explicitly authorized and performed, report it accurately.
+
+21. FINAL MANDATORY DIRECTIVE
+ANTIGRAVITY: BUILD A CINEMATIC, HONEST, ACCESSIBLE LAUNCH EXPERIENCE. DO NOT MAKE MISTAKES.
+
+The boot animation is the product's handshake with the user. It must feel premium, fast, and intentional. It must run once per cold start and never again until the process restarts.
+
+The login screen must be elegant, keyboard-first, screen-reader-friendly, and must always offer a clearly reachable "Create account" entry in the corner.
+
+Every animation must respect Reduced Motion. Every sound must have a visual equivalent. Every claim must be truthful. Every failure must be recoverable.
+
+Use brain.md for engineering memory. Use the Decision Authority Matrix for safe decisions. Use the capability model to maintain honesty. Use Git after every meaningful implementation unit.
+
+Begin with Phase B0 — Boot state mechanism. Do not launch the application. Do not start a development server. Do not install dependencies. Do not execute migrations. Do not modify Windows.
+
+Proceed with safe, documented, reversible repository work.
+
+DO NOT MAKE MISTAKES, ANTIGRAVITY.

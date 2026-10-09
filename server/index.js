@@ -166,6 +166,26 @@ function getLiveCpuUsage() {
   return usage;
 }
 
+// Process-local cold-boot state flag (Master Spec §2.4)
+// Created fresh on every process launch; never written to disk or storage.
+const bootState = {
+  isFirstRendererLoad: true,
+  processStartedAt: Date.now(),
+  launchId: randomUUID(),
+};
+
+function consumeColdBootSignal() {
+  const isColdBoot = bootState.isFirstRendererLoad;
+  if (isColdBoot) {
+    bootState.isFirstRendererLoad = false;
+  }
+  return {
+    isColdBoot,
+    launchId: bootState.launchId,
+    processStartedAt: bootState.processStartedAt,
+  };
+}
+
 // In-Memory state caches (synchronized with local DB & SQL Server schema model)
 const activeSessions = new Map();
 const mockUsers = [
@@ -339,6 +359,19 @@ app.get('/api/v1/system/capabilities', (req, res) => {
 });
 
 // ==========================================
+// 1.1 BOOT SEQUENCE & COLD-BOOT GATING (Section 2.4)
+// ==========================================
+app.get('/api/v1/boot/consume-cold-signal', (_req, res) => {
+  const signal = consumeColdBootSignal();
+  successEnvelope(res, signal);
+});
+
+app.post('/api/v1/boot/consume-cold-signal', (_req, res) => {
+  const signal = consumeColdBootSignal();
+  successEnvelope(res, signal);
+});
+
+// ==========================================
 // 2. MS SQL SERVER ENTERPRISE ENDPOINTS
 // ==========================================
 app.get('/api/v1/db/status', (req, res) => {
@@ -419,6 +452,57 @@ app.post('/api/v1/auth/login', (req, res) => {
       permissions: user.permissions,
     },
   });
+});
+
+app.post('/api/v1/auth/register', (req, res) => {
+  const { email, displayName, password } = req.body;
+  if (!email || !password || !displayName) {
+    return errorEnvelope(res, 'VALIDATION_FAILED', 'Display name, email, and password are required.');
+  }
+
+  const existing = mockUsers.find((u) => u.email.toLowerCase() === email.toLowerCase());
+  if (existing) {
+    return errorEnvelope(res, 'USER_EXISTS', 'An account with this email address already exists.', 409);
+  }
+
+  const newUser = {
+    userId: `usr-${randomUUID().substring(0, 8)}`,
+    email: email.toLowerCase(),
+    displayName: displayName.trim(),
+    role: 'StandardUser',
+    permissions: ['filesystem.user.*', 'workspace.*'],
+    isActive: true,
+  };
+
+  mockUsers.push(newUser);
+
+  const token = signJwt(
+    {
+      sub: newUser.userId,
+      email: newUser.email,
+      displayName: newUser.displayName,
+      role: newUser.role,
+      permissions: newUser.permissions,
+    },
+    JWT_SECRET,
+    7
+  );
+
+  successEnvelope(
+    res,
+    {
+      token,
+      refreshToken: `rt_${randomUUID()}`,
+      user: {
+        id: newUser.userId,
+        email: newUser.email,
+        displayName: newUser.displayName,
+        role: newUser.role,
+        permissions: newUser.permissions,
+      },
+    },
+    201
+  );
 });
 
 app.get('/api/v1/auth/me', authenticateToken, (req, res) => {
