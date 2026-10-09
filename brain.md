@@ -116,10 +116,7 @@ Final verification of source code integrity, Git staging and commit creation for
   - Text Editor with multi-tab file editing, line/column tracking, word counts, formatting, and file export.
   - Application Catalog & Registry with live filtering, category switching, and real-time app launch.
   - Diagnostics & Event Viewer with audit event feeds, log filtering, telemetry status, and diagnostic export.
-- [REAL] Microsoft SQL Server relational schema migration scripts (`001_initial_schema.sql`, `002_v6_enterprise_schema.sql`). App with World Clock, Stopwatch with laps, and Countdown Timer.
-  - API Tester with HTTP REST client, method selector, headers/body inputs, and response viewer.
-  - JSON Formatter with beautify, minify, and validation syntax checking.
-- [REAL] Microsoft SQL Server relational schema migration script (`001_initial_schema.sql`).
+- [REAL] Microsoft SQL Server relational schema migration scripts (`001_initial_schema.sql`, `002_v6_enterprise_schema.sql`).
 - [REAL] Express REST API service with versioned endpoints and request tracing (`server/index.js`).
 - [WINDOWS-INTEGRATED] Safe read-only PowerShell inspection bridge (`querySystem.ps1`).
 

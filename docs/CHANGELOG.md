@@ -9,8 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Master Specification Version 6.0 upgrade incorporating strict truth-in-engineering capability classification.
-- All 21 required engineering documents in `docs/` (`ASSUMPTIONS.md`, `DECISIONS.md`, `THREAT_MODEL.md`, `RISK_REGISTER.md`, `PERFORMANCE.md`, `INTERNATIONALIZATION.md`, `RELEASE.md`, `INSTALLATION.md`, `PRIVACY.md`, `THIRD_PARTY_LICENSES.md`, `CAPABILITY_MATRIX.md`).
+- Full 23 required engineering documents in `docs/` (including `ANIMATIONS_AND_EFFECTS.md`, `SOUND_DESIGN.md`, `RELEASE_PLAN.md`, `ASSUMPTIONS.md`, `DECISIONS.md`, `THREAT_MODEL.md`, `RISK_REGISTER.md`, `PERFORMANCE.md`, `INTERNATIONALIZATION.md`, `RELEASE.md`, `INSTALLATION.md`, `PRIVACY.md`, `THIRD_PARTY_LICENSES.md`, `CAPABILITY_MATRIX.md`).
 - Enterprise SQL Server migration script `002_v6_enterprise_schema.sql` targeting database `MyOS`.
+- Four new built-in production applications:
+  - Developer Workspace (`DeveloperWorkspaceApp.tsx`): Multi-project management, active repo indicators, terminal launch, and health metrics.
+  - Text Editor (`TextEditorApp.tsx`): Multi-tab code & text editor, syntax highlighting mockups, line/column tracking, word counts, formatting, and file export.
+  - Application Catalog (`AppCatalogApp.tsx`): Filterable application catalog with categories, search, taskbar pinning, and sandboxing indicators.
+  - Diagnostics & Event Viewer (`DiagnosticsApp.tsx`): Real-time system event feed, severity filtering, subsystem status, and diagnostic export.
 - Typed Electron IPC boundaries and channels allowlist (`src/electron/ipc/channels.ts`, `contracts.ts`).
 - Enterprise error catalog, event protocol, command definitions, and permission validation (`src/core/contracts.ts`).
 - Multi-language internationalization engine supporting English (`en-US`) and Urdu (`ur-PK`) with dynamic RTL support (`src/core/i18n.ts`).
