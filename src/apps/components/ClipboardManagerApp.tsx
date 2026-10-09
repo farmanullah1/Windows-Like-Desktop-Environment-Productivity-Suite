@@ -8,7 +8,6 @@ import {
   Check,
   Shield,
   Download,
-  Filter,
   FileText,
   Code,
   Link as LinkIcon,

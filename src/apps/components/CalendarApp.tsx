@@ -8,7 +8,6 @@ import {
   ExternalLink,
   Clock,
   Trash2,
-  CheckCircle2,
 } from 'lucide-react';
 import { soundEngine } from '../../design-system/soundEngine';
 
@@ -252,6 +251,13 @@ export const CalendarApp: React.FC<{ windowId: string }> = () => {
                 onChange={(e) => setNewEventTitle(e.target.value)}
                 className="w-full px-2.5 py-1 rounded bg-[var(--surface-input)] border border-[var(--border-subtle)] text-xs focus:outline-none"
                 required
+              />
+              <input
+                type="text"
+                placeholder="Start Time (e.g. 09:00 AM)..."
+                value={newEventStart}
+                onChange={(e) => setNewEventStart(e.target.value)}
+                className="w-full px-2.5 py-1 rounded bg-[var(--surface-input)] border border-[var(--border-subtle)] text-[11px] focus:outline-none"
               />
               <input
                 type="text"

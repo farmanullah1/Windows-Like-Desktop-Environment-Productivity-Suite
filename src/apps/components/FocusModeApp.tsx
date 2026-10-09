@@ -10,7 +10,6 @@ import {
   CloudRain,
   Trees,
   Waves,
-  Sparkles,
   CheckCircle2,
 } from 'lucide-react';
 import { soundEngine } from '../../design-system/soundEngine';
