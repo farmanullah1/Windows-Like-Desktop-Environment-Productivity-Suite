@@ -237,6 +237,14 @@ let inMemoryApplications = [
   { applicationId: 'app-14', applicationKey: 'diagnostics', name: 'Diagnostics', version: '5.0.0', classification: 'System', isEnabled: true, isSystemApplication: true, description: 'System health and event logging.' },
   { applicationId: 'app-15', applicationKey: 'media-player', name: 'Media Player', version: '5.0.0', classification: 'Productivity', isEnabled: true, isSystemApplication: true, description: 'Audio & video visualizer playback.' },
   { applicationId: 'app-16', applicationKey: 'gallery', name: 'Photo Gallery', version: '5.0.0', classification: 'Productivity', isEnabled: true, isSystemApplication: true, description: 'Image preview and organization.' },
+  { applicationId: 'app-17', applicationKey: 'clipboard', name: 'Clipboard History', version: '8.0.0', classification: 'Utilities', isEnabled: true, isSystemApplication: true, description: 'Searchable clipboard history with pinning.' },
+  { applicationId: 'app-18', applicationKey: 'snippets', name: 'Snippet Expander', version: '8.0.0', classification: 'Productivity', isEnabled: true, isSystemApplication: true, description: 'Keyword expansion triggers and dynamic variables.' },
+  { applicationId: 'app-19', applicationKey: 'quick-utils', name: 'Quick Utilities', version: '8.0.0', classification: 'Utilities', isEnabled: true, isSystemApplication: true, description: 'Developer utilities, encoders, color studio.' },
+  { applicationId: 'app-20', applicationKey: 'tasks', name: 'Tasks & Kanban', version: '8.0.0', classification: 'Productivity', isEnabled: true, isSystemApplication: true, description: 'Sprint Kanban boards and project tasks.' },
+  { applicationId: 'app-21', applicationKey: 'calendar', name: 'Calendar & Events', version: '8.0.0', classification: 'Productivity', isEnabled: true, isSystemApplication: true, description: 'Monthly calendar grid and agenda scheduler.' },
+  { applicationId: 'app-22', applicationKey: 'focus', name: 'Focus Mode', version: '8.0.0', classification: 'Productivity', isEnabled: true, isSystemApplication: true, description: 'Pomodoro timer and ambient audio synthesizer.' },
+  { applicationId: 'app-23', applicationKey: 'vault', name: 'Security Vault', version: '8.0.0', classification: 'System', isEnabled: true, isSystemApplication: true, description: 'Encrypted password vault and TOTP 2FA tokens.' },
+  { applicationId: 'app-24', applicationKey: 'ai-assistant', name: 'Antigravity AI', version: '8.0.0', classification: 'Productivity', isEnabled: true, isSystemApplication: true, description: 'On-device desktop AI assistant.' },
 ];
 
 let inMemoryFiles = [

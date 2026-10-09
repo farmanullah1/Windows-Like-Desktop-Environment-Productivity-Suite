@@ -3,14 +3,12 @@ import {
   Bot,
   Send,
   Sparkles,
-  Shield,
   Trash2,
   Copy,
   Check,
   Code,
   FileText,
   Database,
-  Cpu,
 } from 'lucide-react';
 import { soundEngine } from '../../design-system/soundEngine';
 
