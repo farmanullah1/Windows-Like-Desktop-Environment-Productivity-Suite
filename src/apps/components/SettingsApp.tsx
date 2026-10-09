@@ -18,9 +18,10 @@ import {
   AlertCircle,
   Play,
 } from 'lucide-react';
-import { useTheme, ThemeType, EffectsModeType, ShellModeType } from '../../design-system/ThemeProvider';
+import { useTheme, ShellModeType } from '../../design-system/ThemeProvider';
 import { useDesktop } from '../../core/desktopStore';
 import { soundEngine, SoundEffectType } from '../../design-system/soundEngine';
+import { AppearanceDashboard } from './AppearanceDashboard';
 
 type SettingsTab =
   | 'appearance'
@@ -31,28 +32,15 @@ type SettingsTab =
   | 'accessibility'
   | 'about';
 
-const ACCENT_COLORS = [
-  { name: 'Windows Blue', color: '#0078d4' },
-  { name: 'Sky Azure', color: '#0284c7' },
-  { name: 'Emerald Green', color: '#10b981' },
-  { name: 'Aubergine Orange', color: '#e95420' },
-  { name: 'Vibrant Violet', color: '#8b5cf6' },
-  { name: 'Rose Red', color: '#f43f5e' },
-  { name: 'Teal Aurora', color: '#14b8a6' },
-  { name: 'Graphite Zinc', color: '#71717a' },
-];
-
 export const SettingsApp: React.FC<{ windowId: string }> = () => {
   const [activeTab, setActiveTab] = useState<SettingsTab>('appearance');
   const {
     theme,
     setTheme,
     effectsMode,
-    setEffectsMode,
     shellMode,
     setShellMode,
     accentColor,
-    setAccentColor,
     soundEnabled,
     setSoundEnabled,
     soundVolume,
@@ -67,8 +55,6 @@ export const SettingsApp: React.FC<{ windowId: string }> = () => {
     deleteWorkspace,
     renameWorkspace,
     addNotification,
-    currentWallpaper,
-    setWallpaper,
     metrics,
     testDbConnection,
   } = useDesktop();
@@ -143,17 +129,6 @@ export const SettingsApp: React.FC<{ windowId: string }> = () => {
       setQueryRunning(false);
     }
   };
-
-  const themesList: { id: ThemeType; name: string; desc: string }[] = [
-    { id: 'dark', name: 'Dark (Default)', desc: 'Fluent acrylic depth with obsidian blues' },
-    { id: 'light', name: 'Light', desc: 'Crisp platinum surfaces with subtle drop shadows' },
-    { id: 'midnight', name: 'Midnight', desc: 'Pure black OLED high contrast with violet accents' },
-    { id: 'graphite', name: 'Graphite', desc: 'Monochrome minimalist developer workstation' },
-    { id: 'aurora', name: 'Aurora', desc: 'Northern lights glow with teal & marine gradients' },
-    { id: 'ocean', name: 'Ocean', desc: 'Deep macOS Monterey marine navy tones' },
-    { id: 'ubuntu-dark', name: 'Ubuntu-Dark', desc: 'Warm aubergine & dark slate Linux aesthetics' },
-    { id: 'high-contrast', name: 'High Contrast', desc: 'WCAG AAA compliant maximum visibility mode' },
-  ];
 
   const handleTestSound = (cue: SoundEffectType) => {
     soundEngine.play(cue);
@@ -291,114 +266,20 @@ export const SettingsApp: React.FC<{ windowId: string }> = () => {
       <div className="flex-1 overflow-y-auto p-6">
         {/* TAB 1: APPEARANCE */}
         {activeTab === 'appearance' && (
-          <div className="space-y-6 max-w-2xl">
-            <div>
-              <h3 className="text-lg font-semibold">Appearance & Personalization</h3>
-              <p className="text-xs text-[var(--text-muted)]">Configure themes, desktop taskbar mode, and graphic effects.</p>
-            </div>
-
-            {/* Themes Grid */}
-            <div className="space-y-2">
-              <label className="text-xs font-semibold uppercase text-[var(--text-muted)]">Theme Selection</label>
-              <div className="grid grid-cols-2 gap-3">
-                {themesList.map((t) => (
-                  <div
-                    key={t.id}
-                    onClick={() => setTheme(t.id)}
-                    className={`p-3 rounded-xl border cursor-pointer transition-all ${
-                      theme === t.id
-                        ? 'border-[var(--accent-primary)] bg-[var(--accent-subtle)] shadow-sm'
-                        : 'border-[var(--border-subtle)] bg-[var(--surface-card)] hover:border-[var(--border-medium)]'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-xs font-semibold">{t.name}</span>
-                      {theme === t.id && <span className="w-2 h-2 rounded-full bg-[var(--accent-primary)]" />}
-                    </div>
-                    <p className="text-[11px] text-[var(--text-muted)]">{t.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Desktop Wallpaper 4K Gallery */}
-            <div className="space-y-2">
-              <label className="text-xs font-semibold uppercase text-[var(--text-muted)]">Desktop 4K Wallpaper</label>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                {[
-                  { name: 'Nordic Aurora', url: '/wallpapers/aurora.jpg' },
-                  { name: 'Cyberpunk Neon', url: '/wallpapers/cyberpunk.jpg' },
-                  { name: 'Fluent Silk', url: '/wallpapers/fluent_silk.jpg' },
-                  { name: 'Cosmic Nebula', url: '/wallpapers/cosmic_nebula.jpg' },
-                ].map((wp) => (
-                  <div
-                    key={wp.url}
-                    onClick={() => {
-                      setWallpaper(wp.url);
-                      soundEngine.play('click');
-                      addNotification('Wallpaper Applied', `Desktop wallpaper updated to ${wp.name}.`, 'success', 'Personalization');
-                    }}
-                    className={`relative rounded-xl overflow-hidden border cursor-pointer transition-all ${
-                      currentWallpaper === wp.url
-                        ? 'border-[var(--accent-primary)] ring-2 ring-[var(--accent-primary)]/40 scale-102 shadow-md'
-                        : 'border-[var(--border-subtle)] hover:border-white/40'
-                    }`}
-                  >
-                    <img src={wp.url} alt={wp.name} className="w-full h-16 object-cover" />
-                    <div className="p-1.5 bg-[var(--surface-card)] text-center">
-                      <span className="text-[10px] font-medium block truncate">{wp.name}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Accent Color */}
-            <div className="space-y-2">
-              <label className="text-xs font-semibold uppercase text-[var(--text-muted)]">Accent Color</label>
-              <div className="flex items-center gap-3">
-                {ACCENT_COLORS.map((c) => (
-                  <button
-                    key={c.color}
-                    onClick={() => setAccentColor(c.color)}
-                    style={{ backgroundColor: c.color }}
-                    className={`w-7 h-7 rounded-full transition-transform ${
-                      accentColor === c.color ? 'ring-2 ring-white scale-110' : 'hover:scale-105'
-                    }`}
-                    title={c.name}
-                  />
-                ))}
-              </div>
-            </div>
-
-            {/* Visual Performance Mode */}
-            <div className="space-y-2">
-              <label className="text-xs font-semibold uppercase text-[var(--text-muted)]">Visual Performance Mode</label>
-              <div className="grid grid-cols-4 gap-2">
-                {(['minimal', 'balanced', 'enhanced', 'immersive'] as EffectsModeType[]).map((mode) => (
-                  <button
-                    key={mode}
-                    onClick={() => setEffectsMode(mode)}
-                    className={`py-2 px-3 rounded-xl border text-xs font-medium capitalize transition-all ${
-                      effectsMode === mode
-                        ? 'border-[var(--accent-primary)] bg-[var(--accent-subtle)] text-[var(--accent-primary)]'
-                        : 'border-[var(--border-subtle)] bg-[var(--surface-card)] hover:border-[var(--border-medium)]'
-                    }`}
-                  >
-                    {mode}
-                  </button>
-                ))}
-              </div>
-            </div>
+          <div className="space-y-6 max-w-3xl">
+            <AppearanceDashboard />
 
             {/* Desktop Shell Mode */}
-            <div className="space-y-2">
+            <div className="space-y-2 pt-4 border-t border-[var(--border-subtle)]">
               <label className="text-xs font-semibold uppercase text-[var(--text-muted)]">Desktop Shell Layout</label>
               <div className="grid grid-cols-4 gap-2">
                 {(['hybrid', 'windows', 'macos', 'developer'] as ShellModeType[]).map((mode) => (
                   <button
                     key={mode}
-                    onClick={() => setShellMode(mode)}
+                    onClick={() => {
+                      setShellMode(mode);
+                      soundEngine.play('click');
+                    }}
                     className={`py-2 px-3 rounded-xl border text-xs font-medium capitalize transition-all ${
                       shellMode === mode
                         ? 'border-[var(--accent-primary)] bg-[var(--accent-subtle)] text-[var(--accent-primary)]'

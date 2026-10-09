@@ -108,3 +108,83 @@ test('Permissions: All 32 permission keys are covered and verified', () => {
   assert.equal(checkPermission(['calendar.*'], 'calendar.read'), true);
 });
 
+test('Motion Engine: All 6 v9.0 motion profiles and fallbacks are defined', async () => {
+  const { MOTION_PROFILES, getMotionConfig } = await import('../src/design-system/motionEngine.ts');
+
+  const expectedProfiles = ['off', 'minimal', 'balanced', 'expressive', 'cinematic', 'performance_saver'];
+  for (const p of expectedProfiles) {
+    assert.ok(MOTION_PROFILES[p], `Profile ${p} must be defined`);
+  }
+
+  // Default balanced profile
+  const balanced = getMotionConfig('balanced');
+  assert.equal(balanced.profile, 'balanced');
+  assert.equal(balanced.durationStandard, 200);
+  assert.equal(balanced.enableAmbientLoops, true);
+
+  // Reduced motion off profile (instant 0ms)
+  const off = getMotionConfig('off');
+  assert.equal(off.durationStandard, 0);
+  assert.equal(off.durationInstant, 0);
+  assert.equal(off.easingStandard, 'linear');
+  assert.equal(off.enableAmbientLoops, false);
+
+  // Performance saver profile
+  const saver = getMotionConfig('performance_saver');
+  assert.equal(saver.enableAmbientLoops, false);
+  assert.equal(saver.enableParallax, false);
+  assert.equal(saver.enableParticles, false);
+});
+
+test('Color System: All 14 v9.0 theme palettes and gradients are defined in themes.css', async () => {
+  const fs = await import('node:fs');
+  const path = await import('node:path');
+  const cssPath = path.resolve('src/design-system/themes.css');
+  const css = fs.readFileSync(cssPath, 'utf-8');
+
+  const requiredThemes = [
+    'midnight-aurora',
+    'ocean-glass',
+    'solar-flare',
+    'emerald-terminal',
+    'rose-quartz',
+    'arctic-light',
+    'sunset-horizon',
+    'cyber-spectrum',
+    'sage-sand',
+    'monochrome-studio',
+    'classic-blue',
+    'warm-light',
+    'deep-space',
+    'high-contrast',
+  ];
+
+  for (const themeId of requiredThemes) {
+    assert.ok(
+      css.includes(`[data-theme="${themeId}"]`),
+      `themes.css must include definition for data-theme="${themeId}"`
+    );
+  }
+
+  const requiredGradients = [
+    '--gradient-aurora',
+    '--gradient-ocean',
+    '--gradient-sunset',
+    '--gradient-solar',
+    '--gradient-emerald',
+    '--gradient-spectrum',
+    '--gradient-glass',
+    '--gradient-edge-light',
+    '--gradient-focus-progress',
+    '--gradient-selection',
+  ];
+
+  for (const grad of requiredGradients) {
+    assert.ok(
+      css.includes(grad),
+      `themes.css must include gradient token ${grad}`
+    );
+  }
+});
+
+

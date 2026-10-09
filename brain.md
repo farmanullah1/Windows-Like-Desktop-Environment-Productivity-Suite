@@ -1,7 +1,7 @@
 # Project Identity
 **Project Name:** Windows-Like Desktop Environment & Productivity Suite
-**Codename:** Antigravity Desktop OS Workspace (ADW-6)
-**Version:** 6.2.0 (Master Architecture Specification)
+**Codename:** Antigravity Desktop OS Workspace (MyOS / ADW-9)
+**Version:** 9.0.0 (Visual Identity, Color, Motion, Personalization & Feature Expansion)
 **Role:** Senior Production Desktop & Full-Stack System Architect
 
 # Product Vision
@@ -12,13 +12,18 @@ A serious, production-grade desktop application platform designed for Windows 10
 The outcome is a single, cohesive, original desktop environment that delivers high-performance productivity without looking like an operating system collage.
 
 # Current Project Status
-All core architectural phases completed and aligned with Version 6.2 Master Specifications:
+All core architectural phases completed and aligned with Version 9.0 Master Specifications:
 - Native Tailwind CSS v4 compiler integration via `@tailwindcss/vite`
+- 14 Thematic Color Palettes & Centralized Semantic Tokens (`src/design-system/themes.css`)
+- Central Motion Engine with 6 distinct profiles (`src/design-system/motionEngine.ts`, `balanced`, `expressive`, `cinematic`, `minimal`, `performance_saver`, `off`)
+- Appearance & Accessibility Studio (`src/apps/components/AppearanceDashboard.tsx`) with 14-theme gallery, custom accent studio, and live WCAG 2.2 AA contrast calculation
+- Wallpaper Studio with dynamic readability dimming slider (0%–60%) and ambient aurora drift layer (`src/shell/DesktopCanvas.tsx`)
+- Active Window Top Edge-Lighting (`--gradient-edge-light`) in `src/window-manager/WindowFrame.tsx`
 - Microsoft SQL Server enterprise connection pool and query engine (`server/db.js`, `mssql`) targeting `MyOS`
 - Live host telemetry replacing dummy data (Host OS, actual CPU model & cores, 32 GB RAM, live load sampling, Web Battery API)
 - Complete PWA, SEO & Social sharing suite (`manifest.json`, favicons, Apple touch icons, Open Graph, Twitter cards, `robots.txt`)
 - Dedicated MS SQL Server configuration, connection tester, and query runner in Settings (`SettingsApp.tsx`)
-- Full 23-document architectural specification in `docs/`
+- Full architectural specification suite in `docs/` (including `docs/THEMES_AND_COLORS.md` and `docs/MOTION_SYSTEM.md`)
 - 24 registered production applications (including Clipboard History, Snippet Expander, Quick Utilities, Tasks & Kanban, Calendar & Events, Focus Mode, Security Vault, Antigravity AI, Groove Media Player, and Photo Studio)
 - 4K real desktop wallpapers (`aurora.jpg`, `cyberpunk.jpg`, `fluent_silk.jpg`, `cosmic_nebula.jpg`)
 - 3D Squircle `AppIconBadge` system with specular sheen, ambient glow, and distinct category gradients
@@ -32,20 +37,21 @@ All core architectural phases completed and aligned with Version 6.2 Master Spec
 - Cinematic Cold-Boot Startup Sequence (`src/boot/`) with process-local single-use signal (`/api/v1/boot/consume-cold-signal`)
 - Integrated Acrylic Login Experience (`src/auth/LoginScreen.tsx`) and Top-Right Corner Account Creation Entry (`src/auth/CreateAccountLink.tsx`)
 - Synthesized Web Audio procedural boot chime and welcome chime (`src/design-system/soundEngine.ts`)
-- Automated unit test suite (`tests/contracts.test.mjs`) passing with 100% success rate (7 test suites)
-- Production Vite build and strict TypeScript compiler (`tsc --noEmit`) passing with 0 errors
+- Automated unit test suite (`tests/contracts.test.mjs`) passing with 100% success rate (9 test suites)
+- Production Vite build (`npm run build`) and strict TypeScript compiler (`tsc --noEmit`) passing with 0 errors
 - Cross-platform Windows execution fix for `npm run dev` and `npm run build`
 
 # Current Implementation Phase
-Phase S0-S4 / B0-B4 — One-Click Bootstrap Engine & MyOS Brand Identity
+Phase V0–V6 — Version 9.0 Visual Identity, Color, Motion, Personalization & Feature Expansion
 
 # Current Sprint/Task
-One-Click Bootstrap & MyOS Launch Experience:
-- Cross-platform Node.js bootstrap script (`scripts/setup-and-run.mjs`) with Node ≥ 20, npm ≥ 10, project verification, port hunting, dev server launch, and health polling.
-- Windows double-click wrapper (`setup-and-run.bat`), PowerShell wrapper (`setup-and-run.ps1`), and POSIX shell script (`setup-and-run.sh`).
-- Universal branding migration to MyOS: original vector logo, high-contrast monochrome, Safari mask-icon, wordmark, splash, multi-res favicons (`favicon.ico`, `favicon-16/32/48/192/512.png`), and Apple touch icon.
-- Centralized `document.title` synchronization (`src/lib/documentTitle.ts`) dynamically formatting active app titles (`MyOS — <AppName>`).
-- All documentation generated (`docs/SETUP.md`, `docs/BOOTSTRAP.md`, `README.md`).
+Version 9.0 Visual Identity, Color, Motion & Feature Expansion Complete:
+- 14 Theme Palettes: Midnight Aurora, Ocean Glass, Solar Flare, Emerald Terminal, Rose Quartz, Arctic Light, Sunset Horizon, Cyber Spectrum, Sage & Sand, Monochrome Studio, Classic Blue, Warm Light, Deep Space, High Contrast.
+- 10 Reusable Gradient Tokens: Aurora, Ocean, Sunset, Solar, Emerald, Spectrum, Glass, Edge-Light, Focus-Progress, Selection.
+- Central Motion Engine: 6 profiles with token injection into `:root` and reduced-motion instant fallback.
+- Appearance Dashboard: Unified studio with gallery filter, accent hex & contrast analyzer, 4K wallpapers, dimming slider, and motion profile selector.
+- Edge Lighting & Wallpaper Dimming: Focus-aware window edge light and desktop canvas dimming scrim.
+- Tests & Validation: 9 automated test suites passing in 156ms; production build passing in 4.6s.
 
 # Bootstrap Subsystem
 - **Bootstrap Entrypoints:** `setup-and-run.bat` (Windows double-click), `setup-and-run.ps1` (PowerShell), `setup-and-run.sh` (macOS/Linux), and `scripts/setup-and-run.mjs` (Node.js engine).

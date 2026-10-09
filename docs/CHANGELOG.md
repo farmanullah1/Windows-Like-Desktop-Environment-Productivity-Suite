@@ -5,6 +5,29 @@ All notable changes to the **Windows-Like Desktop Environment & Productivity Sui
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [9.0.0] - 2026-10-09
+
+### Added
+- **14 Thematic Color Palettes & Semantic Token System (§2)**:
+  - 14 curated themes: Midnight Aurora (default), Ocean Glass, Solar Flare, Emerald Terminal, Rose Quartz, Arctic Light, Sunset Horizon, Cyber Spectrum, Sage & Sand, Monochrome Studio, Classic Blue, Warm Light, Deep Space, and High Contrast.
+  - Reusable gradient tokens in `:root`: `--gradient-aurora`, `--gradient-ocean`, `--gradient-sunset`, `--gradient-solar`, `--gradient-emerald`, `--gradient-spectrum`, `--gradient-glass`, `--gradient-edge-light`, `--gradient-focus-progress`, `--gradient-selection`.
+  - Atomic theme switching with zero flash or DOM thrashing via `themes.css` data attributes.
+- **Central Motion Engine (§4)**:
+  - Typed central motion API (`src/design-system/motionEngine.ts`) with 6 distinct motion profiles: `balanced` (default), `expressive`, `cinematic`, `minimal`, `performance_saver`, and `off` (Reduced Motion).
+  - Centralized timing tokens (instant 0–80ms, fast 100–160ms, standard 160–240ms, emphasis 240–360ms, cinematic 360–650ms, stagger 20–45ms).
+  - Dynamic injection of `--motion-*` and `--ease-*` tokens onto `:root`.
+- **Appearance & Accessibility Studio (§5.7)**:
+  - Dedicated studio component (`src/apps/components/AppearanceDashboard.tsx`) embedded directly into Settings.
+  - 14-Theme Gallery with live swatches, active indicator, and category filters (Dark, Light, Vibrant, Accessibility).
+  - Accent Studio featuring 10 curated swatches, native color picker, hex input, and live WCAG 2.2 AA contrast evaluator (target ≥ 4.5:1).
+  - Live component preview strip showing button, outline, and focus ring reactions in real time.
+- **Wallpaper Studio & Visual Depth Layer (§3)**:
+  - Wallpaper readability dimming slider (0% to 60%) to guarantee desktop icon text contrast.
+  - Hardware-accelerated ambient aurora drift layer with performance-mode pause.
+  - Active window top edge-light bar (`--gradient-edge-light`) and focus halo on window frames.
+- **Automated Verification**:
+  - Added test suite coverage in `tests/contracts.test.mjs` verifying all 14 theme definitions, gradient tokens, and all 6 motion profiles.
+
 ## [8.2.0] - 2026-10-09
 
 ### Added

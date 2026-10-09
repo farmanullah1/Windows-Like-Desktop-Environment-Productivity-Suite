@@ -10,6 +10,7 @@ import {
   LayoutGrid,
 } from 'lucide-react';
 import { useDesktop } from '../core/desktopStore';
+import { useTheme } from '../design-system/ThemeProvider';
 import { soundEngine } from '../design-system/soundEngine';
 import { AppIconBadge } from '../design-system/AppIconBadge';
 import { DesktopWidgets } from './DesktopWidgets';
@@ -39,6 +40,8 @@ export const DesktopCanvas: React.FC = () => {
     toggleWidgets,
     addStickyNote,
   } = useDesktop();
+
+  const { wallpaperDimming, ambientEffects } = useTheme();
 
   const [contextMenu, setContextMenu] = useState<ContextMenuPos | null>(null);
   const activeWorkspace = workspaces.find((w) => w.id === activeWorkspaceId);
@@ -85,7 +88,19 @@ export const DesktopCanvas: React.FC = () => {
         className="absolute inset-0 bg-cover bg-center transition-all duration-700 ease-out"
         style={{ backgroundImage: `url(${currentWallpaper})` }}
       />
-      <div className="absolute inset-0 bg-black/30 backdrop-brightness-95 pointer-events-none" />
+      {/* Wallpaper Readability Dimming Scrim Layer (0% to 60%) */}
+      <div
+        className="absolute inset-0 pointer-events-none transition-opacity duration-300"
+        style={{ backgroundColor: '#000000', opacity: wallpaperDimming }}
+      />
+      {/* Optional Ambient Aurora Drift */}
+      {ambientEffects && (
+        <div
+          className="absolute inset-0 pointer-events-none opacity-20 mix-blend-screen bg-gradient-to-tr from-cyan-500/10 via-transparent to-purple-500/10 animate-pulse"
+          style={{ animationDuration: '8s' }}
+        />
+      )}
+      <div className="absolute inset-0 bg-black/20 backdrop-brightness-95 pointer-events-none" />
 
       {/* Top Bar / Workspace Badge & Widgets Toggle */}
       <div className="absolute top-3 left-4 flex items-center gap-2">

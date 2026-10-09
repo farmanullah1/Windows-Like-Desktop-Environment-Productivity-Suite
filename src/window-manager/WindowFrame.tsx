@@ -191,6 +191,11 @@ export const WindowFrame: React.FC<{ window: WindowState }> = ({ window: win }) 
         win.isFocused ? 'shadow-2xl ring-1 ring-[var(--accent-primary)]' : 'shadow-lg ring-1 ring-[var(--border-subtle)]'
       } ${isMaximized ? 'rounded-none' : ''}`}
     >
+      {/* Active Window Top Edge-Light Bar (§2, §3, §4.1) */}
+      {win.isFocused && (
+        <div className="absolute top-0 left-0 right-0 h-[2px] bg-[var(--gradient-edge-light)] z-50 pointer-events-none opacity-90" />
+      )}
+
       {/* Window Title Bar */}
       <div
         onMouseDown={handleHeaderMouseDown}

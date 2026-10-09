@@ -50,6 +50,11 @@
 | **Backend & DB** | REST API Service (`/api/v1`) | IMPLEMENTED | REAL | Express REST API in `server/index.js` with live OS telemetry |
 | **Testing** | Automated Isolated Unit Tests | IMPLEMENTED | REAL | 5 passing test suites in `tests/contracts.test.mjs` |
 | **Persistence** | Offline Persistence & Local Cache | IMPLEMENTED | REAL | LocalStorage state persistence with backup export in Settings |
+| **Design System** | 14-Theme Semantic Gallery & Token Engine | IMPLEMENTED | REAL | Complete 14-theme palette system and semantic gradients |
+| **Design System** | Central Motion Engine (6 Profiles) | IMPLEMENTED | REAL | Typed motion engine in `src/design-system/motionEngine.ts` with 6 profiles |
+| **Design System** | Accent Studio & WCAG 2.2 AA Contrast Evaluator | IMPLEMENTED | REAL | Integrated in `AppearanceDashboard.tsx` with live luminance contrast formula |
+| **Desktop Shell** | Wallpaper Studio & Readability Dimming Scrim | IMPLEMENTED | REAL | Dynamic 0% to 60% dimming scrim and ambient aurora drift on canvas |
+| **Window Manager** | Active Window Edge-Lighting & Focus Ring | IMPLEMENTED | REAL | Edge-light bar (`--gradient-edge-light`) on focused window header |
 | **Native Bridge** | Windows OS Metrics Bridge & Safe Shell Runner | IMPLEMENTED | WINDOWS-INTEGRATED | Safe PowerShell inspector in `native/windows/querySystem.ps1` |
 | **OS Shell Swap** | Replace Windows Explorer Kernel Shell | UNSUPPORTED | UNSUPPORTED | Out of architectural scope for safety |
 | **OS Antivirus** | Replace Windows Defender | UNSUPPORTED | UNSUPPORTED | Unsafe and out of scope |
