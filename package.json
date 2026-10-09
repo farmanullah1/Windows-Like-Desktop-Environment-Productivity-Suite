@@ -22,10 +22,15 @@
     "start:myos": "node scripts/start-myos.mjs"
   },
   "dependencies": {
+    "@gsap/react": "^2.1.2",
+    "@react-spring/web": "^10.1.2",
     "clsx": "^2.1.1",
     "cors": "^2.8.5",
     "express": "^4.21.2",
+    "gsap": "^3.15.0",
+    "lottie-react": "^3.1.2",
     "lucide-react": "^0.475.0",
+    "motion": "^14.0.0",
     "mssql": "^12.7.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
