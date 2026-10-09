@@ -40,6 +40,10 @@ export interface TranslationDictionary {
   clock: string;
   apiTester: string;
   jsonFormatter: string;
+  devWorkspace: string;
+  textEditor: string;
+  appCatalog: string;
+  eventViewer: string;
 }
 
 export const translations: Record<LocaleCode, TranslationDictionary> = {
@@ -78,6 +82,10 @@ export const translations: Record<LocaleCode, TranslationDictionary> = {
     clock: 'Clock & Timer',
     apiTester: 'API Tester',
     jsonFormatter: 'JSON Formatter',
+    devWorkspace: 'Dev Workspace',
+    textEditor: 'Text Editor',
+    appCatalog: 'App Catalog',
+    eventViewer: 'Event Viewer',
   },
   'ur-PK': {
     appName: 'اینٹی گریویٹی ڈیسک ٹاپ ورک اسپیس',
