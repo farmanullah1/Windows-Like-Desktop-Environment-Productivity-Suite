@@ -23,6 +23,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Full Web App Manifest (`public/manifest.json`) and `robots.txt`.
   - Production icon suite: `favicon.ico`, `favicon-16x16.png`, `favicon-32x32.png`, `apple-touch-icon.png` (180x180), `icon-192.png`, `icon-512.png`.
   - Complete Open Graph (`og:*`), Twitter Card (`twitter:*`), Apple mobile web app, and canonical tags in `index.html`.
+- **Section 12.5 Relational Schema & Virtual File System**:
+  - Implemented full MS SQL Server schema verification and seeding in `server/db.js` for `dbo.Applications`, `dbo.UserFiles`, `dbo.WindowStates`, `dbo.Notes`, `dbo.Workspaces`, `dbo.Notifications`, `dbo.AuditLogs`, and `dbo.SyncQueue`.
+  - Added REST endpoints in `server/index.js` for Applications catalog (`/api/v1/applications`), User Files (`/api/v1/files`), and Window States (`/api/v1/window-states`).
+  - Integrated live backend synchronization into `FileExplorerApp.tsx` with folder creation, file creation, item deletion, and offline-resilient local cache fallback.
+  - Linked `AppCatalogApp.tsx` to live database application registry.
 - **Extended Contract Tests**:
   - Added database error codes and REST error envelope tests to `tests/contracts.test.mjs` (5 passing test suites).
 
