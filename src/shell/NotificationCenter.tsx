@@ -1,5 +1,6 @@
 import React from 'react';
 import { Bell, X, Trash2, CheckCircle2, AlertTriangle, AlertCircle, Info } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 import { useDesktop } from '../core/desktopStore';
 import { soundEngine } from '../design-system/soundEngine';
 
@@ -27,9 +28,13 @@ export const NotificationCenter: React.FC = () => {
   };
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 16, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: 12, scale: 0.96 }}
+      transition={{ type: 'spring', damping: 25, stiffness: 350 }}
       onClick={(e) => e.stopPropagation()}
-      className="absolute bottom-16 right-4 w-88 rounded-2xl bg-[var(--surface-menu)] border border-[var(--border-strong)] shadow-2xl backdrop-blur-3xl z-[var(--z-notification-center)] flex flex-col max-h-[500px] overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-150 select-none"
+      className="absolute bottom-16 right-4 w-88 rounded-3xl bg-[var(--surface-menu)] border border-[var(--border-strong)] shadow-[0_20px_50px_rgba(0,0,0,0.45)] backdrop-blur-3xl z-[var(--z-notification-center)] flex flex-col max-h-[500px] overflow-hidden select-none"
     >
       {/* Header */}
       <div className="flex items-center justify-between p-3 border-b border-[var(--border-subtle)] bg-[var(--surface-acrylic)]">
@@ -62,38 +67,44 @@ export const NotificationCenter: React.FC = () => {
             <p className="text-xs">No notifications right now</p>
           </div>
         ) : (
-          notifications.map((notif) => (
-            <div
-              key={notif.id}
-              className="p-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] hover:border-[var(--border-medium)] transition-all space-y-1 relative group"
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  {getTypeIcon(notif.type)}
-                  <span className="text-xs font-semibold text-[var(--text-primary)]">{notif.title}</span>
+          <AnimatePresence>
+            {notifications.map((notif) => (
+              <motion.div
+                key={notif.id}
+                initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9, height: 0, marginBottom: 0 }}
+                transition={{ duration: 0.18 }}
+                className="p-3 rounded-2xl border border-[var(--border-subtle)] bg-[var(--surface-card)] hover:border-[var(--border-medium)] transition-all space-y-1 relative group"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    {getTypeIcon(notif.type)}
+                    <span className="text-xs font-semibold text-[var(--text-primary)]">{notif.title}</span>
+                  </div>
+                  <button
+                    onClick={() => {
+                      soundEngine.play('click');
+                      dismissNotification(notif.id);
+                    }}
+                    className="opacity-0 group-hover:opacity-100 p-1 text-[var(--text-muted)] hover:text-white transition-all rounded cursor-pointer"
+                    title="Dismiss"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
                 </div>
-                <button
-                  onClick={() => {
-                    soundEngine.play('click');
-                    dismissNotification(notif.id);
-                  }}
-                  className="opacity-0 group-hover:opacity-100 p-1 text-[var(--text-muted)] hover:text-white transition-all rounded"
-                  title="Dismiss"
-                >
-                  <X className="w-3 h-3" />
-                </button>
-              </div>
 
-              <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed">{notif.message}</p>
+                <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed">{notif.message}</p>
 
-              <div className="flex items-center justify-between text-[10px] text-[var(--text-muted)] pt-1">
-                <span>{notif.source}</span>
-                <span>{notif.timestamp}</span>
-              </div>
-            </div>
-          ))
+                <div className="flex items-center justify-between text-[10px] text-[var(--text-muted)] pt-1">
+                  <span>{notif.source}</span>
+                  <span>{notif.timestamp}</span>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 };

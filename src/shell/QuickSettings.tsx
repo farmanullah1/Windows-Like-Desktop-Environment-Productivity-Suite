@@ -9,6 +9,7 @@ import {
   Battery,
   Settings as SettingsIcon,
 } from 'lucide-react';
+import { motion } from 'motion/react';
 import { useDesktop } from '../core/desktopStore';
 import { useTheme } from '../design-system/ThemeProvider';
 import { soundEngine } from '../design-system/soundEngine';
@@ -27,9 +28,13 @@ export const QuickSettings: React.FC = () => {
   if (!isQuickSettingsOpen) return null;
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 16, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: 12, scale: 0.96 }}
+      transition={{ type: 'spring', damping: 25, stiffness: 350 }}
       onClick={(e) => e.stopPropagation()}
-      className="absolute bottom-16 right-4 w-80 p-4 rounded-2xl bg-[var(--surface-menu)] border border-[var(--border-strong)] shadow-2xl backdrop-blur-3xl z-[var(--z-quick-settings)] flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-4 duration-150 select-none"
+      className="absolute bottom-16 right-4 w-80 p-4 rounded-3xl bg-[var(--surface-menu)] border border-[var(--border-strong)] shadow-[0_20px_50px_rgba(0,0,0,0.45)] backdrop-blur-3xl z-[var(--z-quick-settings)] flex flex-col gap-4 select-none"
     >
       {/* 2x3 Toggles Grid */}
       <div className="grid grid-cols-2 gap-2">
@@ -139,6 +144,6 @@ export const QuickSettings: React.FC = () => {
           <SettingsIcon className="w-4 h-4" />
         </button>
       </div>
-    </div>
+    </motion.div>
   );
 };

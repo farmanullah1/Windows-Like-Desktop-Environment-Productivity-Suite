@@ -13,6 +13,7 @@ import { useTheme } from '../design-system/ThemeProvider';
 import { getPinnedApps, getAllApps } from '../apps/registry';
 import { soundEngine } from '../design-system/soundEngine';
 import { AppIconBadge } from '../design-system/AppIconBadge';
+import { motion } from 'motion/react';
 
 export const Taskbar: React.FC = () => {
   const {
@@ -107,20 +108,23 @@ export const Taskbar: React.FC = () => {
         {/* Left Section: Start & Search & Workspaces */}
         <div className="flex items-center gap-1.5 flex-shrink-0">
           {/* Start Launcher Button (Hybrid / Windows / Linux) */}
-          <button
+          <motion.button
+            whileHover={{ scale: 1.08, y: -1 }}
+            whileTap={{ scale: 0.92 }}
+            transition={{ type: 'spring', stiffness: 450, damping: 20 }}
             onClick={() => {
               soundEngine.play('click');
               setStartMenuOpen(!isStartMenuOpen);
             }}
-            className={`w-9 h-9 rounded-xl flex items-center justify-center p-1.5 transition-all ${
+            className={`w-9 h-9 rounded-xl flex items-center justify-center p-1.5 transition-colors cursor-pointer ${
               isStartMenuOpen
-                ? 'bg-blue-600/30 text-white shadow-md ring-2 ring-blue-500 scale-95'
+                ? 'bg-blue-600/30 text-white shadow-md ring-2 ring-blue-500'
                 : 'hover:bg-white/10'
             }`}
             title="MyOS Start Menu"
           >
             <img src="/assets/branding/logo.svg" alt="MyOS Start" className="w-5 h-5 object-contain drop-shadow-[0_0_8px_rgba(66,103,213,0.8)]" />
-          </button>
+          </motion.button>
 
           {/* Universal Search / Command Palette */}
           <button
@@ -170,9 +174,12 @@ export const Taskbar: React.FC = () => {
                 onMouseEnter={() => setHoveredAppId(app.id)}
                 onMouseLeave={() => setHoveredAppId(null)}
               >
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.12, y: -2 }}
+                  whileTap={{ scale: 0.92 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 20 }}
                   onClick={() => handleAppClick(app.id, app.displayName, app.icon)}
-                  className={`group relative flex flex-col items-center justify-center w-10 h-10 rounded-xl transition-all ${
+                  className={`group relative flex flex-col items-center justify-center w-10 h-10 rounded-xl transition-colors cursor-pointer ${
                     isFocused
                       ? 'bg-white/20 shadow-md ring-1 ring-white/30'
                       : 'hover:bg-white/10'
@@ -189,7 +196,7 @@ export const Taskbar: React.FC = () => {
                       }`}
                     />
                   )}
-                </button>
+                </motion.button>
 
                 {/* Window Thumbnail Preview Hover Card */}
                 {hoveredAppId === app.id && activeWin && (
