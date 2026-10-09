@@ -13,6 +13,8 @@ import { DeveloperWorkspaceApp } from './components/DeveloperWorkspaceApp';
 import { TextEditorApp } from './components/TextEditorApp';
 import { AppCatalogApp } from './components/AppCatalogApp';
 import { DiagnosticsApp } from './components/DiagnosticsApp';
+import { MediaPlayerApp } from './components/MediaPlayerApp';
+import { GalleryApp } from './components/GalleryApp';
 
 export const APP_REGISTRY: Record<string, AppDefinition> = {
   'file-explorer': {
@@ -224,6 +226,36 @@ export const APP_REGISTRY: Record<string, AppDefinition> = {
     minHeight: 340,
     isPinned: false,
     component: DiagnosticsApp,
+  },
+  'media-player': {
+    id: 'media-player',
+    name: 'media-player',
+    displayName: 'Groove Media Player',
+    description: 'Procedural Web Audio music synthesizer and real-time spectrum visualizer.',
+    version: '6.0.0',
+    icon: 'Music',
+    category: 'Media',
+    defaultWidth: 720,
+    defaultHeight: 520,
+    minWidth: 480,
+    minHeight: 380,
+    isPinned: true,
+    component: MediaPlayerApp,
+  },
+  'gallery': {
+    id: 'gallery',
+    name: 'gallery',
+    displayName: 'Photo Studio',
+    description: '4K wallpaper gallery, image inspector, and desktop background manager.',
+    version: '6.0.0',
+    icon: 'Image',
+    category: 'Media',
+    defaultWidth: 880,
+    defaultHeight: 580,
+    minWidth: 540,
+    minHeight: 380,
+    isPinned: true,
+    component: GalleryApp,
   },
 };
 
