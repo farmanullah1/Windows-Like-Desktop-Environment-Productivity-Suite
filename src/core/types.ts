@@ -103,6 +103,39 @@ export interface CommandItem {
   action: () => void;
 }
 
+export interface DatabaseStatus {
+  engine: string;
+  state: 'CONNECTED' | 'DISCONNECTED' | 'CONNECTING' | 'INITIALIZING';
+  server: string;
+  port: number;
+  database: string;
+  user: string;
+  encrypted: boolean;
+  trustedCertificate: boolean;
+  lastConnectedAt: string | null;
+  lastError: string | null;
+}
+
+export interface HostSystemInfo {
+  os: string;
+  platform: string;
+  release: string;
+  arch: string;
+  hostname: string;
+  cpuModel: string;
+  cpuSpeedMhz: number;
+  cpuCores: number;
+  cpuUsage: number;
+  memoryTotalMb: number;
+  memoryUsedMb: number;
+  memoryFreeMb: number;
+  memoryPercent: number;
+  activeProcesses: number;
+  uptimeSeconds: number;
+  classification: string;
+  database: DatabaseStatus;
+}
+
 export interface SystemMetrics {
   cpuUsage: number;
   memoryUsedMb: number;
@@ -110,6 +143,9 @@ export interface SystemMetrics {
   batteryLevel: number;
   isCharging: boolean;
   isOnline: boolean;
+  hasBattery?: boolean;
   activeProcessesCount: number;
   uptimeSeconds: number;
+  hostInfo?: HostSystemInfo;
+  dbStatus?: DatabaseStatus;
 }

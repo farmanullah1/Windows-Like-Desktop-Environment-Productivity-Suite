@@ -60,8 +60,10 @@ export interface DesktopContextValue {
   dismissNotification: (id: string) => void;
   clearAllNotifications: () => void;
 
-  // System Metrics
+  // System Metrics & Database Connection
   metrics: SystemMetrics;
+  testDbConnection: (config?: any) => Promise<any>;
+  refreshSystemInfo: () => Promise<void>;
 }
 
 const DEFAULT_WORKSPACES: Workspace[] = [
@@ -113,30 +115,94 @@ export const DesktopProvider: React.FC<{ children: React.ReactNode }> = ({ child
     },
   ]);
 
-  // System metrics simulation / bridge state
+  // Real host system metrics & database status
   const [metrics, setMetrics] = useState<SystemMetrics>({
     cpuUsage: 14,
-    memoryUsedMb: 3420,
+    memoryUsedMb: 3500,
     memoryTotalMb: 16384,
-    batteryLevel: 94,
+    batteryLevel: 100,
     isCharging: true,
     isOnline: typeof navigator !== 'undefined' ? navigator.onLine : true,
+    hasBattery: false,
     activeProcessesCount: 42,
-    uptimeSeconds: 1240,
+    uptimeSeconds: 0,
   });
 
-  // Periodically update light telemetry ticks safely
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setMetrics((prev) => ({
-        ...prev,
-        cpuUsage: Math.floor(8 + Math.random() * 18),
-        uptimeSeconds: prev.uptimeSeconds + 3,
-        isOnline: navigator.onLine,
-      }));
-    }, 3000);
-    return () => clearInterval(timer);
+  const fetchHostMetrics = useCallback(async () => {
+    try {
+      const res = await fetch('/api/v1/system/info');
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && json.data) {
+          const d = json.data;
+          setMetrics((prev) => ({
+            ...prev,
+            cpuUsage: d.cpuUsage,
+            memoryTotalMb: d.memoryTotalMb,
+            memoryUsedMb: d.memoryUsedMb,
+            uptimeSeconds: d.uptimeSeconds,
+            activeProcessesCount: d.activeProcesses,
+            hostInfo: d,
+            dbStatus: d.database,
+          }));
+        }
+      }
+    } catch (_e) {
+      // Offline resilient fallback
+    }
   }, []);
+
+  const testDbConnection = useCallback(async (customConfig?: any) => {
+    try {
+      const res = await fetch('/api/v1/db/test', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ config: customConfig }),
+      });
+      const data = await res.json();
+      await fetchHostMetrics();
+      return data?.data || { success: false, error: 'Network error contacting endpoint' };
+    } catch (err: any) {
+      return { success: false, error: err.message || 'Failed to contact database endpoint' };
+    }
+  }, [fetchHostMetrics]);
+
+  // Hook live system telemetry, Web Battery API, and Network events
+  useEffect(() => {
+    fetchHostMetrics();
+    const interval = setInterval(fetchHostMetrics, 3000);
+
+    // Real Web Battery API
+    if (typeof navigator !== 'undefined' && 'getBattery' in navigator) {
+      (navigator as any).getBattery().then((battery: any) => {
+        const updateBattery = () => {
+          setMetrics((prev) => ({
+            ...prev,
+            hasBattery: true,
+            batteryLevel: Math.round(battery.level * 100),
+            isCharging: battery.charging,
+          }));
+        };
+        updateBattery();
+        battery.addEventListener('levelchange', updateBattery);
+        battery.addEventListener('chargingchange', updateBattery);
+      }).catch(() => {
+        // Line-powered desktop without battery
+      });
+    }
+
+    // Real Online/Offline Network APIs
+    const handleOnline = () => setMetrics((prev) => ({ ...prev, isOnline: true }));
+    const handleOffline = () => setMetrics((prev) => ({ ...prev, isOnline: false }));
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, [fetchHostMetrics]);
 
   // Save workspaces to localStorage
   useEffect(() => {
@@ -660,6 +726,8 @@ export const DesktopProvider: React.FC<{ children: React.ReactNode }> = ({ child
       dismissNotification,
       clearAllNotifications,
       metrics,
+      testDbConnection,
+      refreshSystemInfo: fetchHostMetrics,
     }),
     [
       workspaces,
@@ -701,6 +769,8 @@ export const DesktopProvider: React.FC<{ children: React.ReactNode }> = ({ child
       dismissNotification,
       clearAllNotifications,
       metrics,
+      testDbConnection,
+      fetchHostMetrics,
     ]
   );
 

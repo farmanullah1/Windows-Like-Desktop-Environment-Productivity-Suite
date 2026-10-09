@@ -124,7 +124,9 @@ export const TaskManagerApp: React.FC<{ windowId: string }> = () => {
                   style={{ width: `${Math.min(100, Math.max(5, metrics.cpuUsage))}%` }}
                 />
               </div>
-              <p className="text-[10px] text-[var(--text-muted)]">Active threads: 1,842 • 8 Cores • 3.60 GHz</p>
+              <p className="text-[10px] text-[var(--text-muted)]">
+                {metrics.hostInfo?.cpuCores ? `${metrics.hostInfo.cpuCores} Cores` : 'Multi-Core'} • {metrics.hostInfo?.cpuSpeedMhz ? `${metrics.hostInfo.cpuSpeedMhz} MHz` : '3.60 GHz'} • Host: {metrics.hostInfo?.hostname || 'Localhost'}
+              </p>
             </div>
 
             {/* Memory Gauge */}
@@ -141,10 +143,12 @@ export const TaskManagerApp: React.FC<{ windowId: string }> = () => {
               <div className="w-full h-3 rounded-full bg-[var(--surface-input)] overflow-hidden">
                 <div
                   className="h-full bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full transition-all duration-500"
-                  style={{ width: `${(metrics.memoryUsedMb / metrics.memoryTotalMb) * 100}%` }}
+                  style={{ width: `${(metrics.memoryUsedMb / (metrics.memoryTotalMb || 16384)) * 100}%` }}
                 />
               </div>
-              <p className="text-[10px] text-[var(--text-muted)]">Available: 12.9 GB • In Use (Compressed): 3.4 GB</p>
+              <p className="text-[10px] text-[var(--text-muted)]">
+                Available: {((metrics.memoryTotalMb - metrics.memoryUsedMb) / 1024).toFixed(1)} GB • In Use: {(metrics.memoryUsedMb / 1024).toFixed(1)} GB
+              </p>
             </div>
 
             {/* System Diagnostic Counters */}
@@ -152,13 +156,13 @@ export const TaskManagerApp: React.FC<{ windowId: string }> = () => {
               <div className="p-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] text-xs">
                 <span className="text-[var(--text-muted)]">Uptime</span>
                 <p className="font-semibold text-sm font-mono mt-1">
-                  {Math.floor(metrics.uptimeSeconds / 60)}m {metrics.uptimeSeconds % 60}s
+                  {Math.floor(metrics.uptimeSeconds / 3600)}h {Math.floor((metrics.uptimeSeconds % 3600) / 60)}m {metrics.uptimeSeconds % 60}s
                 </p>
               </div>
               <div className="p-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--surface-card)] text-xs">
-                <span className="text-[var(--text-muted)]">Battery Power</span>
+                <span className="text-[var(--text-muted)]">Power Source</span>
                 <p className="font-semibold text-sm font-mono mt-1">
-                  {metrics.batteryLevel}% ({metrics.isCharging ? 'Plugged In' : 'On Battery'})
+                  {metrics.hasBattery ? `${metrics.batteryLevel}% (${metrics.isCharging ? 'Plugged In' : 'On Battery'})` : 'Line-Powered (AC)'}
                 </p>
               </div>
             </div>
