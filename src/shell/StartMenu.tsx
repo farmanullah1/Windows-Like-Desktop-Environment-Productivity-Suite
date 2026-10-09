@@ -18,16 +18,22 @@ import { AppIconBadge } from '../design-system/AppIconBadge';
 export const StartMenu: React.FC = () => {
   const { isStartMenuOpen, setStartMenuOpen, openApp, addNotification, setLocked } = useDesktop();
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All');
   const [showPowerMenu, setShowPowerMenu] = useState(false);
   const apps = getAllApps();
 
   if (!isStartMenuOpen) return null;
 
-  const filteredApps = apps.filter(
-    (a) =>
+  const CATEGORIES = ['All', 'Core', 'Productivity', 'Developer', 'Utilities', 'System', 'Media'];
+
+  const filteredApps = apps.filter((a) => {
+    const matchesSearch =
       a.displayName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      a.description.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+      a.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory =
+      selectedCategory === 'All' || a.category.toLowerCase() === selectedCategory.toLowerCase();
+    return matchesSearch && matchesCategory;
+  });
 
   const handleLaunch = (appId: string, displayName: string, icon: string) => {
     soundEngine.play('click');
@@ -58,20 +64,42 @@ export const StartMenu: React.FC = () => {
       exit={{ opacity: 0, y: 16, scale: 0.96 }}
       transition={{ type: 'spring', damping: 25, stiffness: 350 }}
       onClick={(e) => e.stopPropagation()}
-      className="absolute bottom-16 left-1/2 -translate-x-1/2 w-[540px] max-h-[620px] rounded-3xl bg-[var(--surface-menu)] border border-[var(--border-strong)] shadow-[0_25px_60px_rgba(0,0,0,0.5)] backdrop-blur-3xl z-[var(--z-flyout-menu)] flex flex-col overflow-hidden select-none"
+      className="absolute bottom-16 left-1/2 -translate-x-1/2 w-[560px] max-h-[640px] rounded-3xl bg-[var(--surface-menu)] border border-[var(--border-strong)] shadow-[0_25px_60px_rgba(0,0,0,0.5)] backdrop-blur-3xl z-[var(--z-flyout-menu)] flex flex-col overflow-hidden select-none"
     >
-      {/* Top Search Input */}
-      <div className="p-4 border-b border-[var(--border-subtle)]">
+      {/* Top Search Input & Keyboard Hints */}
+      <div className="p-4 border-b border-[var(--border-subtle)] space-y-3">
         <div className="relative">
-          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
+          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
           <input
             type="text"
-            placeholder="Type to search apps, settings, and files..."
+            placeholder="Type to search apps, files, settings..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             autoFocus
-            className="w-full pl-9 pr-4 py-2.5 bg-[var(--surface-input)] border border-[var(--border-subtle)] rounded-xl text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--border-focus)] focus:ring-1 focus:ring-[var(--border-focus)] shadow-inner transition-all"
+            className="w-full pl-10 pr-20 py-2.5 bg-[var(--surface-input)] border border-[var(--border-subtle)] rounded-xl text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--border-focus)] focus:ring-1 focus:ring-[var(--border-focus)] shadow-inner transition-all"
           />
+          <div className="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1">
+            <kbd className="px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-[9px] font-mono text-[var(--text-muted)]">
+              Esc
+            </kbd>
+          </div>
+        </div>
+
+        {/* Category Filter Pills */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 no-scrollbar text-[11px]">
+          {CATEGORIES.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={`px-3 py-1 rounded-full text-[11px] font-medium transition-all whitespace-nowrap cursor-pointer ${
+                selectedCategory === cat
+                  ? 'bg-[var(--accent-primary)] text-white shadow-sm'
+                  : 'bg-[var(--surface-card)] text-[var(--text-muted)] hover:text-white hover:bg-[var(--surface-input)]'
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
         </div>
       </div>
 
@@ -79,8 +107,12 @@ export const StartMenu: React.FC = () => {
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {/* Pinned Applications Header */}
         <div className="flex items-center justify-between px-1">
-          <span className="text-xs font-bold text-[var(--text-primary)]">Pinned Applications</span>
-          <span className="text-[11px] text-[var(--text-muted)] font-medium">All apps ({apps.length})</span>
+          <span className="text-xs font-bold text-[var(--text-primary)]">
+            {selectedCategory === 'All' ? 'All Applications' : `${selectedCategory} Applications`}
+          </span>
+          <span className="text-[11px] text-[var(--text-muted)] font-medium">
+            {filteredApps.length} of {apps.length} apps
+          </span>
         </div>
 
         {/* Pinned Apps Grid */}
@@ -98,6 +130,13 @@ export const StartMenu: React.FC = () => {
                 <span className="text-xs font-medium text-[var(--text-primary)] truncate w-full">
                   {app.displayName}
                 </span>
+                <span className="text-[10px] text-[var(--text-muted)] truncate w-full">
+                  {app.category}
+                </span>
+              </motion.button>
+            );
+          })}
+        </div>
                 <span className="text-[10px] text-[var(--text-muted)] truncate w-full">
                   {app.category}
                 </span>
