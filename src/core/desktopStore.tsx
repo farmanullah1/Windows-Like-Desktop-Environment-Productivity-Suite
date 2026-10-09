@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState, useCallback, useMemo } from 'react';
-import { WindowState, Workspace, SnapZone, NotificationItem, SystemMetrics } from './types';
+import { WindowState, Workspace, SnapZone, NotificationItem, SystemMetrics, StickyNote } from './types';
 import { soundEngine } from '../design-system/soundEngine';
 
 export interface DesktopContextValue {
@@ -24,6 +24,22 @@ export interface DesktopContextValue {
   updateWindowBounds: (windowId: string, x: number, y: number, width: number, height: number) => void;
   moveWindowToWorkspace: (windowId: string, targetWorkspaceId: string) => void;
   toggleShowDesktop: () => void;
+
+  // Personalization & Wallpapers
+  currentWallpaper: string;
+  setWallpaper: (url: string) => void;
+
+  // Session & Security
+  isLocked: boolean;
+  setLocked: (locked: boolean) => void;
+
+  // Desktop Widgets & Sticky Notes
+  widgetsVisible: boolean;
+  toggleWidgets: () => void;
+  stickyNotes: StickyNote[];
+  addStickyNote: (note: { text: string; color: StickyNote['color']; x?: number; y?: number }) => void;
+  updateStickyNote: (id: string, text: string, color?: StickyNote['color']) => void;
+  deleteStickyNote: (id: string) => void;
 
   // Overlays
   isStartMenuOpen: boolean;
